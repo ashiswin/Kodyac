@@ -2,4 +2,8 @@
     <string name="app_name">Kodyac</string>
 
     <string name="welcome_string">Welcome to %1$s\'s  KYC process!</string>
+
+    <string-array name="country_codes">
+        <item>+65</item>
+    </string-array>
 </resources>

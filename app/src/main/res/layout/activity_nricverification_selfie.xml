@@ -4,6 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.ashiswin.kodyac.NRICVerificationSelfie">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:gravity="center"
+        android:text="We need you to take a photo of yourself holding the following code"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="64sp"
+        android:id="@+id/txtCode"
+        android:text="KXQZ"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/btnTakePhoto"
+        android:text="Take Photo"
+        android:layout_margin="16dp"/>
 </LinearLayout>
