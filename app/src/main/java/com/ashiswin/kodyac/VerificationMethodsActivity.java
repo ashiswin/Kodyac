@@ -42,6 +42,11 @@ public class VerificationMethodsActivity extends AppCompatActivity {
                     smsIntent.putExtra("methodId", position);
                     startActivityForResult(smsIntent, INTENT_VERIFICATION);
                 }
+                else if(methods[position].equals("NRIC Verification")) {
+                    Intent nricIntent = new Intent(VerificationMethodsActivity.this, NRICVerificationCard.class);
+                    nricIntent.putExtra("methodId", position);
+                    startActivityForResult(nricIntent, INTENT_VERIFICATION);
+                }
             }
         });
     }

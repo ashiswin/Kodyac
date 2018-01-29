@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.ashiswin.kodyac.MainActivity">
 
     <ImageView
@@ -17,13 +18,11 @@
         android:textAppearance="?android:textAppearanceLarge"
         android:gravity="center_horizontal"
         android:id="@+id/txtWelcome"
-        android:layout_below="@+id/imgLogo"
         android:layout_margin="16dp"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:id="@+id/btnBegin"
         android:text="Lets Begin!"
-        android:layout_alignParentBottom="true"
         android:layout_margin="16dp"/>
-</RelativeLayout>
+</LinearLayout>
