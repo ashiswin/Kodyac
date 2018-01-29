@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -21,6 +22,9 @@ public class NRICVerificationCard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nricverification_card);
+
+        getSupportActionBar().setTitle("Upload NRIC");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         btnFront = (ImageButton) findViewById(R.id.btnFront);
         btnBack = (ImageButton) findViewById(R.id.btnBack);
@@ -74,5 +78,16 @@ public class NRICVerificationCard extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             btnBack.setImageBitmap(imageBitmap);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

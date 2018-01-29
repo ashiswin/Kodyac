@@ -26,6 +26,7 @@
         android:id="@+id/btnVerify"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="Verify"
         android:layout_gravity="center_horizontal"/>
     <TextView

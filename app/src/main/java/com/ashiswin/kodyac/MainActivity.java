@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         btnBegin = (Button) findViewById(R.id.btnBegin);
 
         txtWelcome.setText(text);
-
+        imgLogo.setImageResource(R.drawable.ibm);
         btnBegin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

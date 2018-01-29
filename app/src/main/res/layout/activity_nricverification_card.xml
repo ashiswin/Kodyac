@@ -45,5 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:text="Verify"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginTop="16dp"
         android:id="@+id/btnVerify"/>
 </LinearLayout>

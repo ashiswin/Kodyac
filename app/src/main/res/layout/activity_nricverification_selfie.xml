@@ -26,5 +26,6 @@
         android:layout_height="48dp"
         android:id="@+id/btnTakePhoto"
         android:text="Take Photo"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_margin="16dp"/>
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ public class NRICVerificationSelfie extends AppCompatActivity {
         setContentView(R.layout.activity_nricverification_selfie);
 
         getSupportActionBar().setTitle("Photo Verification");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         txtCode = (TextView) findViewById(R.id.txtCode);
         btnTakePhoto = (Button) findViewById(R.id.btnTakePhoto);
@@ -69,5 +71,17 @@ public class NRICVerificationSelfie extends AppCompatActivity {
                 }
             }).start();
         }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

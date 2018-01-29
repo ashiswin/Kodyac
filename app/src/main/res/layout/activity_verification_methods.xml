@@ -4,10 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.ashiswin.kodyac.VerificationMethodsActivity">
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/lstMethods"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
         android:layout_margin="16dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/btnComplete"
+        android:text="Complete"
+        android:background="@drawable/rounded_rect_button_success"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_margin="16dp"
+        android:enabled="false"/>
 </LinearLayout>
