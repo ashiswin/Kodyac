@@ -1,5 +1,6 @@
 package com.ashiswin.kodyac;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class NRICVerificationCard extends AppCompatActivity {
     private static final int INTENT_SELFIE = 0;
@@ -16,6 +18,7 @@ public class NRICVerificationCard extends AppCompatActivity {
     private static final int INTENT_BACK = 2;
 
     ImageButton btnFront, btnBack;
+    TextView txtName, txtNRIC, txtDOB, txtAddress;
     Button btnVerify;
 
     @Override
@@ -28,6 +31,10 @@ public class NRICVerificationCard extends AppCompatActivity {
 
         btnFront = (ImageButton) findViewById(R.id.btnFront);
         btnBack = (ImageButton) findViewById(R.id.btnBack);
+        txtName = (TextView) findViewById(R.id.txtName);
+        txtNRIC = (TextView) findViewById(R.id.txtNRIC);
+        txtDOB = (TextView) findViewById(R.id.txtDOB);
+        txtAddress = (TextView) findViewById(R.id.txtAddress);
         btnVerify = (Button) findViewById(R.id.btnVerify);
 
         btnVerify.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +79,32 @@ public class NRICVerificationCard extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             btnFront.setImageBitmap(imageBitmap);
+
+            final ProgressDialog dialog = new ProgressDialog(NRICVerificationCard.this);
+            dialog.setIndeterminate(true);
+            dialog.setTitle("Scanning NRIC");
+            dialog.setMessage("Please wait while we scan your NRIC");
+            dialog.show();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.cancel();
+                                txtName.setText("Isaac Ashwin Ravindran");
+                                txtNRIC.setText("S9999999Z");
+                                txtDOB.setText("4th October 1995");
+                                txtAddress.setText("Blk 59 Changi South Avenue, #09-102, S453199");
+                            }
+                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
         else if(requestCode == INTENT_BACK && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
