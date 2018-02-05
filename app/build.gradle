@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.ashiswin.kodyac"
         minSdkVersion 21
@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-auth:11.8.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -32,3 +33,6 @@ dependencies {
     compile 'com.android.support:support-v4:25'
     testCompile 'junit:junit:4.12'
 }
+
+
+apply plugin: 'com.google.gms.google-services'

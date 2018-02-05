@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "860483599521",
+    "firebase_url": "https://kodyac-22760.firebaseio.com",
+    "project_id": "kodyac-22760",
+    "storage_bucket": "kodyac-22760.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860483599521:android:db422e4b2e7e1cca",
+        "android_client_info": {
+          "package_name": "com.ashiswin.kodyac"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860483599521-d3f2f65aojjb01sgviufg4q9mvdhum3t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ashiswin.kodyac",
+            "certificate_hash": "5c884840f1cafbca87e35cdae50592977eda2db1"
+          }
+        },
+        {
+          "client_id": "860483599521-73iipqo2tq7aov5figmbfcs97h0qv9nf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBx1ZuQuLr8Z1LQkjObT8nht655_KMdUJI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860483599521-73iipqo2tq7aov5figmbfcs97h0qv9nf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
