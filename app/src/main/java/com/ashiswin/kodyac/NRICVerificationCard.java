@@ -121,6 +121,9 @@ public class NRICVerificationCard extends AppCompatActivity {
 
                                 SparseArray<TextBlock> textBlocks = textRecognizer.detect(imageFrame);
                                 Log.i("NRICVER",String.valueOf(textBlocks.size()));
+                                if (textBlocks.size()!=0){
+                                    Toast.makeText(NRICVerificationCard.this, "text detected, check log cat", Toast.LENGTH_SHORT).show();
+                                }
 
                                 for (int i=0; i<textBlocks.size();i++){
                                     TextBlock textBlock = textBlocks.get(textBlocks.keyAt(i));
