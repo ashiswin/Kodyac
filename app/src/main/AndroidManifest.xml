@@ -23,4 +23,9 @@
         <activity android:name=".NRICVerificationSelfie"></activity>
     </application>
 
+    <meta-data
+        android:name="com.google.android.gms.vision.DEPENDENCIES"
+        android:value="ocr" />
+
+
 </manifest>

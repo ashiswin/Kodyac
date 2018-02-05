@@ -2,15 +2,25 @@ package com.ashiswin.kodyac;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
+
+import org.w3c.dom.Text;
 
 public class NRICVerificationCard extends AppCompatActivity {
     private static final int INTENT_SELFIE = 0;
@@ -77,7 +87,7 @@ public class NRICVerificationCard extends AppCompatActivity {
         }
         else if(requestCode == INTENT_FRONT && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            final Bitmap imageBitmap = (Bitmap) extras.get("data");
             btnFront.setImageBitmap(imageBitmap);
 
             final ProgressDialog dialog = new ProgressDialog(NRICVerificationCard.this);
@@ -94,17 +104,46 @@ public class NRICVerificationCard extends AppCompatActivity {
                             @Override
                             public void run() {
                                 dialog.cancel();
-                                txtName.setText("Isaac Ashwin Ravindran");
-                                txtNRIC.setText("S9999999Z");
-                                txtDOB.setText("4th October 1995");
-                                txtAddress.setText("Blk 59 Changi South Avenue, #09-102, S453199");
+                                TextRecognizer textRecognizer = new TextRecognizer.Builder(NRICVerificationCard.this).build();
+                                if(!textRecognizer.isOperational()) {
+                                    Log.w("NRICCardtextRec", "Detector dependencies are not yet available.");
+                                    IntentFilter lowstorageFilter = new IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW);
+                                    boolean hasLowStorage = registerReceiver(null, lowstorageFilter) != null;
+                                    if (hasLowStorage) {
+                                        Toast.makeText(NRICVerificationCard.this, "Low Storage", Toast.LENGTH_LONG).show();
+                                        Log.w("NRICCardtextRec", "Low Storage");
+                                    }
+                                }
+
+                                //convert image to a frame so you can feed it into the text recognizer
+                                Frame imageFrame = new Frame.Builder().setBitmap(imageBitmap).build();
+
+
+                                SparseArray<TextBlock> textBlocks = textRecognizer.detect(imageFrame);
+                                Log.i("NRICVER",String.valueOf(textBlocks.size()));
+
+                                for (int i=0; i<textBlocks.size();i++){
+                                    TextBlock textBlock = textBlocks.get(textBlocks.keyAt(i));
+                                    if (textBlock==null){
+                                        Toast.makeText(NRICVerificationCard.this, "no text", Toast.LENGTH_SHORT).show();
+                                    }
+                                    Log.i("NRICCardtextRec", textBlock.getValue());
+                                }
+
                             }
                         });
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
+                    txtName.setText("test name");
+                    txtNRIC.setText("S9999999Z");
+                    txtDOB.setText("4th October 1995");
+                    txtAddress.setText("Blk 59 Changi South Avenue, #09-102, S453199");
                 }
+
             }).start();
+
         }
         else if(requestCode == INTENT_BACK && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
