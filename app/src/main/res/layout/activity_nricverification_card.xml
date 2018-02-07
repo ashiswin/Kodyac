@@ -105,11 +105,35 @@
             android:layout_height="wrap_content"
             android:id="@+id/txtAddress"/>
     </LinearLayout>
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="Verify"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:layout_marginTop="16dp"
-        android:id="@+id/btnVerify"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Verify"
+            android:layout_weight="1"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginTop="16dp"
+            android:id="@+id/btnVerify"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="OpenCV"
+            android:layout_weight="1"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginTop="16dp"
+            android:id="@+id/btnOpenCV"/>
+    </LinearLayout>
+
+
+    <org.opencv.android.JavaCameraView
+        android:id="@+id/openCV_live_camera_frame"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"/>
+
 </LinearLayout>

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.MenuItem;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -20,16 +21,40 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
-import org.w3c.dom.Text;
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.KeyPoint;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfKeyPoint;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.features2d.FeatureDetector;
+import org.opencv.imgproc.Imgproc;
 
-public class NRICVerificationCard extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class NRICVerificationCard extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2{
     private static final int INTENT_SELFIE = 0;
     private static final int INTENT_FRONT = 1;
     private static final int INTENT_BACK = 2;
 
-    ImageButton btnFront, btnBack;
-    TextView txtName, txtNRIC, txtDOB, txtAddress;
-    Button btnVerify;
+    private ImageButton btnFront, btnBack;
+    private TextView txtName, txtNRIC, txtDOB, txtAddress;
+    private Button btnVerify;
+
+    //for OpenCV OCR
+    private CameraBridgeViewBase mOpenCvCameraView;
+    private Mat mGrey, mRgba, mByte;
+    private Scalar CONTOUR_COLOR;
+    private boolean isProcess = false;
+    private Button btnOpenCV;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +71,8 @@ public class NRICVerificationCard extends AppCompatActivity {
         txtDOB = (TextView) findViewById(R.id.txtDOB);
         txtAddress = (TextView) findViewById(R.id.txtAddress);
         btnVerify = (Button) findViewById(R.id.btnVerify);
+        mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.openCV_live_camera_frame);
+        btnOpenCV = (Button) findViewById(R.id.btnOpenCV) ;
 
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +102,9 @@ public class NRICVerificationCard extends AppCompatActivity {
                 }
             }
         });
+
+        mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
+        mOpenCvCameraView.setCvCameraViewListener(this);
     }
 
     @Override
@@ -165,4 +195,127 @@ public class NRICVerificationCard extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onCameraViewStarted(int width, int height) {
+        mRgba = new Mat(height,width, CvType.CV_8UC3);
+        mByte = new Mat(height, width, CvType.CV_8UC1);
+
+    }
+
+    @Override
+    public void onCameraViewStopped() {
+        mRgba.release();
+
+    }
+
+    @Override
+    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+        mRgba = inputFrame.rgba();
+        mGrey = inputFrame.gray();
+
+        CONTOUR_COLOR = new Scalar(255);
+        MatOfKeyPoint keypoint = new MatOfKeyPoint();
+        List<KeyPoint> listpoint = new ArrayList<KeyPoint>();
+        KeyPoint kpoint = new KeyPoint();
+        Mat mask = Mat.zeros(mGrey.size(), CvType.CV_8UC1);
+        int rectanx1;
+        int rectany1;
+        int rectanx2;
+        int rectany2;
+
+        //
+        Scalar zeos = new Scalar(0, 0, 0);
+        List<MatOfPoint> contour2 = new ArrayList<MatOfPoint>();
+        Mat kernel = new Mat(1, 50, CvType.CV_8UC1, Scalar.all(255));
+        Mat morbyte = new Mat();
+        Mat hierarchy = new Mat();
+
+        Rect rectan3 = new Rect();//
+        int imgsize = mRgba.height() * mRgba.width();
+        //
+        FeatureDetector detector = FeatureDetector
+                    .create(FeatureDetector.MSER);
+        detector.detect(mGrey, keypoint);
+        listpoint = keypoint.toList();
+            //
+        for (int ind = 0; ind < listpoint.size(); ind++) {
+            kpoint = listpoint.get(ind);
+            rectanx1 = (int) (kpoint.pt.x - 0.5 * kpoint.size);
+            rectany1 = (int) (kpoint.pt.y - 0.5 * kpoint.size);
+            rectanx2 = (int) (kpoint.size);
+            rectany2 = (int) (kpoint.size);
+            if (rectanx1 <= 0)
+                rectanx1 = 1;
+            if (rectany1 <= 0)
+                rectany1 = 1;
+            if ((rectanx1 + rectanx2) > mGrey.width())
+                rectanx2 = mGrey.width() - rectanx1;
+            if ((rectany1 + rectany2) > mGrey.height())
+                rectany2 = mGrey.height() - rectany1;
+            Rect rectant = new Rect(rectanx1, rectany1, rectanx2, rectany2);
+                try {
+                    Mat roi = new Mat(mask, rectant);
+                    roi.setTo(CONTOUR_COLOR);
+                } catch(Exception e){
+                    Log.d("openCv","mat roi error"+e.getMessage());
+                }
+
+
+            }
+
+            Imgproc.morphologyEx(mask, morbyte, Imgproc.MORPH_DILATE, kernel);
+            Imgproc.findContours(morbyte, contour2, hierarchy,
+                    Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
+            for (int ind = 0; ind < contour2.size(); ind++) {
+                rectan3 = Imgproc.boundingRect(contour2.get(ind));
+                if (rectan3.area() > 0.5 * imgsize || rectan3.area() < 100
+                        || rectan3.width / rectan3.height < 2) {
+                    Mat roi = new Mat(morbyte, rectan3);
+                    roi.setTo(zeos);
+
+                } else
+                    Imgproc.rectangle(mRgba, rectan3.br(), rectan3.tl(),
+                            CONTOUR_COLOR);
+            }
+
+            return mRgba;
+        }
+
+    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status){
+                case LoaderCallbackInterface.SUCCESS: {mOpenCvCameraView.enableView();}
+                break;
+                default: {super.onManagerConnected(status);}
+                break;
+            }
+        }
+    };
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        if (mOpenCvCameraView != null)
+            mOpenCvCameraView.disableView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!OpenCVLoader.initDebug()) {
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
+        } else {
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (mOpenCvCameraView != null)
+            mOpenCvCameraView.disableView();
+    }
+
 }
