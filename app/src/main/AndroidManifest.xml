@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ashiswin.kodyac">
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <meta-data
+        android:name="com.google.android.gms.vision.DEPENDENCIES"
+        android:value="ocr" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,12 +28,8 @@
         <activity android:name=".SMSVerificationNumber" />
         <activity android:name=".SMSVerificationOTP" />
         <activity android:name=".NRICVerificationCard" />
-        <activity android:name=".NRICVerificationSelfie"></activity>
+        <activity android:name=".NRICVerificationSelfie" />
+        <activity android:name=".NRICBarcodeActivity"></activity>
     </application>
-
-    <meta-data
-        android:name="com.google.android.gms.vision.DEPENDENCIES"
-        android:value="ocr" />
-
 
 </manifest>
