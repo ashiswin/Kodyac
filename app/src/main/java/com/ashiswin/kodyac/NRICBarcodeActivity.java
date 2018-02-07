@@ -1,8 +1,10 @@
 package com.ashiswin.kodyac;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,6 +34,8 @@ public class NRICBarcodeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 IntentIntegrator scanIntegrator = new IntentIntegrator(NRICBarcodeActivity.this);
                 //initiate scan
+                scanIntegrator.setPrompt("Scan barcode at the back of your NRIC");
+                scanIntegrator.setOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 scanIntegrator.initiateScan();
             }
         });
@@ -47,5 +51,16 @@ public class NRICBarcodeActivity extends AppCompatActivity {
             Toast.makeText(this, "No scan result", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

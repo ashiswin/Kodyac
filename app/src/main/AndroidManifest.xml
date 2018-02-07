@@ -29,7 +29,10 @@
         <activity android:name=".SMSVerificationOTP" />
         <activity android:name=".NRICVerificationCard" />
         <activity android:name=".NRICVerificationSelfie" />
-        <activity android:name=".NRICBarcodeActivity"></activity>
+        <activity android:name=".NRICBarcodeActivity"
+            android:screenOrientation="sensorPortrait" />
+
+
     </application>
 
 </manifest>
