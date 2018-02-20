@@ -6,6 +6,9 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <meta-data
         android:name="com.google.android.gms.vision.DEPENDENCIES"
         android:value="ocr" />
@@ -29,10 +32,10 @@
         <activity android:name=".SMSVerificationOTP" />
         <activity android:name=".NRICVerificationCard" />
         <activity android:name=".NRICVerificationSelfie" />
-        <activity android:name=".NRICBarcodeActivity"
+        <activity
+            android:name=".NRICBarcodeActivity"
             android:screenOrientation="sensorPortrait" />
-
-
+        <activity android:name=".OpenCVActivity"></activity>
     </application>
 
 </manifest>
