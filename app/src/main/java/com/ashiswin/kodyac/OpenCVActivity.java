@@ -1,10 +1,7 @@
 package com.ashiswin.kodyac;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -173,20 +170,7 @@ public class OpenCVActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_CODE);
             }
         }
-        /*
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
 
-            ContentValues values = new ContentValues(1);
-            values.put(MediaStore.Images.Media.MIME_TYPE, "testes.jpg");
-            outputFileDir = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            Log.e(TAG,outputFileDir.toString());
-            outputFileDir = getImageUri();
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileDir);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            startActivityForResult(intent, REQUEST_CODE);
-        }
-        */
     }
 
 
