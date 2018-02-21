@@ -12,6 +12,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,6 +61,7 @@ public class OpenCVActivity extends AppCompatActivity {
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString()+"";
     private static final String TESS_DATA = "";
     private String mCurrentPhotoPath;
+    private File ImgFile;
 
     Mat imageMat;
     Mat imageMat2;
@@ -140,6 +142,7 @@ public class OpenCVActivity extends AppCompatActivity {
                     is.close();
                     os.close();
                 }
+                Log.d("prepare TEss Data", fileName+"sucessfully rocessed");
             }
         } catch (IOException e) {
             Log.d("openCVTest",e.toString());
@@ -147,41 +150,43 @@ public class OpenCVActivity extends AppCompatActivity {
     }
 
     private void startCameraActivity() {
-        /*
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Log.d("openCVTest","here1");
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             Log.d("openCVTest","here2");
             // Create the File where the photo should go
-            File photoFile = null;
+            ImgFile = null;
             try {
-                photoFile = createImageFile();
+                ImgFile = createImageFile();
                 Log.d("openCVTest","here3");
             } catch (IOException ex) {
                 Log.e(TAG, ex.toString());
                 // Error occurred while creating the File
             }
             // Continue only if the File was successfully created
-            if (photoFile != null) {
+            if (ImgFile != null) {
                 outputFileDir = FileProvider.getUriForFile(this,
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        photoFile);
+                        "com.ashiswin.kodyac.fileprovider",
+                        ImgFile);
+
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileDir);
-                startActivityForResult(takePictureIntent, 1024);
+                startActivityForResult(takePictureIntent, REQUEST_CODE);
             }
         }
-        */
+        /*
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
+
             ContentValues values = new ContentValues(1);
             values.put(MediaStore.Images.Media.MIME_TYPE, "testes.jpg");
             outputFileDir = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
             Log.e(TAG,outputFileDir.toString());
+            outputFileDir = getImageUri();
             intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileDir);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             startActivityForResult(intent, REQUEST_CODE);
         }
+        */
     }
 
 
@@ -193,36 +198,37 @@ public class OpenCVActivity extends AppCompatActivity {
                 prepareTessData();
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 10;
+                imageView.setImageURI(outputFileDir);
 
-                //TODO: the outputFileDir cannot be found no such file or directory
-                Bitmap bitmap = BitmapFactory.decodeFile(outputFileDir.getPath(), options);
-
+                Bitmap bitmap = BitmapFactory.decodeFile(ImgFile.getPath(), options);
                 ExifInterface ei = null;
                 try {
-                    ei = new ExifInterface(outputFileDir.getPath());
+                    ei = new ExifInterface(ImgFile.getPath());
+                    Log.d(TAG, "SUCCESS");
+                    int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            bitmap = rotateImage(bitmap, 90);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            bitmap = rotateImage(bitmap, 180);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            bitmap = rotateImage(bitmap, 270);
+                            break;
+                        case ExifInterface.ORIENTATION_NORMAL:
+                        default:
+                            break;
+                    }
+                    Utils.bitmapToMat(bitmap, imageMat);
+                    //imageView.setImageBitmap(bitmap);
+                    detectText(imageMat);
 
                 } catch (IOException e) {
-                    Log.d(TAG, "OH NO!!! IO problem");
+                    Log.e(TAG, "error again");
                     Log.d(TAG, e.toString());
                 }
-                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-                switch (orientation) {
-                    case ExifInterface.ORIENTATION_ROTATE_90:
-                        bitmap = rotateImage(bitmap, 90);
-                        break;
-                    case ExifInterface.ORIENTATION_ROTATE_180:
-                        bitmap = rotateImage(bitmap, 180);
-                        break;
-                    case ExifInterface.ORIENTATION_ROTATE_270:
-                        bitmap = rotateImage(bitmap, 270);
-                        break;
-                    case ExifInterface.ORIENTATION_NORMAL:
-                    default:
-                        break;
-                }
-                Utils.bitmapToMat(bitmap, imageMat);
-                imageView.setImageBitmap(bitmap);
-                detectText(imageMat);
+
 
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
@@ -239,6 +245,7 @@ public class OpenCVActivity extends AppCompatActivity {
     }
 
     private void detectText(Mat mat){
+        Log.d("detect text","wut wut");
         Imgproc.cvtColor(imageMat, imageMat2, Imgproc.COLOR_RGB2GRAY);
         Mat mRgba = mat;
         Mat mGray = imageMat2;
@@ -331,6 +338,7 @@ public class OpenCVActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        Log.d("pathname", storageDir.getPath());
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -339,6 +347,7 @@ public class OpenCVActivity extends AppCompatActivity {
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
+        Log.d("absolute path", mCurrentPhotoPath);
         return image;
     }
 
