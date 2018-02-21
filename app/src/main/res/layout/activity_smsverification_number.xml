@@ -23,12 +23,15 @@
             android:layout_height="wrap_content"
             android:id="@+id/spnCountryCode"
             android:textAppearance="?android:textAppearanceLarge"/>
+
         <EditText
+            android:id="@+id/edtPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edtPhoneNumber"
             android:gravity="center_horizontal"
-            android:textAppearance="?android:textAppearanceLarge"/>
+            android:inputType="number"
+            android:maxLength="8"
+            android:textAppearance="?android:textAppearanceLarge" />
     </LinearLayout>
 
     <Button

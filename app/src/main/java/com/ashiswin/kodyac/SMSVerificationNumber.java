@@ -3,16 +3,18 @@ package com.ashiswin.kodyac;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class SMSVerificationNumber extends AppCompatActivity {
     private static final int INTENT_OTP = 0;
-
+    private static final String SG_COUNTRY_CODE="SG";
     Spinner spnCountryCodes;
     EditText edtPhoneNumber;
     Button btnSendSMS;
@@ -31,9 +33,17 @@ public class SMSVerificationNumber extends AppCompatActivity {
         btnSendSMS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent otpIntent = new Intent(SMSVerificationNumber.this, SMSVerificationOTP.class);
-                otpIntent.putExtra("methodId", getIntent().getIntExtra("methodId", 0));
-                startActivityForResult(otpIntent, INTENT_OTP);
+
+                if (edtPhoneNumber.getText().toString().charAt(0)=='9' | edtPhoneNumber.getText().toString().charAt(0)=='8'){
+                        Intent otpIntent = new Intent(SMSVerificationNumber.this, SMSVerificationOTP.class);
+                        otpIntent.putExtra("methodId", getIntent().getIntExtra("methodId", 0));
+                        startActivityForResult(otpIntent, INTENT_OTP);
+                }
+                else{
+                    edtPhoneNumber.getText().clear();
+                    Toast.makeText(SMSVerificationNumber.this, "Please enter a valid phone number", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
