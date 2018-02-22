@@ -51,6 +51,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     implementation project(':openCVLibrary300')
     compile 'com.rmtheis:tess-two:5.4.1'
+
+    compile 'com.googlecode.libphonenumber:libphonenumber:8.4.2'
+
+
 }
 
 
