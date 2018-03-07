@@ -37,25 +37,31 @@ dependencies {
     implementation 'com.android.support:cardview-v7:25.3.1'
     implementation 'com.android.support:recyclerview-v7:25.3.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    /* for mobile vision */
+    /* for google mobile vision */
     implementation 'com.google.android.gms:play-services-vision:11.8.0'
     implementation 'com.android.support:support-v4:25'
-    /* for mobile vision */
+
     /*for barcode scanner*/
     implementation 'com.google.zxing:core:3.3.0'
     implementation 'com.journeyapps:zxing-android-integration:2.3.0@aar'
     implementation 'com.journeyapps:zxing-android-embedded:2.3.0@aar'
-    /*for barcode scanner*/
 
+    /*for openCV test*/
     compile project(':openCVLibrary300')
     testCompile 'junit:junit:4.12'
     implementation project(':openCVLibrary300')
     compile 'com.rmtheis:tess-two:5.4.1'
 
+    /*to check for errors in phone number entered*/
     compile 'com.googlecode.libphonenumber:libphonenumber:8.4.2'
+
+    /*for EMAS BLink ID*/
+    implementation project(':LibBlinkID')
+    implementation "com.android.support:appcompat-v7:25"
 
 
 }
+
 
 
 

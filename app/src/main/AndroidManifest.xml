@@ -6,8 +6,8 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <meta-data
         android:name="com.google.android.gms.vision.DEPENDENCIES"
@@ -35,7 +35,7 @@
         <activity
             android:name=".NRICBarcodeActivity"
             android:screenOrientation="sensorPortrait" />
-        <activity android:name=".OpenCVActivity"></activity>
+        <activity android:name=".OpenCVActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -44,8 +44,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
+
+        <activity android:name=".EmasIDActivity"></activity>
     </application>
 
 </manifest>
