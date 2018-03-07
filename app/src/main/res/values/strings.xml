@@ -3,6 +3,8 @@
 
     <string name="welcome_string">Welcome to %1$s\'s  KYC process!</string>
     <string name="microblink_license_key">UPGOJ3UY-KOV7STQT-2MYL6GXU-RMANXESD-5XF3PKUW-MQDZXK7O-6EA7Q53S-M3XIN4IF</string>
+    <string name="emas_scan_first_side">Please scan the front of your NRIC</string>
+    <string name="emas_scan_second_side">Please scan the back of your NRIC</string>
     <string name="error">Error</string>
     <string name="photopayOK">OK</string>
     <string name="errorDesc">There has been an error starting the scanner.</string>

@@ -10,6 +10,13 @@
     tools:context="com.ashiswin.kodyac.EmasIDActivity">
 
 
+    <ImageView
+        android:id="@+id/NRICpic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:srcCompat="@android:drawable/btn_star" />
+
     <Button
         android:id="@+id/startBtn"
         android:layout_width="wrap_content"
@@ -58,4 +65,18 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="country" />
+
+    <TextView
+        android:id="@+id/txtDateOfIssue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Date Of Issue" />
+
+    <TextView
+        android:id="@+id/txtAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="address" />
 </LinearLayout>
