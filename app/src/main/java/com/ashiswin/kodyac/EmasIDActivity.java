@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.microblink.recognizers.blinkid.singapore.front.SingaporeIDFrontRecognitionResult;
 import com.microblink.activity.ScanActivity;
 import com.microblink.activity.ScanCard;
@@ -117,24 +119,40 @@ public class EmasIDActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK && data != null) {
 
                 Bundle extras = data.getExtras();
+
+
                 if (extras != null && extras.getParcelable(ScanActivity.EXTRAS_RECOGNITION_RESULTS) == null) {
                     // VerificationFlowActivity does not return results as RecognitionResults object, prepare RecognitionResults
                     // from combined recognizer result
+
+
+                }else {
                     BaseRecognitionResult combinedResult = extras.getParcelable(VerificationFlowActivity.EXTRAS_COMBINED_RECOGNITION_RESULT);
                     if (combinedResult != null) {
                         data.putExtra(ScanActivity.EXTRAS_RECOGNITION_RESULTS, new RecognitionResults(new BaseRecognitionResult[]{combinedResult}, RecognitionType.SUCCESSFUL));
                     }
+                    RecognitionResults result = data.getParcelableExtra(ScanCard.EXTRAS_RECOGNITION_RESULTS);
+                    BaseRecognitionResult[] resultArray = result.getRecognitionResults();
+                    for (BaseRecognitionResult baseResult : resultArray) {
+                        if (baseResult instanceof SingaporeIDFrontRecognitionResult) {
+                            SingaporeIDFrontRecognitionResult sgresult = (SingaporeIDFrontRecognitionResult) baseResult;
+
+                            // you can use getters of SingaporeIDFrontRecognitionResult class to
+                            // obtain scanned information
+                            if (sgresult.isValid() && !sgresult.isEmpty()) {
+                                String name = sgresult.getName();
+                                Toast.makeText(this, "your name is " + name, Toast.LENGTH_SHORT).show();
+                                String cardNumber = sgresult.getCardNumber();
+                                Toast.makeText(this, "your card Numer is " + cardNumber, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                    Toast.makeText(this, "success here1", Toast.LENGTH_SHORT).show();
+                    // if BlinkID activity did not return result, user has probably
+                    // pressed Back button and cancelled scanning
+
                 }
-
-                // set intent's component to ResultActivity and pass its contents
-                // to ResultActivity. ResultActivity will show how to extract
-                // data from result.
-
-                Toast.makeText(this, "success here1", Toast.LENGTH_SHORT).show();
-                //startActivity(data);
-            } else {
-                // if BlinkID activity did not return result, user has probably
-                // pressed Back button and cancelled scanning
+            }else{
                 Toast.makeText(this, "Scan cancelled!", Toast.LENGTH_SHORT).show();
             }
         }
