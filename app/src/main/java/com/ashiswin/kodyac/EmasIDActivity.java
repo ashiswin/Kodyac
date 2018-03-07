@@ -11,11 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.microblink.recognizers.blinkid.singapore.front.SingaporeIDFrontRecognitionResult;
 import com.microblink.activity.ScanActivity;
 import com.microblink.activity.ScanCard;
@@ -25,14 +24,15 @@ import com.microblink.activity.VerificationFlowActivity;
 import com.microblink.recognizers.BaseRecognitionResult;
 import com.microblink.recognizers.RecognitionResults;
 import com.microblink.recognizers.blinkid.singapore.back.SingaporeIDBackRecognizerSettings;
-import com.microblink.recognizers.blinkid.singapore.combined.SingaporeIDCombinedRecognizerSettings;
 import com.microblink.recognizers.blinkid.singapore.front.SingaporeIDFrontRecognizerSettings;
 import com.microblink.recognizers.settings.RecognitionSettings;
 import com.microblink.recognizers.settings.RecognizerSettings;
+import com.microblink.results.date.Date;
 import com.microblink.util.RecognizerCompatibility;
 import com.microblink.util.RecognizerCompatibilityStatus;
 import com.microblink.view.recognition.RecognitionType;
 
+//TODO: add a timeout -> if user scan wrong card it'll time out
 
 //Tutorial: https://github.com/BlinkID/blinkid-android#quickDemo
 //reference: https://github.com/BlinkID/blinkid-android/blob/master/BlinkIDSample/BlinkIDSampleCustomUI/src/main/java/com/microblink/blinkid/demo/customui/MyScanActivity.java
@@ -40,14 +40,25 @@ import com.microblink.view.recognition.RecognitionType;
 public class EmasIDActivity extends AppCompatActivity {
     private static final int MY_REQUEST_CODE = 0x101;
     private Button startBtn;
-
-
+    private TextView nameText;
+    private TextView cardText;
+    private TextView raceText;
+    private TextView sexText;
+    private TextView countryText;
+    private TextView dobText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emas_id);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        nameText  = (TextView) findViewById(R.id.txtName);
+        cardText = (TextView) findViewById(R.id.txtCardNumber);
+        raceText = (TextView) findViewById(R.id.txtRace);
+        sexText = (TextView) findViewById(R.id.txtSex);
+        countryText = (TextView) findViewById(R.id.txtCountryBirth);
+        dobText = (TextView) findViewById(R.id.txtDOB);
 
 
 
@@ -65,6 +76,7 @@ public class EmasIDActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 RecognitionSettings settings = new RecognitionSettings();
+                settings.setNumMsBeforeTimeout(10000);
                 SingaporeIDFrontRecognizerSettings singaporeFront = new SingaporeIDFrontRecognizerSettings();
                 SingaporeIDBackRecognizerSettings singaporeBack = new SingaporeIDBackRecognizerSettings();
                 RecognizerSettings[] settArray = new RecognizerSettings[]{singaporeFront, singaporeBack};
@@ -73,35 +85,16 @@ public class EmasIDActivity extends AppCompatActivity {
                 intent.putExtra(ScanCard.EXTRAS_LICENSE_KEY, getString(R.string.microblink_license_key));
                 intent.putExtra(ScanCard.EXTRAS_RECOGNITION_SETTINGS,settings);
                 intent.putExtra(ScanCard.EXTRAS_BEEP_RESOURCE, R.raw.beep);
-                intent.putExtra(ScanActivity.EXTRAS_SHOW_FOCUS_RECTANGLE, true);
-                intent.putExtra(SegmentScanActivity.EXTRAS_SHOW_OCR_RESULT_MODE, (Parcelable) ShowOcrResultMode.ANIMATED_DOTS);
+                intent.putExtra(ScanCard.EXTRAS_SHOW_TIME_LIMITED_LICENSE_KEY_WARNING, false);
+                intent.putExtra(ScanCard.EXTRAS_SHOW_OCR_RESULT, true);
+                intent.putExtra(ScanCard.EXTRAS_SHOW_OCR_RESULT_MODE, (Parcelable) ShowOcrResultMode.ANIMATED_DOTS);
                 startActivityForResult(intent, MY_REQUEST_CODE);
 
             }
         });
     }
 
-    public void onScanningDone(RecognitionResults results) {
-        BaseRecognitionResult[] dataArray = results.getRecognitionResults();
-        for(BaseRecognitionResult baseResult : dataArray) {
-            if(baseResult instanceof SingaporeIDFrontRecognitionResult) {
-                SingaporeIDFrontRecognitionResult result = (SingaporeIDFrontRecognitionResult) baseResult;
 
-                // you can use getters of SingaporeIDFrontRecognitionResult class to
-                // obtain scanned information
-                if(result.isValid() && !result.isEmpty()) {
-                    String name = result.getName();
-                    Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-                    String cardNumber = result.getCardNumber();
-                    Toast.makeText(this, cardNumber, Toast.LENGTH_SHORT).show();
-
-                } else {
-                    // not all relevant data was scanned, ask user
-                    // to try again
-                }
-            }
-        }
-    }
 
 
 
@@ -141,9 +134,23 @@ public class EmasIDActivity extends AppCompatActivity {
                             // obtain scanned information
                             if (sgresult.isValid() && !sgresult.isEmpty()) {
                                 String name = sgresult.getName();
-                                Toast.makeText(this, "your name is " + name, Toast.LENGTH_SHORT).show();
                                 String cardNumber = sgresult.getCardNumber();
+                                String country = sgresult.getCountryOfBirth();
+                                String race = sgresult.getRace();
+                                String sex = sgresult.getSex();
+                                Date dob = sgresult.getDateOfBirth();
+
+
+                                Toast.makeText(this, "your name is " + name, Toast.LENGTH_SHORT).show();
+
                                 Toast.makeText(this, "your card Numer is " + cardNumber, Toast.LENGTH_SHORT).show();
+
+                                nameText.setText("name is "+name);
+                                cardText.setText("NRIC is "+cardNumber);
+                                countryText.setText("Country of birth is "+country);
+                                raceText.setText("race is "+race);
+                                sexText.setText("Sex is "+sex);
+                                dobText.setText("DOB is "+dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
                             }
                         }
                     }

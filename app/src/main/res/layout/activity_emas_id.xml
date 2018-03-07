@@ -16,4 +16,46 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="start Scan" />
+
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="name" />
+
+    <TextView
+        android:id="@+id/txtCardNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="NRIC" />
+
+    <TextView
+        android:id="@+id/txtRace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="race" />
+
+    <TextView
+        android:id="@+id/txtSex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="sex" />
+
+    <TextView
+        android:id="@+id/txtDOB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="dob" />
+
+    <TextView
+        android:id="@+id/txtCountryBirth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="country" />
 </LinearLayout>
