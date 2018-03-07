@@ -5,39 +5,30 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.microblink.recognizers.blinkid.CombinedRecognitionResult;
-import com.microblink.recognizers.blinkid.CombinedRecognizerSettings;
-import com.microblink.recognizers.blinkid.singapore.back.SingaporeIDBackRecognitionResult;
+
 import com.microblink.recognizers.blinkid.singapore.combined.SingaporeIDCombinedRecognitionResult;
 import com.microblink.recognizers.blinkid.singapore.combined.SingaporeIDCombinedRecognizerSettings;
-import com.microblink.recognizers.blinkid.singapore.front.SingaporeIDFrontRecognitionResult;
-import com.microblink.activity.ScanActivity;
-import com.microblink.activity.ScanCard;
-import com.microblink.activity.SegmentScanActivity;
-import com.microblink.activity.ShowOcrResultMode;
 import com.microblink.activity.VerificationFlowActivity;
-import com.microblink.recognizers.BaseRecognitionResult;
-import com.microblink.recognizers.RecognitionResults;
-import com.microblink.recognizers.blinkid.singapore.back.SingaporeIDBackRecognizerSettings;
-import com.microblink.recognizers.blinkid.singapore.front.SingaporeIDFrontRecognizerSettings;
-import com.microblink.recognizers.settings.RecognitionSettings;
-import com.microblink.recognizers.settings.RecognizerSettings;
 import com.microblink.results.date.Date;
 import com.microblink.util.RecognizerCompatibility;
 import com.microblink.util.RecognizerCompatibilityStatus;
-import com.microblink.view.recognition.RecognitionType;
 
-//TODO: add a timeout -> if user scan wrong card it'll time out
+
+
 
 //Tutorial: https://github.com/BlinkID/blinkid-android#quickDemo
 //reference: https://github.com/BlinkID/blinkid-android/blob/master/BlinkIDSample/BlinkIDSampleCustomUI/src/main/java/com/microblink/blinkid/demo/customui/MyScanActivity.java
@@ -53,6 +44,8 @@ public class EmasIDActivity extends AppCompatActivity {
     private TextView dobText;
     private TextView addressText;
     private TextView issueDateText;
+    private ImageView profilePic;
+    private boolean profilePictest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +61,7 @@ public class EmasIDActivity extends AppCompatActivity {
         dobText = (TextView) findViewById(R.id.txtDOB);
         addressText = (TextView) findViewById(R.id.txtAddress);
         issueDateText = (TextView) findViewById(R.id.txtDateOfIssue);
+        profilePic = (ImageView) findViewById(R.id.NRICpic);
 
 
 
@@ -84,13 +78,18 @@ public class EmasIDActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SingaporeIDCombinedRecognizerSettings settings = new SingaporeIDCombinedRecognizerSettings();
+                settings.setEncodeFaceImage(true);
+                profilePictest=settings.shouldEncodeFaceImage();
                 Intent intent = new Intent(EmasIDActivity.this, VerificationFlowActivity.class);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_LICENSE_KEY, getString(R.string.microblink_license_key));
                 intent.putExtra(VerificationFlowActivity.EXTRAS_COMBINED_RECOGNIZER_SETTINGS, settings);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_BEEP_RESOURCE, R.raw.beep);
+                //TODO: sort out the hints so the UI is better
                 intent.putExtra(VerificationFlowActivity.EXTRAS_INSTRUCTIONS_DOCUMENT_FIRST_SIDE, R.string.emas_scan_first_side);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_INSTRUCTIONS_DOCUMENT_SECOND_SIDE, R.string.emas_scan_second_side);
+
                 //TODO: include a res ID if possible so users know which side front and back are
+
 
                 intent.putExtra(VerificationFlowActivity.EXTRAS_SHOW_TIME_LIMITED_LICENSE_KEY_WARNING, false);
                 startActivityForResult(intent, MY_REQUEST_CODE);
@@ -127,11 +126,8 @@ public class EmasIDActivity extends AppCompatActivity {
                         Date dob = result.getDateOfBirth();
                         String address = result.getAddress();
                         Date issueDate = result.getDocumentDateOfIssue();
-
-
-                        Toast.makeText(this, "your name is " + name, Toast.LENGTH_SHORT).show();
-
-                        Toast.makeText(this, "your card Numer is " + cardNumber, Toast.LENGTH_SHORT).show();
+                        //TODO: use meta data listener
+                        byte[] face = result.getEncodedFaceImage();
 
                         nameText.setText("name is "+name);
                         cardText.setText("NRIC is "+cardNumber);
@@ -141,6 +137,16 @@ public class EmasIDActivity extends AppCompatActivity {
                         dobText.setText("DOB is "+dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
                         addressText.setText("Address is "+address);
                         issueDateText.setText("Date of issue is "+issueDate.getDay()+"-"+issueDate.getMonth()+"-"+issueDate.getYear());
+
+                        if(face!=null){
+                            Bitmap bmp = BitmapFactory.decodeByteArray(face,0,face.length);
+                            profilePic.setImageBitmap(bmp);
+                            //TODO: check performance if not use picasso
+
+                        }else{
+                            Toast.makeText(this, "profile pic not detected. Encoding profile pic enabled:"+profilePictest, Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 } else {
                     Toast.makeText(this, "Please try again", Toast.LENGTH_SHORT).show();
