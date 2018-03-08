@@ -18,6 +18,7 @@ import java.util.Map;
 
 public class FaceTracker extends Tracker<Face> {
     private static final float EYE_CLOSED_THRESHOLD = 0.4f;
+    private static final float SMILE_THRESHOLD = 0.6f;
 
     private GraphicOverlay mOverlay;
     private FaceTrackerGraphic mEyesGraphic;
@@ -26,8 +27,17 @@ public class FaceTracker extends Tracker<Face> {
 
     // Similarly, keep track of the previous eye open state so that it can be reused for
     // intermediate frames which lack eye landmarks and corresponding eye state.
-    private boolean mPreviousIsLeftOpen = true;
-    private boolean mPreviousIsRightOpen = true;
+
+    //you dont want it to be updated in real time
+    //int is to keep track
+    private int winked =0;
+    private int smile =0;
+    private int rotated =0;
+    private boolean isLeftOpen = true;
+    private boolean isRightOpen = true;
+    private boolean winkLeft = false;
+    private boolean isSmile = false;
+    private boolean isRotateRight = false;
 
 
     //==============================================================================================
@@ -57,35 +67,49 @@ public class FaceTracker extends Tracker<Face> {
 
         updatePreviousProportions(face);
 
-        PointF leftPosition = getLandmarkPosition(face, Landmark.LEFT_EYE);
-        PointF rightPosition = getLandmarkPosition(face, Landmark.RIGHT_EYE);
-
         float leftOpenScore = face.getIsLeftEyeOpenProbability();
-        boolean isLeftOpen;
         if (leftOpenScore == Face.UNCOMPUTED_PROBABILITY) {
-            isLeftOpen = mPreviousIsLeftOpen;
-
+            //cannot be computed nothing is done
         } else {
             isLeftOpen = (leftOpenScore > EYE_CLOSED_THRESHOLD);
-            mPreviousIsLeftOpen = isLeftOpen;
-            Log.i("Googly","left eye open");
         }
 
         float rightOpenScore = face.getIsRightEyeOpenProbability();
-        boolean isRightOpen;
         if (rightOpenScore == Face.UNCOMPUTED_PROBABILITY) {
-            isRightOpen = mPreviousIsRightOpen;
+            //false nothing done
         } else {
             isRightOpen = (rightOpenScore > EYE_CLOSED_THRESHOLD);
-            mPreviousIsRightOpen = isRightOpen;
-            Log.i("Googly","right eye open");
+        }
+
+
+        if(face.getEulerZ()>20){
+            isRotateRight = true;
+            rotated++;
+            //security measure only true after you've passed the prev one
+            if (winked>0){
+                rotated++;
+            }
+
+        }
+
+        winkLeft = !isLeftOpen && isRightOpen;
+        if (winkLeft && rotated>0){
+            winked++;
+        }
+
+        if (face.getIsSmilingProbability()>SMILE_THRESHOLD){
+            isSmile = true;
+            if (winked>0 && rotated>0){
+                smile++;
+            }
+
         }
 
         Log.i("test","Y rotation is" +face.getEulerY());
         Log.i("test","Z rotation is" +face.getEulerZ());
         Log.i("test","smilin prob is" +face.getIsSmilingProbability());
 
-        mEyesGraphic.updateItem(face);
+        mEyesGraphic.updateItem(face, rotated, winked, smile);
     }
 
     /**
