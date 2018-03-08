@@ -47,7 +47,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".EmasIDActivity"></activity>
+        <activity android:name=".EmasIDActivity" />
+        <activity android:name=".FaceVerificationActivity"></activity>
     </application>
 
 </manifest>
