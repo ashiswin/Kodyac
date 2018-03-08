@@ -5,6 +5,7 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,10 +49,19 @@ public class SMSVerificationNumber extends AppCompatActivity {
                     boolean isMobile = validateMobile(countryCode, phoneNumb);
                     if (status){
                         if (isMobile) {
-                            //doesnt check if mobile number is fake
+
+                            final String url = "http://www.kodyac.tech/scripts/SendSMSOTP.php";
+                            final int Lid = 17;
+                            final String phone = countryCode + edtPhoneNumber.getText().toString();
+                            Log.d("phone no?:", "****"  + "****" + edtPhoneNumber.getText() +"****");
+
+                            SMSSendRunnable Send_SMS = new SMSSendRunnable(getApplicationContext(), url, Lid, phone);
+                            Thread T = new Thread(Send_SMS);
+                            T.start();
+
                             Intent otpIntent = new Intent(SMSVerificationNumber.this, SMSVerificationOTP.class);
-                            otpIntent.putExtra("methodId", getIntent().getIntExtra("methodId", 0));
-                            startActivityForResult(otpIntent, INTENT_OTP);
+                            otpIntent.putExtra("linkId", getIntent().getIntExtra("linkId", Lid));
+                            otpIntent.putExtra("phone", phone);startActivityForResult(otpIntent, INTENT_OTP);
                         }
                         else{
                             edtPhoneNumber.getText().clear();

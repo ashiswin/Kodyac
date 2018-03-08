@@ -59,7 +59,8 @@ dependencies {
     implementation project(':LibBlinkID')
     implementation "com.android.support:appcompat-v7:25"
 
-
+    /* for HTTP request (SMS OTP) */
+    compile 'com.android.volley:volley:1.0.0'
 
 }
 
