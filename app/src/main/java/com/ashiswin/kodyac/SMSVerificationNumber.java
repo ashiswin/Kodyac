@@ -21,6 +21,11 @@ import com.google.i18n.phonenumbers.Phonenumber;
 
 public class SMSVerificationNumber extends AppCompatActivity {
     private static final int INTENT_OTP = 0;
+    private static final String COUNTRY_CODE="+65";
+    private static final String INSUFFICIENT_LENGTH = "Phone number should be 8 digits long";
+    private static final String INVALID_NUMB="Phone number is invalid";
+    private static final String LANDLINE_NUMD="Please enter a MOBILE number";
+    private static final String VALID_NUMB="Phone number entered is valid";
     Spinner spnCountryCodes;
     EditText edtPhoneNumber;
     Button btnSendSMS;
@@ -39,44 +44,25 @@ public class SMSVerificationNumber extends AppCompatActivity {
         btnSendSMS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String countryCode = "+65";
                 String phoneNumb = edtPhoneNumber.getText().toString().trim();
-                if (edtPhoneNumber.getText().toString().length()!=8){
-                    Toast.makeText(SMSVerificationNumber.this, "Phone number should be 8 digits long", Toast.LENGTH_SHORT).show();
+                String result = ValidatePhoneNumb(COUNTRY_CODE,phoneNumb);
+                if (result.equals(VALID_NUMB)){
+                    final String url = "http://www.kodyac.tech/scripts/SendSMSOTP.php";
+                    final int Lid = 17;
+                    final String phone = COUNTRY_CODE + edtPhoneNumber.getText().toString();
+                    Log.d("phone no?:", "****"  + "****" + edtPhoneNumber.getText() +"****");
+
+                    SMSSendRunnable Send_SMS = new SMSSendRunnable(getApplicationContext(), url, Lid, phone);
+                    Thread T = new Thread(Send_SMS);
+                    T.start();
+
+                    Intent otpIntent = new Intent(SMSVerificationNumber.this, SMSVerificationOTP.class);
+                    otpIntent.putExtra("linkId", getIntent().getIntExtra("linkId", Lid));
+                    otpIntent.putExtra("phone", phone);startActivityForResult(otpIntent, INTENT_OTP);
+                } else{
+                    edtPhoneNumber.getText().clear();
+                    Toast.makeText(SMSVerificationNumber.this, "ERROR: "+result, Toast.LENGTH_SHORT).show();
                 }
-                else if (Patterns.PHONE.matcher(phoneNumb).matches()){
-                    boolean status = validateWithLibPhoneNumb(countryCode, phoneNumb);
-                    boolean isMobile = validateMobile(countryCode, phoneNumb);
-                    if (status){
-                        if (isMobile) {
-
-                            final String url = "http://www.kodyac.tech/scripts/SendSMSOTP.php";
-                            final int Lid = 17;
-                            final String phone = countryCode + edtPhoneNumber.getText().toString();
-                            Log.d("phone no?:", "****"  + "****" + edtPhoneNumber.getText() +"****");
-
-                            SMSSendRunnable Send_SMS = new SMSSendRunnable(getApplicationContext(), url, Lid, phone);
-                            Thread T = new Thread(Send_SMS);
-                            T.start();
-
-                            Intent otpIntent = new Intent(SMSVerificationNumber.this, SMSVerificationOTP.class);
-                            otpIntent.putExtra("linkId", getIntent().getIntExtra("linkId", Lid));
-                            otpIntent.putExtra("phone", phone);startActivityForResult(otpIntent, INTENT_OTP);
-                        }
-                        else{
-                            edtPhoneNumber.getText().clear();
-                            Toast.makeText(SMSVerificationNumber.this, "Please enter a MOBILE number", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    else{
-                        edtPhoneNumber.getText().clear();
-                        Toast.makeText(SMSVerificationNumber.this, "Phone number is invalid", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else{
-                    Toast.makeText(SMSVerificationNumber.this, "Please enter a valid phone number", Toast.LENGTH_SHORT).show();
-                }
-
             }
         });
 
@@ -84,41 +70,34 @@ public class SMSVerificationNumber extends AppCompatActivity {
         spnCountryCodes.setAdapter(adapter);
     }
 
-    private boolean validateWithLibPhoneNumb(String countryCode, String phNumber) {
+    private String ValidatePhoneNumb(String countryCode, String phNumber) {
         PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
         String isoCode = phoneNumberUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCode));
         Phonenumber.PhoneNumber phoneNumber = null;
+        if (phNumber.length()!=8){
+            return SMSVerificationNumber.INSUFFICIENT_LENGTH;
+        }
         try {
-            //phoneNumber = phoneNumberUtil.parse(phNumber, "IN");  //if you want to pass region code
             phoneNumber = phoneNumberUtil.parse(phNumber, isoCode);
         } catch (NumberParseException e) {
             System.err.println(e);
+            return SMSVerificationNumber.INVALID_NUMB;
         }
 
         boolean isValid = phoneNumberUtil.isValidNumber(phoneNumber);
+        boolean isMobile = phoneNumberUtil.getNumberType(phoneNumber)==PhoneNumberUtil.PhoneNumberType.MOBILE;
         if (isValid) {
-            String internationalFormat = phoneNumberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
-            //Toast.makeText(this, "Phone Number is Valid " + internationalFormat, Toast.LENGTH_LONG).show();
-            return true;
+            if (isMobile){
+                return SMSVerificationNumber.VALID_NUMB;
+            }else{
+                return SMSVerificationNumber.LANDLINE_NUMD;
+            }
         } else {
-            Toast.makeText(this, "Phone Number is Invalid " + phoneNumber, Toast.LENGTH_LONG).show();
-            return false;
+            return SMSVerificationNumber.INVALID_NUMB;
         }
     }
 
-    private boolean validateMobile(String countryCode, String phNumber) {
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-        String isoCode = phoneNumberUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCode));
-        Phonenumber.PhoneNumber phoneNumber = null;
-        try {
-            //phoneNumber = phoneNumberUtil.parse(phNumber, "IN");  //if you want to pass region code
-            phoneNumber = phoneNumberUtil.parse(phNumber, isoCode);
-        } catch (NumberParseException e) {
-            System.err.println(e);
-        }
-        PhoneNumberUtil.PhoneNumberType isMobile = phoneNumberUtil.getNumberType(phoneNumber);
-        return (PhoneNumberUtil.PhoneNumberType.MOBILE==isMobile);
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
