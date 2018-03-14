@@ -64,7 +64,7 @@ public class SMSVerificationNumberTest {
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             //3595683
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -101,7 +101,7 @@ public class SMSVerificationNumberTest {
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             //60000
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -164,7 +164,7 @@ public class SMSVerificationNumberTest {
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             //3595683
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -201,7 +201,7 @@ public class SMSVerificationNumberTest {
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             //60000
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
