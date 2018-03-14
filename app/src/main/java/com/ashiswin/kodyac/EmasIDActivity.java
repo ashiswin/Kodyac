@@ -34,6 +34,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -54,6 +56,7 @@ public class EmasIDActivity extends AppCompatActivity {
     private TextView issueDateText;
     private ImageView profilePic;
     private boolean profilePictest;
+    private String UriString = "file:///storage/emulated/0/myImages20180314.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +151,9 @@ public class EmasIDActivity extends AppCompatActivity {
                         //TODO: use meta data listener
                         byte[] face = result.getEncodedFaceImage();
 
+                        Uri imageURI = Uri.parse(UriString);
+                        profilePic.setImageURI(imageURI);
+
                         nameText.setText("name is "+name);
                         cardText.setText("NRIC is "+cardNumber);
                         countryText.setText("Country of birth is "+country);
@@ -169,14 +175,12 @@ public class EmasIDActivity extends AppCompatActivity {
                     }
                 } else {
                     Toast.makeText(this, "Please try again", Toast.LENGTH_SHORT).show();
-                    // not all relevant data was scanned, ask user
-                    // to try again
                 }
             }
         }
     }
 
-    class MyImageListener implements ImageListener {
+    static class MyImageListener implements ImageListener {
 
         /**
          * Called when library has image available.
@@ -186,12 +190,8 @@ public class EmasIDActivity extends AppCompatActivity {
             // we will save images to 'myImages' folder on external storage
             // image filenames will be 'imageType - currentTimestamp.jpg'
             String output = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImages";
-            File f = new File(output);
-            if(!f.exists()) {
-                f.mkdirs();
-            }
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-            String dateString = dateFormat.format(new java.util.Date());
+
+            String dateString = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
             String filename = null;
             switch(image.getImageFormat()) {
                 case ALPHA_8: {
@@ -203,13 +203,17 @@ public class EmasIDActivity extends AppCompatActivity {
                     break;
                 }
                 case YUV_NV21: {
-                    filename = output + "/yuv - " + image.getImageName()+ " - " + dateString + ".jpg";
+                    filename = output + "/yuv - " + image.getImageName() + " - " + dateString + ".jpg";
                     break;
                 }
             }
+            File f = new File(output+filename);
+            if(!f.exists()) {
+                f.mkdirs();
+            }
             Bitmap b = image.convertToBitmap();
-            Uri faceUri = Uri.fromFile(f);
-            Log.e("Image Listener", faceUri.toString());
+            //Uri faceUri = Uri.fromFile(f);
+            //Log.e("Image Listener", faceUri.toString());
             FileOutputStream fos = null;
             try {
                 fos = new FileOutputStream(filename);
@@ -227,7 +231,8 @@ public class EmasIDActivity extends AppCompatActivity {
                     }
                 }
             } catch (FileNotFoundException e) {
-                Log.e("EMAS ImageListener", "Failed to save image");
+                e.printStackTrace();
+                Log.e("EMAS ImageListener", "Failed to save image ");
             } finally {
                 if(fos != null) {
                     try {
@@ -238,6 +243,16 @@ public class EmasIDActivity extends AppCompatActivity {
             }
             // after this line, image gets disposed. If you want to save it
             // for later, you need to clone it with image.clone()
+            Image myimage = image.clone();
+            String timeStamp = new SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
+            String imageFileName = timeStamp + ".jpg";
+            String storageDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImages";
+            File imgF = new File(storageDir+imageFileName);
+            if(!imgF.exists()) {
+                imgF.mkdirs();
+            }
+            Uri IMgFile = Uri.fromFile(imgF);
+            Log.e("ImageListener",IMgFile.toString());
         }
 
         /**
