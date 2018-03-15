@@ -26,7 +26,7 @@ repositories {
         url "http://dl.bintray.com/journeyapps/maven"
 
     }
-    maven{
+    maven {
         url "https://maven.google.com"
     }
 }
@@ -84,6 +84,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
 }
+
 
 
 

@@ -26,7 +26,8 @@
             android:resource="@string/asset_statements" />
 
         <activity android:name=".MainActivity">
-            <!--test link-->
+
+            <!-- test link -->
             <tools:validation testUrl="https://www.kodyac.tech/links/kycmain.php?id=18" />
 
             <intent-filter>
@@ -41,9 +42,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="www.kodyac.tech"
-                    android:pathPrefix="/links" />
+                    android:pathPrefix="/links"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity android:name=".VerificationMethodsActivity" />
@@ -67,7 +68,8 @@
         </provider>
 
         <activity android:name=".EmasIDActivity" />
-        <activity android:name=".FaceVerificationActivity"></activity>
+        <activity android:name=".FaceVerificationActivity" />
+        <activity android:name=".NRICVerificationMethodActivity"></activity>
     </application>
 
 </manifest>
