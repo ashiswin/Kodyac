@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnBegin;
     private int companyID =0;
 
-    //TODO: make button unclickable until companyID is retrieved (down below) 
+    //TODO: make button unclickable until companyID is retrieved (down below)
 
 
     @Override
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-        handleAppIntent();
+       // handleAppIntent();
     }
 
     @Override

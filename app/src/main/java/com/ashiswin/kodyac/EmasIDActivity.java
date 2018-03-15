@@ -148,7 +148,6 @@ public class EmasIDActivity extends AppCompatActivity {
                         Date dob = result.getDateOfBirth();
                         String address = result.getAddress();
                         Date issueDate = result.getDocumentDateOfIssue();
-                        //TODO: use meta data listener
                         byte[] face = result.getEncodedFaceImage();
 
                         Uri imageURI = Uri.parse(UriString);
@@ -190,7 +189,10 @@ public class EmasIDActivity extends AppCompatActivity {
             // we will save images to 'myImages' folder on external storage
             // image filenames will be 'imageType - currentTimestamp.jpg'
             String output = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImages";
-
+            File f = new File(output);
+            if(!f.exists()) {
+                f.mkdirs();
+            }
             String dateString = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
             String filename = null;
             switch(image.getImageFormat()) {
@@ -207,10 +209,7 @@ public class EmasIDActivity extends AppCompatActivity {
                     break;
                 }
             }
-            File f = new File(output+filename);
-            if(!f.exists()) {
-                f.mkdirs();
-            }
+
             Bitmap b = image.convertToBitmap();
             //Uri faceUri = Uri.fromFile(f);
             //Log.e("Image Listener", faceUri.toString());
@@ -244,6 +243,7 @@ public class EmasIDActivity extends AppCompatActivity {
             // after this line, image gets disposed. If you want to save it
             // for later, you need to clone it with image.clone()
             Image myimage = image.clone();
+
             String timeStamp = new SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
             String imageFileName = timeStamp + ".jpg";
             String storageDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImages";
