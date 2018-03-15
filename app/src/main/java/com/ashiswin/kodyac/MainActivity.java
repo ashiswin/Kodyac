@@ -17,8 +17,9 @@ public class MainActivity extends AppCompatActivity {
     TextView txtWelcome;
     ImageView imgLogo;
     Button btnBegin;
-    private final String APP_LINK_PATTERN =  "kycmain.php?id=";
     private int companyID =0;
+
+    //TODO: make button unclickable until companyID is retrieved (down below) 
 
 
     @Override
@@ -47,9 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-
         handleAppIntent();
-
     }
 
     @Override
@@ -62,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private void handleAppIntent() {
         Intent appLinkIntent = getIntent();
         Uri appLinkData = appLinkIntent.getData();
+
         //extract company ID
         String companyIDString = appLinkData.getQueryParameter("id");
         companyID = Integer.valueOf(companyIDString);

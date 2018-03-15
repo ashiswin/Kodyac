@@ -20,8 +20,8 @@ public class VerificationMethodsActivity extends AppCompatActivity {
     private static final int INTENT_VERIFICATION = 0;
 
     // TODO: REMOVE DUMMY DATA
-    String[] methods = new String[] {"SMS Verification", "NRIC Verification", "Biometric Verification", "NRIC Barcode", "OpenCVTest", "EmasID","FaceVerification"};
-    boolean[] completion = new boolean[] {false, false, true, false, false, false, false};
+    String[] methods = new String[] {"SMS Verification", "OLD NRIC test", "Biometric Verification", "NRIC Barcode", "OpenCVTest", "EmasID","FaceVerification"};
+    boolean[] completion = new boolean[] {false, true, true, false, false, false, false};
 
     VerificationAdapter adapter;
     RecyclerView lstMethods;
@@ -108,7 +108,7 @@ public class VerificationMethodsActivity extends AppCompatActivity {
                             Intent smsIntent = new Intent(VerificationMethodsActivity.this, SMSVerificationNumber.class);
                             smsIntent.putExtra("methodId", position);
                             startActivityForResult(smsIntent, INTENT_VERIFICATION);
-                        } else if (text.equals("NRIC Verification")) {
+                        } else if (text.equals("OLD NRIC test")) {
                             Intent nricIntent = new Intent(VerificationMethodsActivity.this, NRICVerificationCard.class);
                             nricIntent.putExtra("methodId", position);
                             startActivityForResult(nricIntent, INTENT_VERIFICATION);
