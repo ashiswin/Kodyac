@@ -2,18 +2,24 @@ package com.ashiswin.kodyac;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     TextView txtWelcome;
     ImageView imgLogo;
     Button btnBegin;
+    private final String APP_LINK_PATTERN =  "kycmain.php?id=";
+    private int companyID =0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +42,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent verificationIntent = new Intent(MainActivity.this, VerificationMethodsActivity.class);
+                verificationIntent.putExtra("companyID",companyID);
                 startActivity(verificationIntent);
                 finish();
             }
         });
+
+        Intent appLinkIntent = getIntent();
+        Uri appLinkData = appLinkIntent.getData();
+        //extract company ID
+        String companyIDString = appLinkData.getQueryParameter("id");
+        companyID = Integer.valueOf(companyIDString);
+        Toast.makeText(this, "company id is "+companyIDString, Toast.LENGTH_SHORT).show();
     }
 }

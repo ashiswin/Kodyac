@@ -13,7 +13,9 @@
     <string name="ok">OK</string>
     <string name="photopayOK">OK</string>
     <string name="errorDesc">There has been an error starting the scanner.</string>
+    <string name="app_link_startPatt">kycmain.php?id=</string>
     <string-array name="country_codes">
         <item>+65</item>
     </string-array>
+    <string name="asset_statements" translatable="false">[{\n  \"relation\": [\"delegate_permission/common.handle_all_urls\"],\n  \"target\": {\n    \"namespace\": \"web\",\n    \"site\": \"https://www.kodyac.tech\",\n  }\n}]</string>
 </resources>
