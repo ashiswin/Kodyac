@@ -48,11 +48,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        handleAppIntent();
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleAppIntent();
+    }
+
+    private void handleAppIntent() {
         Intent appLinkIntent = getIntent();
         Uri appLinkData = appLinkIntent.getData();
         //extract company ID
         String companyIDString = appLinkData.getQueryParameter("id");
         companyID = Integer.valueOf(companyIDString);
-        Toast.makeText(this, "company id is "+companyIDString, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "company id is " + companyIDString, Toast.LENGTH_SHORT).show();
     }
 }
