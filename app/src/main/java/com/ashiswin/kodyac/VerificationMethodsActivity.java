@@ -15,9 +15,8 @@ import android.widget.TextView;
 public class VerificationMethodsActivity extends AppCompatActivity {
     private static final int INTENT_VERIFICATION = 0;
 
-    // TODO: REMOVE DUMMY DATA
-    String[] methods = new String[] {"SMS Verification", "OLD NRIC test", "Biometric Verification", "NRIC Verification", "OpenCVTest", "FaceVerification"};
-    boolean[] completion = new boolean[] {false, false, true, false, false, false};
+    String[] methods = new String[] {"SMS Verification", "Basic Information Verification", "NRIC Verification", "Video Verification"};
+    boolean[] completion = new boolean[] {false, false, false, false};
 
     VerificationAdapter adapter;
     RecyclerView lstMethods;
@@ -30,13 +29,11 @@ public class VerificationMethodsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification_methods);
 
-        getSupportActionBar().hide();
-
         lstMethods = (RecyclerView) findViewById(R.id.lstMethods);
         btnComplete = (Button) findViewById(R.id.btnComplete);
 
         adapter = new VerificationAdapter();
-        layoutManager = new GridLayoutManager(VerificationMethodsActivity.this,2);
+        layoutManager = new GridLayoutManager(VerificationMethodsActivity.this, 1);
         lstMethods.setLayoutManager(layoutManager);
         lstMethods.setAdapter(adapter);
     }

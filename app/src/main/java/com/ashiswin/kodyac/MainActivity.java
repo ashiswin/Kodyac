@@ -1,9 +1,11 @@
 package com.ashiswin.kodyac;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -38,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        //getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        //getSupportActionBar().hide();
 
         setContentView(R.layout.activity_main);
 
@@ -77,12 +79,27 @@ public class MainActivity extends AppCompatActivity {
         Intent appLinkIntent = getIntent();
         Uri appLinkData = appLinkIntent.getData();
 
-        //extract company ID
-        String companyIDString = appLinkData.getQueryParameter("id");
-        int linkID = Integer.valueOf(companyIDString);
-        getLink(linkID);
+        if(appLinkData == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.Theme_AppCompat_Dialog);
+            builder.setTitle("KodYaC Error");
+            builder.setMessage("Please select a KYC link to launch KodYaC");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            builder.setCancelable(false);
+            builder.show();
+        }
+        else {
+            //extract company ID
+            String companyIDString = appLinkData.getQueryParameter("id");
+            int linkID = Integer.valueOf(companyIDString);
+            getLink(linkID);
 
-        Toast.makeText(this, "LINK ID is: " + companyIDString, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "LINK ID is: " + companyIDString, Toast.LENGTH_SHORT).show();
+        }
     }
 
     //get information about company and KYC methods using  HTTP GET Request
