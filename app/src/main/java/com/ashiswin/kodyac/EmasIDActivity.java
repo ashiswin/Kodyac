@@ -153,13 +153,13 @@ public class EmasIDActivity extends AppCompatActivity {
                         Uri imageURI = Uri.parse(UriString);
                         profilePic.setImageURI(imageURI);
 
-                        nameText.setText(name);
-                        cardText.setText(cardNumber);
-                        countryText.setText(country);
-                        raceText.setText(race);
-                        sexText.setText(sex);
+                        nameText.setText(name.trim());
+                        cardText.setText(cardNumber.trim());
+                        countryText.setText(country.trim());
+                        raceText.setText(race.trim());
+                        sexText.setText(sex.trim());
                         dobText.setText(dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
-                        addressText.setText(address);
+                        addressText.setText(address.trim());
                         issueDateText.setText(issueDate.getDay()+"-"+issueDate.getMonth()+"-"+issueDate.getYear());
 
                         if(face!=null){
