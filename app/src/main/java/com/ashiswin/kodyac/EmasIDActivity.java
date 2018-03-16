@@ -153,14 +153,14 @@ public class EmasIDActivity extends AppCompatActivity {
                         Uri imageURI = Uri.parse(UriString);
                         profilePic.setImageURI(imageURI);
 
-                        nameText.setText("name is "+name);
-                        cardText.setText("NRIC is "+cardNumber);
-                        countryText.setText("Country of birth is "+country);
-                        raceText.setText("race is "+race);
-                        sexText.setText("Sex is "+sex);
-                        dobText.setText("DOB is "+dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
-                        addressText.setText("Address is "+address);
-                        issueDateText.setText("Date of issue is "+issueDate.getDay()+"-"+issueDate.getMonth()+"-"+issueDate.getYear());
+                        nameText.setText(name);
+                        cardText.setText(cardNumber);
+                        countryText.setText(country);
+                        raceText.setText(race);
+                        sexText.setText(sex);
+                        dobText.setText(dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
+                        addressText.setText(address);
+                        issueDateText.setText(issueDate.getDay()+"-"+issueDate.getMonth()+"-"+issueDate.getYear());
 
                         if(face!=null){
                             Bitmap bmp = BitmapFactory.decodeByteArray(face,0,face.length);
