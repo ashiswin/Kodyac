@@ -6,4 +6,5 @@
     <color name="colorDisabled">#999999FF</color>
     <color name="colorSuccess">#00CC00</color>
     <color name="colorSuccessDisabled">#99FF99</color>
+    <color name="colorBackground">#000000</color>
 </resources>

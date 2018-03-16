@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
     android:clipToPadding="false"
+    android:background="@color/colorBackground"
     tools:context="com.ashiswin.kodyac.VerificationMethodsActivity">
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:layout_marginBottom="50dp"
         android:id="@+id/lstMethods"
         android:clipToPadding="false"
-        android:paddingBottom="8dp"/>
+        android:paddingBottom="8dp" />
+
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
         android:id="@+id/btnComplete"
-        android:text="Complete"
-        android:background="@drawable/rounded_rect_button_success"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:layout_marginRight="4dp"
-        android:layout_marginLeft="4dp"
-        android:enabled="false"/>
-</LinearLayout>
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/tick"
+        android:enabled="false"
+        android:foreground="?android:attr/selectableItemBackground" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="0dp"
+        android:paddingTop="0dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/banner" />
+</RelativeLayout>

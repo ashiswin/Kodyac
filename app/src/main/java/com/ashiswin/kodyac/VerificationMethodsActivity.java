@@ -1,19 +1,15 @@
 package com.ashiswin.kodyac;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class VerificationMethodsActivity extends AppCompatActivity {
@@ -34,13 +30,13 @@ public class VerificationMethodsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification_methods);
 
-        getSupportActionBar().setTitle("Verification Steps");
+        getSupportActionBar().hide();
 
         lstMethods = (RecyclerView) findViewById(R.id.lstMethods);
         btnComplete = (Button) findViewById(R.id.btnComplete);
 
         adapter = new VerificationAdapter();
-        layoutManager = new LinearLayoutManager(VerificationMethodsActivity.this);
+        layoutManager = new GridLayoutManager(VerificationMethodsActivity.this,2);
         lstMethods.setLayoutManager(layoutManager);
         lstMethods.setAdapter(adapter);
     }
