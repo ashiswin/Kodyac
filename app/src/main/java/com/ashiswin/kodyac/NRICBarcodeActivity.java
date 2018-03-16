@@ -31,7 +31,12 @@ public class NRICBarcodeActivity extends AppCompatActivity {
 
     private Button startScan;
     private TextView barcodeNum;
-    private TextView detailsDisplay;
+    private TextView nameText;
+    private TextView raceText;
+    private TextView sexText;
+    private TextView countryText;
+    private TextView dobText;
+    private TextView addressText;
     private final String endPoint="GetMyInfo.php";
     private final String ERROR_MSG="Deatils could not be obtained. Please ensure you have a SingPass Account.";
     private JSONObject jsonObject;
@@ -46,7 +51,12 @@ public class NRICBarcodeActivity extends AppCompatActivity {
 
         startScan = (Button) findViewById(R.id.scan_bttn);
         barcodeNum = (TextView) findViewById(R.id.barcode_num);
-        detailsDisplay = (TextView) findViewById(R.id.barcode_details);
+        nameText  = (TextView) findViewById(R.id.txtName);
+        raceText = (TextView) findViewById(R.id.txtRace);
+        sexText = (TextView) findViewById(R.id.txtSex);
+        countryText = (TextView) findViewById(R.id.txtCountryBirth);
+        dobText = (TextView) findViewById(R.id.txtDOB);
+        addressText = (TextView) findViewById(R.id.txtAddress);
 
         startScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,22 +138,24 @@ public class NRICBarcodeActivity extends AppCompatActivity {
                 JSONObject details = jsonObject.getJSONObject("details");
                 /*"name":null,"sex":null,"race":null,"dob":null,"address":"  #-, S"*/
                 if (details.isNull("name")||details.isNull("sex")||details.isNull("race")||details.isNull("dob")){
-                    detailsDisplay.setText(ERROR_MSG);
+                    nameText.setText(ERROR_MSG);
                 }else{
                     String name = details.getString("name");
                     String sex = details.getString("sex");
                     String race = details.getString("race");
                     String dob = details.getString("dob");
                     String address = details.getString("address");
-                    detailsDisplay.setText("name: "+name+"\n"
-                            +"sex: "+sex+"\n"
-                            +"race: "+race+"\n"
-                            +"dob: "+dob+"\n"
-                            +"address: "+address+"\n");
+                    String nationality = details.getString("nationality");
+                    nameText.setText(name);
+                    sexText.setText(sex);
+                    raceText.setText(race);
+                    dobText.setText(dob);
+                    addressText.setText(address);
+                    countryText.setText(nationality);
                 }
             }else{
                 //cannot log into MyInfo API
-                detailsDisplay.setText(ERROR_MSG);
+                nameText.setText(ERROR_MSG);
             }
 
 
