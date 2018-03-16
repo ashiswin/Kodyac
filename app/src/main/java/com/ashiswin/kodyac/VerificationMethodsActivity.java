@@ -113,7 +113,7 @@ public class VerificationMethodsActivity extends AppCompatActivity {
                             Intent openCVtestIntent = new Intent(VerificationMethodsActivity.this, OpenCVActivity.class);
                             openCVtestIntent.putExtra("methodId", position);
                             startActivityForResult(openCVtestIntent, INTENT_VERIFICATION);
-                        }else if (text.equals("FaceVerification")){
+                        }else if (text.equals("Video Verification")){
                             Intent openCVtestIntent = new Intent(VerificationMethodsActivity.this, FaceVerificationActivity.class);
                             openCVtestIntent.putExtra("methodId", position);
                             startActivityForResult(openCVtestIntent, INTENT_VERIFICATION);

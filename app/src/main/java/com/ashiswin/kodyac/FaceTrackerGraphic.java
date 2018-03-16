@@ -86,7 +86,7 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
         if (face == null) {
             return;
         }
-
+        /*draw border around face*/
         float cx = translateX(face.getPosition().x + face.getWidth() / 2);
         float cy = translateY(face.getPosition().y + face.getHeight() / 2);
         canvas.drawCircle(cx, cy, FACE_POSITION_RADIUS, mFacePositionPaint);
