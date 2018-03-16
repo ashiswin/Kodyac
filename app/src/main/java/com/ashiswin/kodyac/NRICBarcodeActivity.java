@@ -75,7 +75,7 @@ public class NRICBarcodeActivity extends AppCompatActivity {
         //once there is result output the barcode number
         if (scanResult!=null){
             String scanContent = scanResult.getContents();
-            barcodeNum.setText("NUMBER SCANNED: "+scanContent);
+            barcodeNum.setText(scanContent);
             sendGetMyInfo(scanContent);
         }else{
             Toast.makeText(this, "No scan result", Toast.LENGTH_SHORT).show();
