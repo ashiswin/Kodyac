@@ -50,18 +50,18 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-integration:2.3.0@aar'
     implementation 'com.journeyapps:zxing-android-embedded:2.3.0@aar'
 
-    /*for openCV test*/
-    compile project(':openCVLibrary300')
-    testCompile 'junit:junit:4.12'
-    implementation project(':openCVLibrary300')
-    compile 'com.rmtheis:tess-two:5.4.1'
-
     /*to check for errors in phone number entered*/
     compile 'com.googlecode.libphonenumber:libphonenumber:8.4.2'
 
     /*for EMAS BLink ID*/
     implementation project(':LibBlinkID')
     implementation "com.android.support:appcompat-v7:25"
+
+    /*for openCV test*/
+    compile project(':openCVLibrary300')
+    testCompile 'junit:junit:4.12'
+    implementation project(':openCVLibrary300')
+    compile 'com.rmtheis:tess-two:5.4.1'
 
     /* for HTTP request (SMS OTP) */
     compile 'com.android.volley:volley:1.0.0'

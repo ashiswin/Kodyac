@@ -25,16 +25,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="32dp"
-        android:background="@drawable/tick"
+        android:background="@drawable/rounded_rect_button_success"
         android:enabled="false"
         android:foreground="?android:attr/selectableItemBackground" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:layout_marginTop="0dp"
-        android:paddingTop="0dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/banner" />
 </RelativeLayout>

@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.ashiswin.kodyac.camera.CameraSourcePreview;
@@ -62,7 +63,7 @@ public class FaceVerificationActivity extends AppCompatActivity {
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
 
-        final Button button = (Button) findViewById(R.id.flipButton);
+        final ImageButton button = (ImageButton) findViewById(R.id.flipButton);
         button.setOnClickListener(mFlipButtonListener);
 
         if (savedInstanceState != null) {
