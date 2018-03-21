@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     TextView txtWelcome;
     ImageView imgLogo;
     Button btnBegin;
+
+    MainApplication m;
+
     private String linkEndPoint = "GetLink.php";
     private String companyEndPoint = "GetCompany.php";
 
@@ -40,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        //getSupportActionBar().hide();
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
 
         setContentView(R.layout.activity_main);
 
@@ -51,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         txtWelcome = (TextView) findViewById(R.id.txtWelcome);
         imgLogo = (ImageView) findViewById(R.id.imgLogo);
         btnBegin = (Button) findViewById(R.id.btnBegin);
+
+        m = (MainApplication) getApplicationContext();
+
         //make Button un-clickable until relevant information is loaded
         //btnBegin.setEnabled(false);
 
@@ -98,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
             int linkID = Integer.valueOf(companyIDString);
             getLink(linkID);
 
-            Toast.makeText(this, "LINK ID is: " + companyIDString, Toast.LENGTH_SHORT).show();
+            m.linkId = linkID;
+            //Toast.makeText(this, "LINK ID is: " + companyIDString, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -106,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     private void getLink(final int idLink) {
         // Instantiate the RequestQueue.
         final RequestQueue queue = Volley.newRequestQueue(this);
-        final String url =getString(R.string.base_url)+linkEndPoint;
+        final String url = getString(R.string.base_url) + linkEndPoint;
 
         // Request a string response from the provided URL.
         new Thread(new Runnable() {
@@ -123,8 +130,24 @@ public class MainActivity extends AppCompatActivity {
                                     //successfully get linkID from HTTP GET
                                     if (responseJson.getBoolean("success")){
                                         JSONObject linkJson = responseJson.getJSONObject("link");
-                                        Log.e("Company ID", "company ID obtained is " + linkJson.getInt("companyId"));
-                                        getCompany(linkJson.getInt("companyId"));
+                                        m.companyId = linkJson.getInt("companyId");
+                                        m.name = linkJson.getString("name");
+                                        m.address = linkJson.getString("address");
+                                        m.dob = linkJson.getString("dob");
+                                        m.contact = linkJson.getString("contact");
+                                        m.nationality = linkJson.getString("nationality");
+                                        m.nric = linkJson.getString("nric");
+                                        m.sex = linkJson.getString("sex");
+                                        m.race = linkJson.getString("race");
+
+                                        m.methods = new HashMap<>();
+
+                                        String[] completedMethods = linkJson.getString("completedMethods").split("|");
+                                        for(String s : completedMethods) {
+                                            m.methods.put(s, true);
+                                        }
+                                        //Log.e("Company ID", "company ID obtained is " + linkJson.getInt("companyId"));
+                                        getCompany(m.companyId);
                                     }else{
                                         String errorMsg = responseJson.getString("message");
                                         Toast.makeText(MainActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
@@ -156,11 +179,11 @@ public class MainActivity extends AppCompatActivity {
     private void getCompany(final int idCompany) {
         // Instantiate the RequestQueue.
         final RequestQueue queue = Volley.newRequestQueue(this);
-        final String url =getString(R.string.base_url)+companyEndPoint;
+        final String url = getString(R.string.base_url) + companyEndPoint;
 
         // Request a string response from the provided URL.
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url+"?id="+idCompany,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url+"?id=" + idCompany,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -172,7 +195,14 @@ public class MainActivity extends AppCompatActivity {
                             if (responseJson.getBoolean("success")){
                                 JSONObject companyJson = responseJson.getJSONObject("company");
                                 Log.e("Company ID", companyJson.toString());
-                                Toast.makeText(MainActivity.this, "KYC methods are: "+companyJson.getString("methods"), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(MainActivity.this, "KYC methods are: " + companyJson.getString("methods"), Toast.LENGTH_SHORT).show();
+                                String[] methods = companyJson.getString("methods").split("|");
+
+                                for(String s : methods) {
+                                    if(!m.methods.containsKey(s)) {
+                                        m.methods.put(s, false);
+                                    }
+                                }
                             }else{
                                 String errorMsg = responseJson.getString("message");
                                 Toast.makeText(MainActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
