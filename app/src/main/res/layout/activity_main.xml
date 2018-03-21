@@ -29,6 +29,7 @@
             android:layout_height="48dp"
             android:id="@+id/btnBegin"
             android:text="Begin"
+            android:elevation="0dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:layout_margin="16dp"/>
     </LinearLayout>

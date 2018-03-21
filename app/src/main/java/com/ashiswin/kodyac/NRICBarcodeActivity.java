@@ -20,10 +20,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.microblink.results.date.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,7 +77,7 @@ public class NRICBarcodeActivity extends AppCompatActivity {
             raceText.setText(m.race);
             sexText.setText(m.sex);
             countryText.setText(m.nationality);
-            dobText.setText(m.dob);
+            dobText.setText(prettyDate(m.dob));
             addressText.setText(m.address);
         }
         startScan.setOnClickListener(new View.OnClickListener() {
@@ -152,11 +155,12 @@ public class NRICBarcodeActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         //once there is result output the barcode number
-        if (scanResult!=null){
+        if (scanResult != null){
             String scanContent = scanResult.getContents();
             barcodeNum.setText(scanContent);
             sendGetMyInfo(scanContent);
-        }else{
+        }
+        else{
             Toast.makeText(this, "No scan result", Toast.LENGTH_SHORT).show();
         }
 
@@ -168,38 +172,28 @@ public class NRICBarcodeActivity extends AppCompatActivity {
         final RequestQueue queue = Volley.newRequestQueue(this);
         final String url = MainApplication.SERVER_URL + endPoint;
 
-        // Request a string response from the provided URL.
-        //TODO: do i need threads????? -jingyun
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, url + "?nric=" + nricInput,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Log.e("NRIC Barcode", "Response is " + response);
-                                //convert the string to a json object so i easily parse it
-                                try {
-                                    jsonObject = new JSONObject(response);
-                                    displayResult(jsonObject);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    Log.e("JSON ERROR", e.toString());
-                                }
-                            }
-                        }, new Response.ErrorListener() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url + "?nric=" + nricInput,
+                new Response.Listener<String>() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Error.Response", error.getLocalizedMessage());
+                    public void onResponse(String response) {
+                        Log.e("NRIC Barcode", "Response is " + response);
+                        //convert the string to a json object so i easily parse it
+                        try {
+                            jsonObject = new JSONObject(response);
+                            displayResult(jsonObject);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e("JSON ERROR", e.toString());
+                        }
                     }
-                });
-                // Add the request to the RequestQueue.
-                queue.add(stringRequest);
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error.Response", error.getLocalizedMessage());
             }
-        }).start();
-
-
-
+        });
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 
     //parse json object obtained from HTTP GET method above
@@ -222,7 +216,7 @@ public class NRICBarcodeActivity extends AppCompatActivity {
                     nameText.setText(name);
                     sexText.setText(sex);
                     raceText.setText(race);
-                    dobText.setText(dob);
+                    dobText.setText(prettyDate(dob));
                     addressText.setText(address);
                     countryText.setText(nationality);
 
@@ -290,5 +284,18 @@ public class NRICBarcodeActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public String prettyDate(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        java.util.Date newDate = null;
+        try {
+            newDate = format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        format = new SimpleDateFormat("MMM dd, yyyy");
+        return format.format(newDate);
     }
 }

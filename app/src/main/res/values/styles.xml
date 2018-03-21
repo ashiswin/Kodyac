@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="buttonStyle">@style/buttonStyle</item>
         <item name="imageButtonStyle">@style/roundedButtonStyle</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
     </style>
     <style name="buttonStyle" parent="@android:style/Widget.Button.Small">
         <item name="android:textColor">#FFFFFF</item>

@@ -19,6 +19,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
         android:foreground="?android:attr/selectableItemBackground"
+        android:elevation="0dp"
         android:text="Start Scan" />
 
     <ImageView
