@@ -71,7 +71,6 @@
 
         <activity android:name=".EmasIDActivity" />
         <activity android:name=".FaceVerificationActivity" />
-        <activity android:name=".NRICVerificationMethodActivity"></activity>
     </application>
 
 </manifest>
