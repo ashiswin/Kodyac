@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="56dp"
     android:padding="4dp"
     android:clipToPadding="false">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:minHeight="48dp"
+        android:minHeight="56dp"
+        android:layout_marginLeft="8dp"
         android:id="@+id/text"
         android:textAppearance="?android:textAppearanceLarge"
         android:layout_alignParentStart="true"
@@ -17,5 +18,8 @@
         android:layout_height="24dp"
         android:id="@+id/imgStatus"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_chevron_right_black_24dp"
         android:scaleType="fitXY"/>
 </RelativeLayout>

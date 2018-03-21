@@ -9,6 +9,7 @@ import java.util.HashMap;
  */
 
 public class MainApplication extends Application {
+    public static final String SERVER_URL = "http://www.kodyac.tech/scripts/";
     int linkId;
     int companyId;
 

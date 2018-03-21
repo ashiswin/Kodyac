@@ -10,7 +10,7 @@
     <Button
         android:id="@+id/scan_bttn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -73,6 +73,8 @@
             android:id="@+id/txtRace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:textAppearance="?android:textAppearanceMedium"/>
     </LinearLayout>
 
@@ -95,6 +97,8 @@
             android:id="@+id/txtSex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:textAppearance="?android:textAppearanceMedium"/>
     </LinearLayout>
 
@@ -169,4 +173,18 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/rounded_rect_button_success"
+        android:enabled="false"
+        android:elevation="0dp"
+        android:text="Confirm"
+        android:foreground="?android:attr/selectableItemBackground" />
 </LinearLayout>

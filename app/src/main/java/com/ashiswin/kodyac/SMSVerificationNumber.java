@@ -21,14 +21,16 @@ import com.google.i18n.phonenumbers.Phonenumber;
 
 public class SMSVerificationNumber extends AppCompatActivity {
     private static final int INTENT_OTP = 0;
-    private static final String COUNTRY_CODE="+65";
+    private static final String COUNTRY_CODE = "+65";
     private static final String INSUFFICIENT_LENGTH = "Phone number should be 8 digits long";
-    private static final String INVALID_NUMB="Phone number is invalid";
-    private static final String LANDLINE_NUMD="Please enter a MOBILE number";
+    private static final String INVALID_NUMB = "Phone number is invalid";
+    private static final String LANDLINE_NUMD = "Please enter a MOBILE number";
     private static final String VALID_NUMB="Phone number entered is valid";
     Spinner spnCountryCodes;
     EditText edtPhoneNumber;
     Button btnSendSMS;
+
+    MainApplication m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +39,18 @@ public class SMSVerificationNumber extends AppCompatActivity {
         getSupportActionBar().setTitle("SMS Verification");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        m = (MainApplication) getApplicationContext();
+
         spnCountryCodes = (Spinner) findViewById(R.id.spnCountryCode);
         edtPhoneNumber = (EditText) findViewById(R.id.edtPhoneNumber);
         btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
 
+        if(m.methods.get("sms")) {
+            btnSendSMS.setEnabled(false);
+            edtPhoneNumber.setText(m.contact);
+            edtPhoneNumber.setEnabled(false);
+            spnCountryCodes.setVisibility(View.GONE);
+        }
         btnSendSMS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,16 +58,15 @@ public class SMSVerificationNumber extends AppCompatActivity {
                 String result = ValidatePhoneNumb(COUNTRY_CODE,phoneNumb);
                 if (result.equals(VALID_NUMB)){
                     final String url = "http://www.kodyac.tech/scripts/SendSMSOTP.php";
-                    final int Lid = 17;
                     final String phone = COUNTRY_CODE + edtPhoneNumber.getText().toString();
                     Log.d("phone no?:", "****"  + "****" + edtPhoneNumber.getText() +"****");
 
-                    SMSSendRunnable Send_SMS = new SMSSendRunnable(getApplicationContext(), url, Lid, phone);
+                    SMSSendRunnable Send_SMS = new SMSSendRunnable(getApplicationContext(), url, m.linkId, phone);
                     Thread T = new Thread(Send_SMS);
                     T.start();
 
                     Intent otpIntent = new Intent(SMSVerificationNumber.this, SMSVerificationOTP.class);
-                    otpIntent.putExtra("linkId", getIntent().getIntExtra("linkId", Lid));
+                    otpIntent.putExtra("linkId", getIntent().getIntExtra("linkId", m.linkId));
                     otpIntent.putExtra("phone", phone);startActivityForResult(otpIntent, INTENT_OTP);
                 } else{
                     edtPhoneNumber.getText().clear();

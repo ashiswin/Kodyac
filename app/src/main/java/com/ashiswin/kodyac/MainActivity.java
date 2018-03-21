@@ -1,5 +1,7 @@
 package com.ashiswin.kodyac;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -37,9 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private String linkEndPoint = "GetLink.php";
     private String companyEndPoint = "GetCompany.php";
 
-    //TODO: make button unclickable until companyID is retrieved (down below)
-
-
+    ProgressDialog d;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         m = (MainApplication) getApplicationContext();
 
         //make Button un-clickable until relevant information is loaded
-        //btnBegin.setEnabled(false);
+        btnBegin.setEnabled(false);
 
         txtWelcome.setText(text);
         imgLogo.setImageResource(R.drawable.ibm);
@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent verificationIntent = new Intent(MainActivity.this, VerificationMethodsActivity.class);
-               // verificationIntent.putExtra("companyID",companyID);
                 startActivity(verificationIntent);
                 finish();
             }
@@ -102,10 +101,14 @@ public class MainActivity extends AppCompatActivity {
             //extract company ID
             String companyIDString = appLinkData.getQueryParameter("id");
             int linkID = Integer.valueOf(companyIDString);
+            d = new ProgressDialog(MainActivity.this);
+            d.setTitle("Loading KYC");
+            d.setMessage("Please wait while we load this KYC session");
+            d.setIndeterminate(true);
+            d.show();
             getLink(linkID);
 
             m.linkId = linkID;
-            //Toast.makeText(this, "LINK ID is: " + companyIDString, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -142,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
                                         m.methods = new HashMap<>();
 
-                                        String[] completedMethods = linkJson.getString("completedMethods").split("|");
+                                        String[] completedMethods = linkJson.getString("completedMethods").split("\\|");
                                         for(String s : completedMethods) {
                                             m.methods.put(s, true);
                                         }
@@ -195,18 +198,19 @@ public class MainActivity extends AppCompatActivity {
                             if (responseJson.getBoolean("success")){
                                 JSONObject companyJson = responseJson.getJSONObject("company");
                                 Log.e("Company ID", companyJson.toString());
-                                //Toast.makeText(MainActivity.this, "KYC methods are: " + companyJson.getString("methods"), Toast.LENGTH_SHORT).show();
-                                String[] methods = companyJson.getString("methods").split("|");
+                                String[] methods = companyJson.getString("methods").split("\\|");
                                 m.methodNames = methods;
                                 for(String s : methods) {
                                     if(!m.methods.containsKey(s)) {
                                         m.methods.put(s, false);
                                     }
                                 }
+                                btnBegin.setEnabled(true);
                             }else{
                                 String errorMsg = responseJson.getString("message");
                                 Toast.makeText(MainActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                             }
+                            d.dismiss();
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.e("JSON ERROR", e.toString());

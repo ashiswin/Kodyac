@@ -2,10 +2,12 @@ package com.ashiswin.kodyac;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class VerificationMethodsActivity extends AppCompatActivity {
+    private static final String TAG = "VerificationMethodsActivity";
     private static final int INTENT_VERIFICATION = 0;
 
     MainApplication m;
@@ -52,6 +55,7 @@ public class VerificationMethodsActivity extends AppCompatActivity {
                     case "myinfo":
                         Intent nricbarcodeIntent = new Intent(VerificationMethodsActivity.this, NRICBarcodeActivity.class);
                         startActivityForResult(nricbarcodeIntent, INTENT_VERIFICATION);
+                        break;
                     case "nric":
                         Intent emasIntent = new Intent(VerificationMethodsActivity.this, EmasIDActivity.class);
                         startActivityForResult(emasIntent, INTENT_VERIFICATION);
@@ -90,7 +94,7 @@ public class VerificationMethodsActivity extends AppCompatActivity {
     class VerificationAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return m.methods.size();
+            return m.methodNames.length;
         }
 
         @Override
@@ -131,10 +135,15 @@ public class VerificationMethodsActivity extends AppCompatActivity {
                     break;
                 default:
                     name = "Unknown Verification Method";
+                    Log.e(TAG, m.methodNames[position]);
                     break;
             }
 
             ((TextView) itemView.findViewById(R.id.text)).setText(name);
+            if(m.methods.get(m.methodNames[position])) {
+                itemView.setBackgroundColor(Color.parseColor("#00CC00"));
+            }
+
             return itemView;
         }
     }

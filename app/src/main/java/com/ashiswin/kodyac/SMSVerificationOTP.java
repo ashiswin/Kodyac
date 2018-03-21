@@ -39,8 +39,6 @@ public class SMSVerificationOTP extends AppCompatActivity {
         getSupportActionBar().setTitle("Verify OTP");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final int Lid = 17, linkId = 17;
-
         edtOTP = (EditText) findViewById(R.id.edtOTP);
         btnVerify = (Button) findViewById(R.id.btnVerify);
         txtResend = (TextView) findViewById(R.id.txtResendSMS);
@@ -53,7 +51,6 @@ public class SMSVerificationOTP extends AppCompatActivity {
                 // TODO: Check valid
                 final ProgressDialog dialog = new ProgressDialog(SMSVerificationOTP.this);
 
-                final Intent intent = getIntent();
                 final String otp = edtOTP.getText().toString();
                 final String url = "http://www.kodyac.tech/scripts/VerifySMSOTP.php";
                 dialog.setIndeterminate(true);
@@ -65,20 +62,21 @@ public class SMSVerificationOTP extends AppCompatActivity {
                     public void run() {
                         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-                        intent.getIntExtra("linkId",linkId);
                         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                                 new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
                                         Log.d("Response successful verification:", response);
+                                        dialog.dismiss();
                                         try {
                                             JSONObject res = new JSONObject(response);
                                             if (res.getBoolean("success")) {
-                                                dialog.dismiss();
                                                 Toast.makeText(SMSVerificationOTP.this, "Verified", Toast.LENGTH_SHORT).show();
                                                 m.methods.put("sms", true);
-                                                setResult(RESULT_OK);
-                                                finish();
+                                                completeMethod();
+                                            }
+                                            else {
+                                                edtOTP.setError(res.getString("message"));
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -94,7 +92,7 @@ public class SMSVerificationOTP extends AppCompatActivity {
                             protected Map<String, String> getParams() {
                                 Map<String, String> params = new HashMap<String, String>();
                                 params.put("otp", otp );
-                                params.put("linkId", Integer.toString(linkId));
+                                params.put("linkId", Integer.toString(m.linkId));
                                 return params;
                             }
                         };
@@ -116,13 +114,54 @@ public class SMSVerificationOTP extends AppCompatActivity {
 
                 final String phone = intent.getStringExtra("phone");
                 Log.d("Shobhit",phone);
-                SMSSendRunnable Send_SMS = new SMSSendRunnable(getApplicationContext(), url, Lid, phone);
+                SMSSendRunnable Send_SMS = new SMSSendRunnable(getApplicationContext(), url, m.linkId, phone);
                 Thread T = new Thread(Send_SMS);
                 T.start();
             }
         });
     }
 
+    public void completeMethod() {
+        final ProgressDialog dialog = new ProgressDialog(SMSVerificationOTP.this);
+
+        final String url = "http://www.kodyac.tech/scripts/AddMethodCompletion.php";
+        dialog.setIndeterminate(true);
+        dialog.setTitle("Submitting Completion");
+        dialog.setMessage("Please wait while we submit your completion");
+        dialog.show();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject res = new JSONObject(response);
+                            if (res.getBoolean("success")) {
+                                dialog.dismiss();
+
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", error.getLocalizedMessage());
+                    }
+                }) {
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("method", "sms");
+                params.put("linkId", Integer.toString(m.linkId));
+                return params;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        queue.add(postRequest);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

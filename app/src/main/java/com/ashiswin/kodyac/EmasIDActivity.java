@@ -2,6 +2,7 @@ package com.ashiswin.kodyac;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -20,6 +21,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.microblink.image.Image;
 import com.microblink.image.ImageListener;
 import com.microblink.metadata.MetadataSettings;
@@ -30,6 +37,9 @@ import com.microblink.results.date.Date;
 import com.microblink.util.RecognizerCompatibility;
 import com.microblink.util.RecognizerCompatibilityStatus;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -38,6 +48,8 @@ import java.net.URI;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 
 //Tutorial: https://github.com/BlinkID/blinkid-android#quickDemo
@@ -55,8 +67,12 @@ public class EmasIDActivity extends AppCompatActivity {
     private TextView addressText;
     private TextView issueDateText;
     private ImageView profilePic;
+    private Button btnConfirm;
+
     private boolean profilePictest;
     private String UriString = "file:///storage/emulated/0/myImages20180314.jpg";
+
+    MainApplication m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,15 +89,14 @@ public class EmasIDActivity extends AppCompatActivity {
         addressText = (TextView) findViewById(R.id.txtAddress);
         issueDateText = (TextView) findViewById(R.id.txtDateOfIssue);
         profilePic = (ImageView) findViewById(R.id.NRICpic);
+        btnConfirm = (Button) findViewById(R.id.btnConfirm);
 
-
-
+        m = (MainApplication) getApplicationContext();
 
         RecognizerCompatibilityStatus supportStatus = RecognizerCompatibility.getRecognizerCompatibilityStatus(this);
         if (supportStatus != RecognizerCompatibilityStatus.RECOGNIZER_SUPPORTED) {
             Toast.makeText(this, "BlinkID is not supported! Reason: " + supportStatus.name(), Toast.LENGTH_LONG).show();
         }
-
 
         startBtn = (Button) findViewById(R.id.startBtn);
 
@@ -117,12 +132,80 @@ public class EmasIDActivity extends AppCompatActivity {
                 startActivityForResult(intent, MY_REQUEST_CODE);
             }
         });
+
+        if(m.methods.get("nric")) {
+            startBtn.setEnabled(false);
+            btnConfirm.setVisibility(View.GONE);
+
+            cardText.setText(m.nric);
+            nameText.setText(m.name);
+            raceText.setText(m.race);
+            sexText.setText(m.sex);
+            countryText.setText(m.nationality);
+            dobText.setText(m.dob);
+            addressText.setText(m.address);
+        }
+
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                m.nric = cardText.getText().toString();
+                m.name = nameText.getText().toString();
+                m.sex = sexText.getText().toString();
+                m.race = raceText.getText().toString();
+                m.dob = dobText.getText().toString();
+                m.address = addressText.getText().toString();
+                m.nationality = countryText.getText().toString();
+
+                /*final ProgressDialog dialog = new ProgressDialog(EmasIDActivity.this);
+
+                final String url = MainApplication.SERVER_URL + "VerifyMyInfo.php";
+                dialog.setIndeterminate(true);
+                dialog.setTitle("Verifying Info");
+                dialog.setMessage("Please wait while we verify your info");
+                dialog.show();
+                StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject res = new JSONObject(response);
+                                    dialog.dismiss();
+                                    if (res.getBoolean("success")) {
+                                        completeMethod();
+                                    }
+                                    else {
+                                        Toast.makeText(EmasIDActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error.Response", error.getLocalizedMessage());
+                            }
+                        }) {
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("name", m.name);
+                        params.put("nric", m.nric);
+                        params.put("address", m.address);
+                        params.put("nationality", m.nationality);
+                        params.put("dob", m.dob);
+                        params.put("sex", m.sex);
+                        params.put("race", m.race);
+                        params.put("linkId", Integer.toString(m.linkId));
+                        return params;
+                    }
+                };
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                queue.add(postRequest);*/
+            }
+        });
     }
-
-
-
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -171,12 +254,55 @@ public class EmasIDActivity extends AppCompatActivity {
                             Toast.makeText(this, "profile pic not detected. Encoding profile pic enabled:"+profilePictest, Toast.LENGTH_SHORT).show();
                         }
 
+                        btnConfirm.setEnabled(true);
                     }
                 } else {
                     Toast.makeText(this, "Please try again", Toast.LENGTH_SHORT).show();
                 }
             }
         }
+    }
+
+    public void completeMethod() {
+        final ProgressDialog dialog = new ProgressDialog(EmasIDActivity.this);
+
+        final String url = MainApplication.SERVER_URL + "AddMethodCompletion.php";
+        dialog.setIndeterminate(true);
+        dialog.setTitle("Submitting Completion");
+        dialog.setMessage("Please wait while we submit your completion");
+        dialog.show();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject res = new JSONObject(response);
+                            if (res.getBoolean("success")) {
+                                dialog.dismiss();
+                                m.methods.put("nric", true);
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", error.getLocalizedMessage());
+                    }
+                }) {
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("method", "nric");
+                params.put("linkId", Integer.toString(m.linkId));
+                return params;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        queue.add(postRequest);
     }
 
     static class MyImageListener implements ImageListener {
