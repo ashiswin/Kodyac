@@ -51,9 +51,9 @@ import java.util.Map;
 //Tutorial: https://github.com/BlinkID/blinkid-android#quickDemo
 //reference: https://github.com/BlinkID/blinkid-android/blob/master/BlinkIDSample/BlinkIDSampleCustomUI/src/main/java/com/microblink/blinkid/demo/customui/MyScanActivity.java
 // Javadoc:https://blinkid.github.io/blinkid-android/com/microblink/recognizers/blinkid/singapore/front/SingaporeIDFrontRecognizerSettings.html
-public class PhotoVerificationNRICActivity extends AppCompatActivity {
+public class VideoVerificationNRICActivity extends AppCompatActivity {
     private static final int MY_REQUEST_CODE = 0x101;
-    private static final int PHOTO_INTENT = 1;
+    private static final int VIDEO_INTENT = 1;
 
     private Button startBtn;
     private TextView nameText;
@@ -64,8 +64,8 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
     private TextView dobText;
     private TextView addressText;
     private ImageView profilePic;
+    private Button btnVideoVerification;
     private Button btnConfirm;
-    private Button btnPhotoVerification;
 
     private boolean profilePictest;
     private String UriString = "file:///storage/emulated/0/myImages20180314.jpg";
@@ -75,7 +75,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo_verification_nric);
+        setContentView(R.layout.activity_video_verification_nric);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         getSupportActionBar().setTitle("Scan NRIC");
@@ -88,7 +88,8 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         countryText = (TextView) findViewById(R.id.txtCountryBirth);
         dobText = (TextView) findViewById(R.id.txtDOB);
         addressText = (TextView) findViewById(R.id.txtAddress);
-        btnPhotoVerification = (Button) findViewById(R.id.btnPhotoVerification);
+        profilePic = (ImageView) findViewById(R.id.NRICpic);
+        btnVideoVerification = (Button) findViewById(R.id.btnVideoVerification); 
         btnConfirm = (Button) findViewById(R.id.btnConfirm);
 
         m = (MainApplication) getApplicationContext();
@@ -115,7 +116,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 ims.setSuccessfulScanFrameEnabled(true);
 
                 profilePictest=settings.shouldEncodeFaceImage();
-                Intent intent = new Intent(PhotoVerificationNRICActivity.this, VerificationFlowActivity.class);
+                Intent intent = new Intent(VideoVerificationNRICActivity.this, VerificationFlowActivity.class);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_LICENSE_KEY, getString(R.string.microblink_license_key));
                 intent.putExtra(VerificationFlowActivity.EXTRAS_COMBINED_RECOGNIZER_SETTINGS, settings);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_BEEP_RESOURCE, R.raw.beep);
@@ -133,10 +134,10 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
             }
         });
 
-        if(m.methods.get("nric")) {
+        if(m.methods.get("video")) {
             startBtn.setEnabled(false);
-            btnPhotoVerification.setEnabled(false);
-            btnPhotoVerification.setText("Photo Verified");
+            btnVideoVerification.setEnabled(false);
+            btnVideoVerification.setText("Video Verified");
             btnConfirm.setVisibility(View.GONE);
 
             cardText.setText(m.nric);
@@ -148,11 +149,11 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
             addressText.setText(m.address);
         }
 
-        btnPhotoVerification.setOnClickListener(new View.OnClickListener() {
+        btnVideoVerification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent photoIntent = new Intent(PhotoVerificationNRICActivity.this, PhotoVerificationSelfieActivity.class);
-                startActivityForResult(photoIntent, PHOTO_INTENT);
+                Intent videoIntent = new Intent(VideoVerificationNRICActivity.this, VideoVerificationVideoActivity.class);
+                startActivityForResult(videoIntent, VIDEO_INTENT);
             }
         });
         btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +167,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 m.address = addressText.getText().toString();
                 m.nationality = countryText.getText().toString();
 
-                /*final ProgressDialog dialog = new ProgressDialog(PhotoVerificationNRICActivity.this);
+                /*final ProgressDialog dialog = new ProgressDialog(VideoVerificationNRICActivity.this);
 
                 final String url = MainApplication.SERVER_URL + "VerifyMyInfo.php";
                 dialog.setIndeterminate(true);
@@ -184,7 +185,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                                         completeMethod();
                                     }
                                     else {
-                                        Toast.makeText(PhotoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(VideoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -254,24 +255,25 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                         profilePic.setImageBitmap(bmp);
                         //TODO: check performance if not use picasso
 
-                    }else{
+                    }
+                    else{
                         Toast.makeText(this, "profile pic not detected. Encoding profile pic enabled:"+profilePictest, Toast.LENGTH_SHORT).show();
                     }
 
-                    btnConfirm.setEnabled(true);
+                    btnVideoVerification.setEnabled(true);
                 }
             } else {
                 Toast.makeText(this, "Please try again", Toast.LENGTH_SHORT).show();
             }
         }
-        else if(requestCode == PHOTO_INTENT && resultCode == RESULT_OK) {
-            btnPhotoVerification.setText("Photo Verified");
+        else if(requestCode == VIDEO_INTENT && resultCode == RESULT_OK) {
+            btnVideoVerification.setText("Video Verified");
             btnConfirm.setEnabled(true);
         }
     }
 
     public void completeMethod() {
-        final ProgressDialog dialog = new ProgressDialog(PhotoVerificationNRICActivity.this);
+        final ProgressDialog dialog = new ProgressDialog(VideoVerificationNRICActivity.this);
 
         final String url = MainApplication.SERVER_URL + "AddMethodCompletion.php";
         dialog.setIndeterminate(true);
@@ -286,7 +288,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                             JSONObject res = new JSONObject(response);
                             if (res.getBoolean("success")) {
                                 dialog.dismiss();
-                                m.methods.put("nric", true);
+                                m.methods.put("video", true);
                                 setResult(RESULT_OK);
                                 finish();
                             }
@@ -303,7 +305,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 }) {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("method", "nric");
+                params.put("method", "video");
                 params.put("linkId", Integer.toString(m.linkId));
                 return params;
             }

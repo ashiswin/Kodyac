@@ -80,6 +80,9 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
         rotated = rotateRight;
         smiled = smile;
 
+        if(smile == 1) {
+            ((VideoVerificationVideoActivity) context).verifyVideo();
+        }
         postInvalidate();
     }
 
@@ -122,10 +125,6 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
             //take a picture? (fucking low res tho)
             text = "Smile!";
         }
-        else if (rotated > 0 && winkedLeft > 0 && smiled > 0) {
-            //canvas.drawText("Verification Successful!", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
-            Toast.makeText(context, "Verified!", Toast.LENGTH_SHORT).show();
-        }
         else {
             //TODO: debugging
             canvas.drawText("oh shit waddup check ur code bitch", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
@@ -160,6 +159,4 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
         paint.getTextBounds(text, 0, text.length(), rect);
         return rect.height();
     }
-
-
 }

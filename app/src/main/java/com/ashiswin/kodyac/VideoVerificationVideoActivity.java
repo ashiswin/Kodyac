@@ -377,6 +377,9 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
         }
     }
 
-
-
+    public void verifyVideo() {
+        // TODO: Perform screenshot/photo capture and verify face with NRIC face
+        setResult(RESULT_OK);
+        finish();
+    }
 }

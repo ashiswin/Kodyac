@@ -2,14 +2,12 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_enabled="true">
         <shape android:shape="rectangle" android:padding="10dp">
-            <!-- you can use any color you want I used here gray color-->
             <solid android:color="@color/colorSuccess"/>
             <corners android:radius="4dp"/>
         </shape>
     </item>
     <item android:state_enabled="false">
         <shape android:shape="rectangle" android:padding="10dp">
-            <!-- you can use any color you want I used here gray color-->
             <solid android:color="@color/colorSuccessDisabled"/>
             <corners android:radius="4dp"/>
         </shape>

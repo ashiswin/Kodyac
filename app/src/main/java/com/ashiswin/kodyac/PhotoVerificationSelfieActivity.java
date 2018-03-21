@@ -20,7 +20,7 @@ public class PhotoVerificationSelfieActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photoverificationselfie);
+        setContentView(R.layout.activity_photo_verification_selfie);
 
         getSupportActionBar().setTitle("Photo Verification");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -56,6 +56,7 @@ public class PhotoVerificationSelfieActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
+                        // TODO: Perform photo comparison
                         Thread.sleep(1000);
                         runOnUiThread(new Runnable() {
                             @Override

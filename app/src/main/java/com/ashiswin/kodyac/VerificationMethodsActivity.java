@@ -51,16 +51,16 @@ public class VerificationMethodsActivity extends AppCompatActivity {
                         startActivityForResult(smsIntent, INTENT_VERIFICATION);
                         break;
                     case "myinfo":
-                        Intent nricbarcodeIntent = new Intent(VerificationMethodsActivity.this, BasicInformationVerificationActivity.class);
-                        startActivityForResult(nricbarcodeIntent, INTENT_VERIFICATION);
+                        Intent myinfoIntent = new Intent(VerificationMethodsActivity.this, BasicInformationVerificationActivity.class);
+                        startActivityForResult(myinfoIntent, INTENT_VERIFICATION);
                         break;
                     case "nric":
-                        Intent emasIntent = new Intent(VerificationMethodsActivity.this, PhotoVerificationNRICActivity.class);
-                        startActivityForResult(emasIntent, INTENT_VERIFICATION);
+                        Intent photoIntent = new Intent(VerificationMethodsActivity.this, PhotoVerificationNRICActivity.class);
+                        startActivityForResult(photoIntent, INTENT_VERIFICATION);
                         break;
                     case "video":
-                        Intent openCVtestIntent = new Intent(VerificationMethodsActivity.this, VideoVerificationVideoActivity.class);
-                        startActivityForResult(openCVtestIntent, INTENT_VERIFICATION);
+                        Intent videoIntent = new Intent(VerificationMethodsActivity.this, VideoVerificationNRICActivity.class);
+                        startActivityForResult(videoIntent, INTENT_VERIFICATION);
                         break;
                 }
             }

@@ -50,7 +50,7 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_basicinformationverification);
+        setContentView(R.layout.activity_basic_information_verification);
 
         getSupportActionBar().setTitle("Scan NRIC Barcode");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
