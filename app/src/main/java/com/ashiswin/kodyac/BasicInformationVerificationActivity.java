@@ -93,14 +93,6 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                m.nric = barcodeNum.getText().toString();
-                m.name = nameText.getText().toString();
-                m.sex = sexText.getText().toString();
-                m.race = raceText.getText().toString();
-                m.dob = dobText.getText().toString();
-                m.address = addressText.getText().toString();
-                m.nationality = countryText.getText().toString();
-
                 final ProgressDialog dialog = new ProgressDialog(BasicInformationVerificationActivity.this);
 
                 final String url = MainApplication.SERVER_URL + "VerifyMyInfo.php";
@@ -206,18 +198,19 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
                     nameText.setText(ERROR_MSG);
                 }
                 else{
-                    String name = details.getString("name").trim();
-                    String sex = details.getString("sex").trim();
-                    String race = details.getString("race").trim();
-                    String dob = details.getString("dob").trim();
-                    String address = details.getString("address").trim();
-                    String nationality = details.getString("nationality").trim();
-                    nameText.setText(name);
-                    sexText.setText(sex);
-                    raceText.setText(race);
-                    dobText.setText(prettyDate(dob));
-                    addressText.setText(address);
-                    countryText.setText(nationality);
+                    m.name = details.getString("name").trim();
+                    m.sex = details.getString("sex").trim();
+                    m.race = details.getString("race").trim();
+                    m.dob = details.getString("dob").trim();
+                    m.address = details.getString("address").trim();
+                    m.nationality = details.getString("nationality").trim();
+
+                    nameText.setText(m.name);
+                    sexText.setText(m.sex);
+                    raceText.setText(m.race);
+                    dobText.setText(prettyDate(m.dob));
+                    addressText.setText(m.address);
+                    countryText.setText(m.nationality);
 
                     btnConfirm.setEnabled(true);
                 }
