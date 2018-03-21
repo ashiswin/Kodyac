@@ -13,7 +13,6 @@
     <string name="ok">OK</string>
     <string name="photopayOK">OK</string>
     <string name="errorDesc">There has been an error starting the scanner.</string>
-    <string name="base_url">http://www.kodyac.tech/scripts/</string>
 
     <string-array name="country_codes">
         <item>+65</item>

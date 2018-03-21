@@ -166,7 +166,7 @@ public class NRICBarcodeActivity extends AppCompatActivity {
     private void sendGetMyInfo(final String nricInput) {
         // Instantiate the RequestQueue.
         final RequestQueue queue = Volley.newRequestQueue(this);
-        final String url =getString(R.string.base_url)+endPoint;
+        final String url = MainApplication.SERVER_URL + endPoint;
 
         // Request a string response from the provided URL.
         //TODO: do i need threads????? -jingyun

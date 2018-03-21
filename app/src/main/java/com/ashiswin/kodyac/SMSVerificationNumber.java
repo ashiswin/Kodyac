@@ -57,7 +57,7 @@ public class SMSVerificationNumber extends AppCompatActivity {
                 String phoneNumb = edtPhoneNumber.getText().toString().trim();
                 String result = ValidatePhoneNumb(COUNTRY_CODE,phoneNumb);
                 if (result.equals(VALID_NUMB)){
-                    final String url = "http://www.kodyac.tech/scripts/SendSMSOTP.php";
+                    final String url = MainApplication.SERVER_URL + "SendSMSOTP.php";
                     final String phone = COUNTRY_CODE + edtPhoneNumber.getText().toString();
                     Log.d("phone no?:", "****"  + "****" + edtPhoneNumber.getText() +"****");
 

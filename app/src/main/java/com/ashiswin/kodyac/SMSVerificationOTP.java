@@ -52,7 +52,7 @@ public class SMSVerificationOTP extends AppCompatActivity {
                 final ProgressDialog dialog = new ProgressDialog(SMSVerificationOTP.this);
 
                 final String otp = edtOTP.getText().toString();
-                final String url = "http://www.kodyac.tech/scripts/VerifySMSOTP.php";
+                final String url = MainApplication.SERVER_URL + "VerifySMSOTP.php";
                 dialog.setIndeterminate(true);
                 dialog.setTitle("Verifying OTP");
                 dialog.setMessage("Please wait while we verify your OTP");
@@ -110,7 +110,7 @@ public class SMSVerificationOTP extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(SMSVerificationOTP.this, "SMS Sent", Toast.LENGTH_SHORT).show();
                 final Intent intent = getIntent();
-                final String url = "http://www.kodyac.tech/scripts/SendSMSOTP.php";
+                final String url = MainApplication.SERVER_URL + "SendSMSOTP.php";
 
                 final String phone = intent.getStringExtra("phone");
                 Log.d("Shobhit",phone);
@@ -124,7 +124,7 @@ public class SMSVerificationOTP extends AppCompatActivity {
     public void completeMethod() {
         final ProgressDialog dialog = new ProgressDialog(SMSVerificationOTP.this);
 
-        final String url = "http://www.kodyac.tech/scripts/AddMethodCompletion.php";
+        final String url = MainApplication.SERVER_URL + "AddMethodCompletion.php";
         dialog.setIndeterminate(true);
         dialog.setTitle("Submitting Completion");
         dialog.setMessage("Please wait while we submit your completion");
