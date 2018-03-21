@@ -125,10 +125,6 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
             //take a picture? (fucking low res tho)
             text = "Smile!";
         }
-        else {
-            //TODO: debugging
-            canvas.drawText("oh shit waddup check ur code bitch", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
-        }
 
         TextPaint textPaint = new TextPaint();
         textPaint.setColor(Color.parseColor("#FFFFFF"));

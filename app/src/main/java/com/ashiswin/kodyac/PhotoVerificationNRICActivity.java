@@ -239,7 +239,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                     byte[] face = result.getEncodedFaceImage();
 
                     Uri imageURI = Uri.parse(UriString);
-                    profilePic.setImageURI(imageURI);
+                    //profilePic.setImageURI(imageURI);
 
                     nameText.setText(name.trim());
                     cardText.setText(cardNumber.trim());
@@ -258,7 +258,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                         Toast.makeText(this, "profile pic not detected. Encoding profile pic enabled:"+profilePictest, Toast.LENGTH_SHORT).show();
                     }
 
-                    btnConfirm.setEnabled(true);
+                    btnPhotoVerification.setEnabled(true);
                 }
             } else {
                 Toast.makeText(this, "Please try again", Toast.LENGTH_SHORT).show();
