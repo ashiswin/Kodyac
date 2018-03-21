@@ -17,7 +17,8 @@
         android:layout_marginTop="16dp"
         android:text="Scan Barcode"
         tools:layout_editor_absoluteX="106dp"
-        tools:layout_editor_absoluteY="66dp" />
+        tools:layout_editor_absoluteY="66dp"
+        android:foreground="?android:attr/selectableItemBackground" />
 
     <TextView
         android:id="@+id/txtName"
