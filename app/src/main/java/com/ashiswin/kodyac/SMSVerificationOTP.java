@@ -20,6 +20,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,9 +30,8 @@ public class SMSVerificationOTP extends AppCompatActivity {
     EditText edtOTP;
     Button btnVerify;
     TextView txtResend;
-    TextView VerifiedTxt;
 
-
+    MainApplication m;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,8 @@ public class SMSVerificationOTP extends AppCompatActivity {
         edtOTP = (EditText) findViewById(R.id.edtOTP);
         btnVerify = (Button) findViewById(R.id.btnVerify);
         txtResend = (TextView) findViewById(R.id.txtResendSMS);
-        VerifiedTxt = (TextView) findViewById(R.id.Verifiedtxt);
+
+        m = (MainApplication) getApplicationContext();
 
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +54,6 @@ public class SMSVerificationOTP extends AppCompatActivity {
                 final ProgressDialog dialog = new ProgressDialog(SMSVerificationOTP.this);
 
                 final Intent intent = getIntent();
-                final String[] Res = new String[1];
                 final String otp = edtOTP.getText().toString();
                 final String url = "http://www.kodyac.tech/scripts/VerifySMSOTP.php";
                 dialog.setIndeterminate(true);
@@ -69,17 +71,21 @@ public class SMSVerificationOTP extends AppCompatActivity {
                                     @Override
                                     public void onResponse(String response) {
                                         Log.d("Response successful verification:", response);
-                                        Res[0] = response;
-                                        if (Res[0].contains("true")) {
-                                            dialog.dismiss();
-                                            Toast.makeText(SMSVerificationOTP.this, "Verified", Toast.LENGTH_SHORT).show();
-                                            VerifiedTxt.setText("VERIFIED");
+                                        try {
+                                            JSONObject res = new JSONObject(response);
+                                            if (res.getBoolean("success")) {
+                                                dialog.dismiss();
+                                                Toast.makeText(SMSVerificationOTP.this, "Verified", Toast.LENGTH_SHORT).show();
+                                                m.methods.put("sms", true);
+                                                setResult(RESULT_OK);
+                                                finish();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
                                     }
                                 },
                                 new Response.ErrorListener() {
-
-
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         Log.d("Error.Response", error.getLocalizedMessage());
@@ -89,7 +95,6 @@ public class SMSVerificationOTP extends AppCompatActivity {
                                 Map<String, String> params = new HashMap<String, String>();
                                 params.put("otp", otp );
                                 params.put("linkId", Integer.toString(linkId));
-                                Log.d("Shobhit", otp + " " + linkId);
                                 return params;
                             }
                         };

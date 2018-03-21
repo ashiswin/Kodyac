@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                                 Log.e("Company ID", companyJson.toString());
                                 //Toast.makeText(MainActivity.this, "KYC methods are: " + companyJson.getString("methods"), Toast.LENGTH_SHORT).show();
                                 String[] methods = companyJson.getString("methods").split("|");
-
+                                m.methodNames = methods;
                                 for(String s : methods) {
                                     if(!m.methods.containsKey(s)) {
                                         m.methods.put(s, false);

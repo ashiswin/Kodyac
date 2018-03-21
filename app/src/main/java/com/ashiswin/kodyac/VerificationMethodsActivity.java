@@ -1,5 +1,6 @@
 package com.ashiswin.kodyac;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,19 +9,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.Iterator;
+import java.util.Map;
 
 public class VerificationMethodsActivity extends AppCompatActivity {
     private static final int INTENT_VERIFICATION = 0;
 
-    String[] methods = new String[] {"SMS Verification", "Basic Information Verification", "NRIC Verification", "Video Verification"};
-    boolean[] completion = new boolean[] {false, false, false, false};
+    MainApplication m;
 
     VerificationAdapter adapter;
-    RecyclerView lstMethods;
-    RecyclerView.LayoutManager layoutManager;
+    ListView lstMethods;
 
     Button btnComplete;
 
@@ -29,13 +34,35 @@ public class VerificationMethodsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification_methods);
 
-        lstMethods = (RecyclerView) findViewById(R.id.lstMethods);
+        m = (MainApplication) getApplicationContext();
+
+        lstMethods = (ListView) findViewById(R.id.lstMethods);
         btnComplete = (Button) findViewById(R.id.btnComplete);
 
         adapter = new VerificationAdapter();
-        layoutManager = new GridLayoutManager(VerificationMethodsActivity.this, 1);
-        lstMethods.setLayoutManager(layoutManager);
         lstMethods.setAdapter(adapter);
+        lstMethods.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch(m.methodNames[position]) {
+                    case "sms":
+                        Intent smsIntent = new Intent(VerificationMethodsActivity.this, SMSVerificationNumber.class);
+                        startActivityForResult(smsIntent, INTENT_VERIFICATION);
+                        break;
+                    case "myinfo":
+                        Intent nricbarcodeIntent = new Intent(VerificationMethodsActivity.this, NRICBarcodeActivity.class);
+                        startActivityForResult(nricbarcodeIntent, INTENT_VERIFICATION);
+                    case "nric":
+                        Intent emasIntent = new Intent(VerificationMethodsActivity.this, EmasIDActivity.class);
+                        startActivityForResult(emasIntent, INTENT_VERIFICATION);
+                        break;
+                    case "video":
+                        Intent openCVtestIntent = new Intent(VerificationMethodsActivity.this, FaceVerificationActivity.class);
+                        startActivityForResult(openCVtestIntent, INTENT_VERIFICATION);
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -43,12 +70,14 @@ public class VerificationMethodsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == INTENT_VERIFICATION && resultCode == RESULT_OK) {
-            completion[data.getIntExtra("methodId", 0)] = true;
             adapter.notifyDataSetChanged();
 
-            boolean complete = true;
-            for(boolean c : completion) {
-                if(!c) {
+            Iterator<Map.Entry<String, Boolean>> it = m.methods.entrySet().iterator();
+            boolean complete = false;
+
+            while(it.hasNext()) {
+                Map.Entry<String, Boolean> e = it.next();
+                if(!e.getValue()) {
                     complete = false;
                     break;
                 }
@@ -58,72 +87,55 @@ public class VerificationMethodsActivity extends AppCompatActivity {
         }
     }
 
-    class VerificationAdapter extends RecyclerView.Adapter<VerificationAdapter.ViewHolder> {
+    class VerificationAdapter extends BaseAdapter {
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.verification_method_item, parent, false);
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
+        public int getCount() {
+            return m.methods.size();
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.text.setText(methods[position]);
-
-            if(completion[position]) {
-                holder.status.setImageResource(R.drawable.ic_done_black_24dp);
-            }
-            else {
-                holder.status.setImageResource(R.drawable.ic_chevron_right_black_24dp);
-            }
-            holder.position = position;
+        public Object getItem(int position) {
+            return m.methodNames[position];
         }
 
         @Override
-        public int getItemCount() {
-            return methods.length;
+        public long getItemId(int position) {
+            return position;
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            // each data item is just a string in this case
-            public TextView text;
-            public ImageView status;
-            public int position;
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View itemView;
 
-            public ViewHolder(View v) {
-                super(v);
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String text = ((TextView) v.findViewById(R.id.text)).getText().toString();
-
-                        if (text.equals("SMS Verification")) {
-                            Intent smsIntent = new Intent(VerificationMethodsActivity.this, SMSVerificationNumber.class);
-                            smsIntent.putExtra("methodId", position);
-                            startActivityForResult(smsIntent, INTENT_VERIFICATION);
-                        } else if (text.equals("OLD NRIC test")) {
-                            Intent nricIntent = new Intent(VerificationMethodsActivity.this, NRICVerificationCard.class);
-                            nricIntent.putExtra("methodId", position);
-                            startActivityForResult(nricIntent, INTENT_VERIFICATION);
-                        } else if (text.equals("NRIC Verification")){
-                            Intent nricbarcodeIntent = new Intent(VerificationMethodsActivity.this, NRICVerificationMethodActivity.class);
-                            nricbarcodeIntent.putExtra("methodId", position);
-                            startActivityForResult(nricbarcodeIntent, INTENT_VERIFICATION);
-                        }else if (text.equals("OpenCVTest")){
-                            Intent openCVtestIntent = new Intent(VerificationMethodsActivity.this, OpenCVActivity.class);
-                            openCVtestIntent.putExtra("methodId", position);
-                            startActivityForResult(openCVtestIntent, INTENT_VERIFICATION);
-                        }else if (text.equals("Video Verification")){
-                            Intent openCVtestIntent = new Intent(VerificationMethodsActivity.this, FaceVerificationActivity.class);
-                            openCVtestIntent.putExtra("methodId", position);
-                            startActivityForResult(openCVtestIntent, INTENT_VERIFICATION);
-                        }
-                    }
-                });
-                text = (TextView) v.findViewById(R.id.text);
-                status = (ImageView) v.findViewById(R.id.imgStatus);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                itemView = inflater.inflate(R.layout.verification_method_item, parent, false);
+            } else {
+                itemView = convertView;
             }
-        }
 
+            String name;
+
+            switch (m.methodNames[position]) {
+                case "sms":
+                    name = "SMS Verification";
+                    break;
+                case "myinfo":
+                    name = "Basic Information Verification";
+                    break;
+                case "nric":
+                    name = "Photo Verification";
+                    break;
+                case "video":
+                    name = "Video Verification";
+                    break;
+                default:
+                    name = "Unknown Verification Method";
+                    break;
+            }
+
+            ((TextView) itemView.findViewById(R.id.text)).setText(name);
+            return itemView;
+        }
     }
 }

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:clipToPadding="false"
     tools:context="com.ashiswin.kodyac.VerificationMethodsActivity">
-    <android.support.v7.widget.RecyclerView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -26,6 +26,7 @@
         android:layout_marginBottom="48dp"
         android:background="@drawable/rounded_rect_button_success"
         android:enabled="false"
+        android:elevation="0dp"
         android:text="Complete"
         android:foreground="?android:attr/selectableItemBackground" />
 </LinearLayout>

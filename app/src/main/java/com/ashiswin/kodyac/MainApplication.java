@@ -13,6 +13,7 @@ public class MainApplication extends Application {
     int companyId;
 
     HashMap<String, Boolean> methods;
+    String[] methodNames;
 
     String name;
     String address;
