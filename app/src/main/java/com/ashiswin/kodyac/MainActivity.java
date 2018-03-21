@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -65,9 +66,51 @@ public class MainActivity extends AppCompatActivity {
         btnBegin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent verificationIntent = new Intent(MainActivity.this, VerificationMethodsActivity.class);
-                startActivity(verificationIntent);
-                finish();
+                final ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+                dialog.setTitle("Beginning KYC");
+                dialog.setMessage("Please wait while we load your KYC session");
+                dialog.setIndeterminate(true);
+                dialog.show();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        StringRequest postRequest = new StringRequest(Request.Method.POST, MainApplication.SERVER_URL + "BeginKYC.php",
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        try {
+                                            JSONObject res = new JSONObject(response);
+                                            dialog.dismiss();
+                                            if (res.getBoolean("success")) {
+                                                Intent verificationIntent = new Intent(MainActivity.this, VerificationMethodsActivity.class);
+                                                startActivity(verificationIntent);
+                                                finish();
+                                            }
+                                            else {
+                                                Toast.makeText(MainActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d("Error.Response", error.getLocalizedMessage());
+                                    }
+                                }) {
+                            protected Map<String, String> getParams() {
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("id", Integer.toString(m.linkId));
+                                return params;
+                            }
+                        };
+                        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                        queue.add(postRequest);
+                    }
+                }).start();
             }
         });
         handleAppIntent();
@@ -116,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
     private void getLink(final int idLink) {
         // Instantiate the RequestQueue.
         final RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = getString(R.string.base_url) + linkEndPoint;
+        final String url = MainApplication.SERVER_URL + linkEndPoint;
 
         // Request a string response from the provided URL.
         new Thread(new Runnable() {
@@ -133,6 +176,20 @@ public class MainActivity extends AppCompatActivity {
                                     //successfully get linkID from HTTP GET
                                     if (responseJson.getBoolean("success")){
                                         JSONObject linkJson = responseJson.getJSONObject("link");
+                                        if(linkJson.getString("status").equals("completed")) {
+                                            d.dismiss();
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.Theme_AppCompat_Dialog);
+                                            builder.setTitle("KodYaC Error");
+                                            builder.setMessage("This KYC has already been completed");
+                                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    finish();
+                                                }
+                                            });
+                                            builder.setCancelable(false);
+                                            builder.show();
+                                        }
                                         m.companyId = linkJson.getInt("companyId");
                                         m.name = linkJson.getString("name");
                                         m.address = linkJson.getString("address");
@@ -182,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
     private void getCompany(final int idCompany) {
         // Instantiate the RequestQueue.
         final RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = getString(R.string.base_url) + companyEndPoint;
+        final String url = MainApplication.SERVER_URL + companyEndPoint;
 
         // Request a string response from the provided URL.
 

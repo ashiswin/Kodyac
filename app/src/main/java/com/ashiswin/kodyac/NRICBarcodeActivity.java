@@ -50,7 +50,7 @@ public class NRICBarcodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nricbarcode);
 
-        getSupportActionBar().setTitle("Scan NRIC");
+        getSupportActionBar().setTitle("Scan NRIC Barcode");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         startScan = (Button) findViewById(R.id.scan_bttn);

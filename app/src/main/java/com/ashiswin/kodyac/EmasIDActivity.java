@@ -80,6 +80,9 @@ public class EmasIDActivity extends AppCompatActivity {
         setContentView(R.layout.activity_emas_id);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        getSupportActionBar().setTitle("Scan NRIC");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         nameText  = (TextView) findViewById(R.id.txtName);
         cardText = (TextView) findViewById(R.id.txtCardNumber);
         raceText = (TextView) findViewById(R.id.txtRace);
