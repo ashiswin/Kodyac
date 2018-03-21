@@ -3,7 +3,6 @@ package com.ashiswin.kodyac;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -11,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,9 +43,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +51,7 @@ import java.util.Map;
 //Tutorial: https://github.com/BlinkID/blinkid-android#quickDemo
 //reference: https://github.com/BlinkID/blinkid-android/blob/master/BlinkIDSample/BlinkIDSampleCustomUI/src/main/java/com/microblink/blinkid/demo/customui/MyScanActivity.java
 // Javadoc:https://blinkid.github.io/blinkid-android/com/microblink/recognizers/blinkid/singapore/front/SingaporeIDFrontRecognizerSettings.html
-public class EmasIDActivity extends AppCompatActivity {
+public class PhotoVerificationNRICActivity extends AppCompatActivity {
     private static final int MY_REQUEST_CODE = 0x101;
     private Button startBtn;
     private TextView nameText;
@@ -78,7 +73,7 @@ public class EmasIDActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_emas_id);
+        setContentView(R.layout.activity_photoverificationnric);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         getSupportActionBar().setTitle("Scan NRIC");
@@ -119,7 +114,7 @@ public class EmasIDActivity extends AppCompatActivity {
                 ims.setSuccessfulScanFrameEnabled(true);
 
                 profilePictest=settings.shouldEncodeFaceImage();
-                Intent intent = new Intent(EmasIDActivity.this, VerificationFlowActivity.class);
+                Intent intent = new Intent(PhotoVerificationNRICActivity.this, VerificationFlowActivity.class);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_LICENSE_KEY, getString(R.string.microblink_license_key));
                 intent.putExtra(VerificationFlowActivity.EXTRAS_COMBINED_RECOGNIZER_SETTINGS, settings);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_BEEP_RESOURCE, R.raw.beep);
@@ -161,7 +156,7 @@ public class EmasIDActivity extends AppCompatActivity {
                 m.address = addressText.getText().toString();
                 m.nationality = countryText.getText().toString();
 
-                /*final ProgressDialog dialog = new ProgressDialog(EmasIDActivity.this);
+                /*final ProgressDialog dialog = new ProgressDialog(PhotoVerificationNRICActivity.this);
 
                 final String url = MainApplication.SERVER_URL + "VerifyMyInfo.php";
                 dialog.setIndeterminate(true);
@@ -179,7 +174,7 @@ public class EmasIDActivity extends AppCompatActivity {
                                         completeMethod();
                                     }
                                     else {
-                                        Toast.makeText(EmasIDActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PhotoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -268,7 +263,7 @@ public class EmasIDActivity extends AppCompatActivity {
     }
 
     public void completeMethod() {
-        final ProgressDialog dialog = new ProgressDialog(EmasIDActivity.this);
+        final ProgressDialog dialog = new ProgressDialog(PhotoVerificationNRICActivity.this);
 
         final String url = MainApplication.SERVER_URL + "AddMethodCompletion.php";
         dialog.setIndeterminate(true);

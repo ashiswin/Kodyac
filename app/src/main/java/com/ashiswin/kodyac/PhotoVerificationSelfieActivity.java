@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class NRICVerificationSelfie extends AppCompatActivity {
+public class PhotoVerificationSelfieActivity extends AppCompatActivity {
     private static final int INTENT_CAMERA = 0;
 
     TextView txtCode;
@@ -20,7 +20,7 @@ public class NRICVerificationSelfie extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nricverification_selfie);
+        setContentView(R.layout.activity_photoverificationselfie);
 
         getSupportActionBar().setTitle("Photo Verification");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -47,7 +47,7 @@ public class NRICVerificationSelfie extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-            final ProgressDialog dialog = new ProgressDialog(NRICVerificationSelfie.this);
+            final ProgressDialog dialog = new ProgressDialog(PhotoVerificationSelfieActivity.this);
             dialog.setIndeterminate(true);
             dialog.setTitle("Verifying Photo");
             dialog.setMessage("Please wait while we verify your photo");

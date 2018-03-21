@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -34,7 +33,7 @@ import com.google.android.gms.vision.face.LargestFaceFocusingProcessor;
 
 import java.io.IOException;
 
-public class FaceVerificationActivity extends AppCompatActivity {
+public class VideoVerificationVideoActivity extends AppCompatActivity {
 
     private static final String TAG = "GooglyEyes";
 
@@ -61,7 +60,7 @@ public class FaceVerificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_face_verification);
+        setContentView(R.layout.activity_videoverificationvideo);
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);

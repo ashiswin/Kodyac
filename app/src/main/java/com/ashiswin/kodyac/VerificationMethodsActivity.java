@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,15 +51,15 @@ public class VerificationMethodsActivity extends AppCompatActivity {
                         startActivityForResult(smsIntent, INTENT_VERIFICATION);
                         break;
                     case "myinfo":
-                        Intent nricbarcodeIntent = new Intent(VerificationMethodsActivity.this, NRICBarcodeActivity.class);
+                        Intent nricbarcodeIntent = new Intent(VerificationMethodsActivity.this, BasicInformationVerificationActivity.class);
                         startActivityForResult(nricbarcodeIntent, INTENT_VERIFICATION);
                         break;
                     case "nric":
-                        Intent emasIntent = new Intent(VerificationMethodsActivity.this, EmasIDActivity.class);
+                        Intent emasIntent = new Intent(VerificationMethodsActivity.this, PhotoVerificationNRICActivity.class);
                         startActivityForResult(emasIntent, INTENT_VERIFICATION);
                         break;
                     case "video":
-                        Intent openCVtestIntent = new Intent(VerificationMethodsActivity.this, FaceVerificationActivity.class);
+                        Intent openCVtestIntent = new Intent(VerificationMethodsActivity.this, VideoVerificationVideoActivity.class);
                         startActivityForResult(openCVtestIntent, INTENT_VERIFICATION);
                         break;
                 }

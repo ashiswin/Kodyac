@@ -52,10 +52,9 @@
         <activity android:name=".VerificationMethodsActivity" />
         <activity android:name=".SMSVerificationNumber" />
         <activity android:name=".SMSVerificationOTP" />
-        <activity android:name=".NRICVerificationCard" />
-        <activity android:name=".NRICVerificationSelfie" />
+        <activity android:name=".PhotoVerificationSelfieActivity" />
         <activity
-            android:name=".NRICBarcodeActivity"
+            android:name=".BasicInformationVerificationActivity"
             android:screenOrientation="sensorPortrait" />
         <activity android:name=".OpenCVActivity" />
 
@@ -69,8 +68,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".EmasIDActivity" />
-        <activity android:name=".FaceVerificationActivity" />
+        <activity android:name=".PhotoVerificationNRICActivity" />
+        <activity android:name=".VideoVerificationVideoActivity" />
     </application>
 
 </manifest>

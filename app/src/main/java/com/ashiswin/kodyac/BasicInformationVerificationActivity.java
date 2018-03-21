@@ -20,7 +20,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.microblink.results.date.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +31,7 @@ import java.util.Map;
 
 //TODO: Make barcode and OCR go into the same results page????-jingyun
 
-public class NRICBarcodeActivity extends AppCompatActivity {
+public class BasicInformationVerificationActivity extends AppCompatActivity {
     private Button startScan;
     private Button btnConfirm;
     private TextView barcodeNum;
@@ -51,7 +50,7 @@ public class NRICBarcodeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nricbarcode);
+        setContentView(R.layout.activity_basicinformationverification);
 
         getSupportActionBar().setTitle("Scan NRIC Barcode");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -83,7 +82,7 @@ public class NRICBarcodeActivity extends AppCompatActivity {
         startScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentIntegrator scanIntegrator = new IntentIntegrator(NRICBarcodeActivity.this);
+                IntentIntegrator scanIntegrator = new IntentIntegrator(BasicInformationVerificationActivity.this);
                 //initiate scan
                 scanIntegrator.setPrompt("Scan barcode at the back of your NRIC");
                 scanIntegrator.setOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -102,7 +101,7 @@ public class NRICBarcodeActivity extends AppCompatActivity {
                 m.address = addressText.getText().toString();
                 m.nationality = countryText.getText().toString();
 
-                final ProgressDialog dialog = new ProgressDialog(NRICBarcodeActivity.this);
+                final ProgressDialog dialog = new ProgressDialog(BasicInformationVerificationActivity.this);
 
                 final String url = MainApplication.SERVER_URL + "VerifyMyInfo.php";
                 dialog.setIndeterminate(true);
@@ -120,7 +119,7 @@ public class NRICBarcodeActivity extends AppCompatActivity {
                                         completeMethod();
                                     }
                                     else {
-                                        Toast.makeText(NRICBarcodeActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(BasicInformationVerificationActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -234,7 +233,7 @@ public class NRICBarcodeActivity extends AppCompatActivity {
     }
 
     public void completeMethod() {
-        final ProgressDialog dialog = new ProgressDialog(NRICBarcodeActivity.this);
+        final ProgressDialog dialog = new ProgressDialog(BasicInformationVerificationActivity.this);
 
         final String url = MainApplication.SERVER_URL + "AddMethodCompletion.php";
         dialog.setIndeterminate(true);
