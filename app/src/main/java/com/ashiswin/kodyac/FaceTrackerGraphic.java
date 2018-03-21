@@ -1,9 +1,18 @@
 package com.ashiswin.kodyac;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Rect;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.widget.Toast;
 
 import com.ashiswin.kodyac.camera.GraphicOverlay;
 import com.google.android.gms.vision.face.Face;
@@ -18,26 +27,23 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
     private static final float IRIS_RADIUS_PROPORTION = EYE_RADIUS_PROPORTION / 2.0f;
     private static final float ID_TEXT_SIZE = 40.0f;
     private static final float INS_TEXT_SIZE = 100.0f;
-    private static final float ID_Y_OFFSET = 50.0f;
-    private static final float ID_X_OFFSET = -50.0f;
+    private static final float ID_Y_OFFSET = 100.0f;
+    private static final float ID_X_OFFSET = 100.0f;
     private static final float BOX_STROKE_WIDTH = 5.0f;
 
     //Boolean is update in real time! static int is to correct that
-    private int winkedLeft =0;
-    private int rotated =0;
-    private int smiled =0;
-
-
+    private int winkedLeft = 0;
+    private int rotated = 0;
+    private int smiled = 0;
 
     private volatile Face mFace;
-
 
     private Paint mFacePositionPaint;
     private Paint mIdInstructions;
     private Paint mBoxPaint;
     private Paint mIdPaint;
 
-
+    private Context context;
     //==============================================================================================
     // Methods
     //==============================================================================================
@@ -60,6 +66,8 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
         mBoxPaint.setColor(Color.YELLOW);
         mBoxPaint.setStyle(Paint.Style.STROKE);
         mBoxPaint.setStrokeWidth(BOX_STROKE_WIDTH);
+
+        context = overlay.getContext();
     }
 
     /**
@@ -89,8 +97,8 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
         /*draw border around face*/
         float cx = translateX(face.getPosition().x + face.getWidth() / 2);
         float cy = translateY(face.getPosition().y + face.getHeight() / 2);
-        canvas.drawCircle(cx, cy, FACE_POSITION_RADIUS, mFacePositionPaint);
-        canvas.drawText("id: " + face.getId() + "rotation: "+face.getEulerZ()+"smiling "+face.getIsSmilingProbability(),  cx + ID_X_OFFSET, cy + ID_Y_OFFSET, mIdPaint);
+        //canvas.drawCircle(cx, cy, FACE_POSITION_RADIUS, mFacePositionPaint);
+        //canvas.drawText("id: " + face.getId() + "rotation: "+face.getEulerZ()+"smiling "+face.getIsSmilingProbability(),  cx + ID_X_OFFSET, cy + ID_Y_OFFSET, mIdPaint);
 
         float xOffset = scaleX(face.getWidth() / 2.0f);
         float yOffset = scaleY(face.getHeight() / 2.0f);
@@ -100,22 +108,57 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
         float bottom = cy + yOffset;
         canvas.drawRect(left, top, right, bottom, mBoxPaint);
 
-
-
+        String text = "";
         //get person to rotate head
-        if(rotated==0 && winkedLeft==0 && smiled==0){
-            canvas.drawText("Rotate your head right", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
-        }else if (rotated>0 && winkedLeft==0 && smiled==0) {
-            canvas.drawText("Wink Your Left Eye", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
-        }else if(rotated>0 && winkedLeft>0&& smiled==0){
-            canvas.drawText("Smile!", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
+        if(rotated == 0 && winkedLeft == 0 && smiled == 0){
+            text = "Tilt your head right";
+        }
+        else if (rotated > 0 && winkedLeft == 0 && smiled == 0) {
+            //canvas.drawText("Wink Your Left Eye", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
+            text = "Wink your left eye";
+        }
+        else if(rotated > 0 && winkedLeft > 0&& smiled == 0){
+            //canvas.drawText("Smile!", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
             //take a picture? (fucking low res tho)
-        }else if (rotated>0 && winkedLeft>0&& smiled>0) {
-            canvas.drawText("Verification Successful!", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
-        }else {
+            text = "Smile!";
+        }
+        else if (rotated > 0 && winkedLeft > 0 && smiled > 0) {
+            //canvas.drawText("Verification Successful!", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
+            Toast.makeText(context, "Verified!", Toast.LENGTH_SHORT).show();
+        }
+        else {
             //TODO: debugging
             canvas.drawText("oh shit waddup check ur code bitch", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
         }
+
+        TextPaint textPaint = new TextPaint();
+        textPaint.setColor(Color.parseColor("#FFFFFF"));
+        textPaint.setTextSize(100);
+        StaticLayout sl = new StaticLayout(text, textPaint, canvas.getClipBounds().width(), Layout.Alignment.ALIGN_CENTER, 1, 1, true);
+        canvas.save();
+        float textHeight = getTextHeight(text, textPaint);
+        int numberOfTextLines = sl.getLineCount();
+        //float textYCoordinate = canvas.getClipBounds().exactCenterY() - ((numberOfTextLines * textHeight) / 2);
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        float textYCoordinate =  (int)TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 16, displaymetrics );
+
+        //text will be drawn from left
+        float textXCoordinate = canvas.getClipBounds().left;
+
+        canvas.translate(textXCoordinate, textYCoordinate);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.parseColor("#66000000"));
+        canvas.drawRect(textXCoordinate, -textYCoordinate, textXCoordinate + sl.getWidth(), 2 * textYCoordinate + textHeight, paint);
+        //draws static layout on canvas
+        sl.draw(canvas);
+        canvas.restore();
+    }
+    private float getTextHeight(String text, Paint paint) {
+        Rect rect = new Rect();
+        paint.getTextBounds(text, 0, text.length(), rect);
+        return rect.height();
     }
 
 
