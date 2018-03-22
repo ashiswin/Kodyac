@@ -2,7 +2,6 @@ package com.ashiswin.kodyac;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +25,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SMSVerificationOTP extends AppCompatActivity {
+public class SMSVerificationOTPActivity extends AppCompatActivity {
     EditText edtOTP;
     Button btnVerify;
     TextView txtResend;
@@ -49,7 +48,7 @@ public class SMSVerificationOTP extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO: Check valid
-                final ProgressDialog dialog = new ProgressDialog(SMSVerificationOTP.this);
+                final ProgressDialog dialog = new ProgressDialog(SMSVerificationOTPActivity.this);
 
                 final String otp = edtOTP.getText().toString();
                 final String url = MainApplication.SERVER_URL + "VerifySMSOTP.php";
@@ -71,7 +70,7 @@ public class SMSVerificationOTP extends AppCompatActivity {
                                         try {
                                             JSONObject res = new JSONObject(response);
                                             if (res.getBoolean("success")) {
-                                                Toast.makeText(SMSVerificationOTP.this, "Verified", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(SMSVerificationOTPActivity.this, "Verified", Toast.LENGTH_SHORT).show();
                                                 m.methods.put("sms", true);
                                                 completeMethod();
                                             }
@@ -108,7 +107,7 @@ public class SMSVerificationOTP extends AppCompatActivity {
         txtResend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SMSVerificationOTP.this, "SMS Sent", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SMSVerificationOTPActivity.this, "SMS Sent", Toast.LENGTH_SHORT).show();
                 final Intent intent = getIntent();
                 final String url = MainApplication.SERVER_URL + "SendSMSOTP.php";
 
@@ -122,7 +121,7 @@ public class SMSVerificationOTP extends AppCompatActivity {
     }
 
     public void completeMethod() {
-        final ProgressDialog dialog = new ProgressDialog(SMSVerificationOTP.this);
+        final ProgressDialog dialog = new ProgressDialog(SMSVerificationOTPActivity.this);
 
         final String url = MainApplication.SERVER_URL + "AddMethodCompletion.php";
         dialog.setIndeterminate(true);

@@ -1,12 +1,9 @@
 package com.ashiswin.kodyac;
 
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,7 +16,7 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
-public class SMSVerificationNumber extends AppCompatActivity {
+public class SMSVerificationNumberActivity extends AppCompatActivity {
     private static final int INTENT_OTP = 0;
     private static final String COUNTRY_CODE = "+65";
     private static final String INSUFFICIENT_LENGTH = "Phone number should be 8 digits long";
@@ -65,12 +62,12 @@ public class SMSVerificationNumber extends AppCompatActivity {
                     Thread T = new Thread(Send_SMS);
                     T.start();
 
-                    Intent otpIntent = new Intent(SMSVerificationNumber.this, SMSVerificationOTP.class);
+                    Intent otpIntent = new Intent(SMSVerificationNumberActivity.this, SMSVerificationOTPActivity.class);
                     otpIntent.putExtra("linkId", getIntent().getIntExtra("linkId", m.linkId));
                     otpIntent.putExtra("phone", phone);startActivityForResult(otpIntent, INTENT_OTP);
                 } else{
                     edtPhoneNumber.getText().clear();
-                    Toast.makeText(SMSVerificationNumber.this, "ERROR: "+result, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SMSVerificationNumberActivity.this, "ERROR: "+result, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -84,25 +81,25 @@ public class SMSVerificationNumber extends AppCompatActivity {
         String isoCode = phoneNumberUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCode));
         Phonenumber.PhoneNumber phoneNumber = null;
         if (phNumber.length()!=8){
-            return SMSVerificationNumber.INSUFFICIENT_LENGTH;
+            return SMSVerificationNumberActivity.INSUFFICIENT_LENGTH;
         }
         try {
             phoneNumber = phoneNumberUtil.parse(phNumber, isoCode);
         } catch (NumberParseException e) {
             System.err.println(e);
-            return SMSVerificationNumber.INVALID_NUMB;
+            return SMSVerificationNumberActivity.INVALID_NUMB;
         }
 
         boolean isValid = phoneNumberUtil.isValidNumber(phoneNumber);
         boolean isMobile = phoneNumberUtil.getNumberType(phoneNumber)==PhoneNumberUtil.PhoneNumberType.MOBILE;
         if (isValid) {
             if (isMobile){
-                return SMSVerificationNumber.VALID_NUMB;
+                return SMSVerificationNumberActivity.VALID_NUMB;
             }else{
-                return SMSVerificationNumber.LANDLINE_NUMD;
+                return SMSVerificationNumberActivity.LANDLINE_NUMD;
             }
         } else {
-            return SMSVerificationNumber.INVALID_NUMB;
+            return SMSVerificationNumberActivity.INVALID_NUMB;
         }
     }
 

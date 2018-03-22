@@ -47,7 +47,7 @@ public class VerificationMethodsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch(m.methodNames[position]) {
                     case "sms":
-                        Intent smsIntent = new Intent(VerificationMethodsActivity.this, SMSVerificationNumber.class);
+                        Intent smsIntent = new Intent(VerificationMethodsActivity.this, SMSVerificationNumberActivity.class);
                         startActivityForResult(smsIntent, INTENT_VERIFICATION);
                         break;
                     case "myinfo":

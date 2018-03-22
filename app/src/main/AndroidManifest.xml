@@ -50,8 +50,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".VerificationMethodsActivity" />
-        <activity android:name=".SMSVerificationNumber" />
-        <activity android:name=".SMSVerificationOTP" />
+        <activity android:name=".SMSVerificationNumberActivity" />
+        <activity android:name=".SMSVerificationOTPActivity" />
         <activity android:name=".PhotoVerificationSelfieActivity" />
         <activity
             android:name=".BasicInformationVerificationActivity"
