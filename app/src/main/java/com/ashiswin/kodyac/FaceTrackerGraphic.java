@@ -2,20 +2,28 @@ package com.ashiswin.kodyac;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PointF;
 import android.graphics.Rect;
+import android.os.Environment;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
-import android.widget.Toast;
+import android.view.View;
 
 import com.ashiswin.kodyac.camera.GraphicOverlay;
 import com.google.android.gms.vision.face.Face;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
+
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 /**
  * Created by Jing Yun on 8/3/2018.
@@ -93,6 +101,8 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
      */
     @Override
     public void draw(Canvas canvas) {
+
+
         Face face = mFace;
         if (face == null) {
             return;
@@ -100,8 +110,8 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
         /*draw border around face*/
         float cx = translateX(face.getPosition().x + face.getWidth() / 2);
         float cy = translateY(face.getPosition().y + face.getHeight() / 2);
-        //canvas.drawCircle(cx, cy, FACE_POSITION_RADIUS, mFacePositionPaint);
-        //canvas.drawText("id: " + face.getId() + "rotation: "+face.getEulerZ()+"smiling "+face.getIsSmilingProbability(),  cx + ID_X_OFFSET, cy + ID_Y_OFFSET, mIdPaint);
+        Log.e("testing",String.valueOf(cx));
+        Log.e("testing",String.valueOf(cy));
 
         float xOffset = scaleX(face.getWidth() / 2.0f);
         float yOffset = scaleY(face.getHeight() / 2.0f);
@@ -117,11 +127,25 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
             text = "Tilt your head right";
         }
         else if (rotated > 0 && winkedLeft == 0 && smiled == 0) {
-            //canvas.drawText("Wink Your Left Eye", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
+            //take picture of person smiling
+            Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+            Bitmap bitmap_object = Bitmap.createBitmap((int) cx, (int) cy, conf);
+            //TODO: only saves balck imgFAILED
+            /*
+            File file = new File(Environment.getExternalStorageDirectory() + "/test2.png");
+
+            try {
+                bitmap_object.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            */
+
+
+
             text = "Wink your left eye";
         }
         else if(rotated > 0 && winkedLeft > 0&& smiled == 0){
-            //canvas.drawText("Smile!", ID_X_OFFSET, ID_Y_OFFSET, mIdInstructions);
             //take a picture? (fucking low res tho)
             text = "Smile!";
         }
@@ -131,9 +155,8 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
         textPaint.setTextSize(100);
         StaticLayout sl = new StaticLayout(text, textPaint, canvas.getClipBounds().width(), Layout.Alignment.ALIGN_CENTER, 1, 1, true);
         canvas.save();
+
         float textHeight = getTextHeight(text, textPaint);
-        int numberOfTextLines = sl.getLineCount();
-        //float textYCoordinate = canvas.getClipBounds().exactCenterY() - ((numberOfTextLines * textHeight) / 2);
         DisplayMetrics displaymetrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         float textYCoordinate =  (int)TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 16, displaymetrics );
@@ -155,4 +178,6 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
         paint.getTextBounds(text, 0, text.length(), rect);
         return rect.height();
     }
+
+
 }

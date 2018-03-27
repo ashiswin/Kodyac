@@ -1,7 +1,10 @@
 package com.ashiswin.kodyac;
 
+import android.graphics.Bitmap;
 import android.graphics.PointF;
+import android.icu.util.VersionInfo;
 import android.util.Log;
+import android.view.View;
 
 import com.ashiswin.kodyac.camera.GraphicOverlay;
 import com.google.android.gms.vision.Tracker;
@@ -87,6 +90,11 @@ public class FaceTracker extends Tracker<Face> {
 
         if(face.getEulerZ()>20){
             isRotateRight = true;
+            if (rotated==0){
+                //take snapshot of first rotation
+
+
+            }
             rotated++;
             //security measure only true after you've passed the prev one
             if (winked>0){
@@ -107,11 +115,11 @@ public class FaceTracker extends Tracker<Face> {
             }
 
         }
-
+        /*
         Log.i("test","Y rotation is" +face.getEulerY());
         Log.i("test","Z rotation is" +face.getEulerZ());
         Log.i("test","smilin prob is" +face.getIsSmilingProbability());
-
+*/
         mEyesGraphic.updateItem(face, rotated, winked, smile);
     }
 
@@ -167,4 +175,17 @@ public class FaceTracker extends Tracker<Face> {
         float y = face.getPosition().y + (prop.y * face.getHeight());
         return new PointF(x, y);
     }
+
+    public int getRotated(){
+        return this.rotated;
+    }
+
+    public int getWinked(){
+        return this.winked;
+    }
+
+    public int getSmile(){
+        return this.smile;
+    }
+
 }
