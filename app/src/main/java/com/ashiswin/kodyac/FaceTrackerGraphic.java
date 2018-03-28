@@ -127,22 +127,6 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
             text = "Tilt your head right";
         }
         else if (rotated > 0 && winkedLeft == 0 && smiled == 0) {
-            //take picture of person smiling
-            Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-            Bitmap bitmap_object = Bitmap.createBitmap((int) cx, (int) cy, conf);
-            //TODO: only saves balck imgFAILED
-            /*
-            File file = new File(Environment.getExternalStorageDirectory() + "/test2.png");
-
-            try {
-                bitmap_object.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            */
-
-
-
             text = "Wink your left eye";
         }
         else if(rotated > 0 && winkedLeft > 0&& smiled == 0){

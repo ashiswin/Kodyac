@@ -46,6 +46,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.ashiswin.kodyac.OpenCVActivity.REQUEST_CODE;
@@ -400,7 +403,6 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
     }
 
     public void verifyVideo() {
-        // TODO: Perform screenshot/photo capture and verify face with NRIC face
         setResult(RESULT_OK);
 
         finish();
@@ -416,15 +418,21 @@ class MyFaceDetector extends Detector<Face> {
 
     public SparseArray<Face> detect(Frame frame) {
         // *** add your custom frame processing code here
+        SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd", Locale.US);
+        Date now = new Date();
         ByteBuffer byteBuffer = frame.getGrayscaleImageData();
         YuvImage yuvImage = new YuvImage(frame.getGrayscaleImageData().array(), ImageFormat.NV21, frame.getMetadata().getWidth(), frame.getMetadata().getHeight(), null);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         yuvImage.compressToJpeg(new Rect(0, 0, frame.getMetadata().getWidth(), frame.getMetadata().getHeight()), 100, byteArrayOutputStream);
         byte[] jpegArray = byteArrayOutputStream.toByteArray();
         Bitmap bitmap_object = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.length);
+        //create directory to put file in
+        File directory = new File(Environment.getExternalStorageDirectory() + "/Kodyac/Video");
+        if (!directory.exists()){
+            directory.mkdirs();
+        }
 
-        File file = new File(Environment.getExternalStorageDirectory() + "/test3.png");
-
+        File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+".png");
             try {
                 bitmap_object.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
             } catch (Exception e) {

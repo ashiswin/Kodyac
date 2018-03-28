@@ -91,9 +91,6 @@ public class FaceTracker extends Tracker<Face> {
         if(face.getEulerZ()>20){
             isRotateRight = true;
             if (rotated==0){
-                //take snapshot of first rotation
-
-
             }
             rotated++;
             //security measure only true after you've passed the prev one

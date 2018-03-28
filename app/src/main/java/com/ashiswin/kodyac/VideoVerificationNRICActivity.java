@@ -5,11 +5,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Parcel;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,7 +47,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.ashiswin.kodyac.OpenCVActivity.REQUEST_CODE;
 
 
 //Tutorial: https://github.com/BlinkID/blinkid-android#quickDemo
@@ -215,6 +221,11 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 queue.add(postRequest);*/
             }
         });
+
+        //alow bitmap to write into external storage
+        if(PackageManager.PERMISSION_GRANTED== ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)){} else {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+        }
     }
 
     @Override
@@ -332,73 +343,22 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
          */
         @Override
         public void onImageAvailable(Image image) {
-            // we will save images to 'myImages' folder on external storage
-            // image filenames will be 'imageType - currentTimestamp.jpg'
-            String output = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImages";
-            File f = new File(output);
-            if(!f.exists()) {
-                f.mkdirs();
+            //create directory to store the file
+            File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Kodyac/NRIC/");
+            if(!directory.exists()) {
+                directory.mkdirs();
             }
-            String dateString = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
-            String filename = null;
-            switch(image.getImageFormat()) {
-                case ALPHA_8: {
-                    filename = output + "/alpha_8 - " + image.getImageName() + " - " + dateString + ".jpg";
-                    break;
-                }
-                case BGRA_8888: {
-                    filename = output + "/bgra - " + image.getImageName() + " - " + dateString + ".jpg";
-                    break;
-                }
-                case YUV_NV21: {
-                    filename = output + "/yuv - " + image.getImageName() + " - " + dateString + ".jpg";
-                    break;
-                }
-            }
-
-            Bitmap b = image.convertToBitmap();
-            //Uri faceUri = Uri.fromFile(f);
-            //Log.e("Image Listener", faceUri.toString());
-            FileOutputStream fos = null;
+            //get date to name the picture file
+            SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd", Locale.US);
+            java.util.Date now = new java.util.Date();
+            //save the picture under correct directory and date
+            Bitmap bitmap_obtained = image.convertToBitmap();
+            File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+".png");
             try {
-                fos = new FileOutputStream(filename);
-                boolean success = b.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                if(!success) {
-                    Log.e("EMAS ImageListener", "Failed to compress bitmap!");
-                    if(fos != null) {
-                        try {
-                            fos.close();
-                        } catch (IOException ignored) {
-                        } finally {
-                            fos = null;
-                        }
-                        new File(filename).delete();
-                    }
-                }
-            } catch (FileNotFoundException e) {
+                bitmap_obtained.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
+            } catch (Exception e) {
                 e.printStackTrace();
-                Log.e("EMAS ImageListener", "Failed to save image ");
-            } finally {
-                if(fos != null) {
-                    try {
-                        fos.close();
-                    } catch (IOException ignored) {
-                    }
-                }
             }
-            // after this line, image gets disposed. If you want to save it
-            // for later, you need to clone it with image.clone()
-            Image myimage = image.clone();
-
-            String timeStamp = new SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
-            String imageFileName = timeStamp + ".jpg";
-            String storageDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImages";
-            File imgF = new File(storageDir+imageFileName);
-            if(!imgF.exists()) {
-                imgF.mkdirs();
-            }
-            Uri IMgFile = Uri.fromFile(imgF);
-            Log.e("ImageListener",IMgFile.toString());
         }
 
         /**
