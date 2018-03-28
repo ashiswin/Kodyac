@@ -111,15 +111,13 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SingaporeIDCombinedRecognizerSettings settings = new SingaporeIDCombinedRecognizerSettings();
+                MetadataSettings.ImageMetadataSettings ims = new MetadataSettings.ImageMetadataSettings();
                 //so i can extract the face image
                 settings.setEncodeFaceImage(true);
 
-                MetadataSettings.ImageMetadataSettings ims = new MetadataSettings.ImageMetadataSettings();
                 // enable obtaining of dewarped(cropped) images
                 ims.setDewarpedImageEnabled(true);
-                // obtain successful frames (full last frame on which scan has succeeded)
-                // if you want to obtain only dewarped(cropped) images do not enable successful scan frames
-                ims.setSuccessfulScanFrameEnabled(true);
+
 
                 profilePictest=settings.shouldEncodeFaceImage();
                 Intent intent = new Intent(VideoVerificationNRICActivity.this, VerificationFlowActivity.class);
@@ -131,7 +129,6 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 //TODO: sort out the hints so the UI is better
                 intent.putExtra(VerificationFlowActivity.EXTRAS_INSTRUCTIONS_DOCUMENT_FIRST_SIDE, R.string.emas_scan_first_side);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_INSTRUCTIONS_DOCUMENT_SECOND_SIDE, R.string.emas_scan_second_side);
-
                 //TODO: include a res ID if possible so users know which side front and back are
 
 
@@ -261,14 +258,8 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                     dobText.setText(dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
                     addressText.setText(address.trim());
 
-                    if(face!=null){
-                        Bitmap bmp = BitmapFactory.decodeByteArray(face,0,face.length);
-                        profilePic.setImageBitmap(bmp);
-                        //TODO: check performance if not use picasso
-
-                    }
-                    else{
-                        Toast.makeText(this, "profile pic not detected. Encoding profile pic enabled:"+profilePictest, Toast.LENGTH_SHORT).show();
+                    if(face!=null) {
+                    //set URI here
                     }
 
                     btnVideoVerification.setEnabled(true);
@@ -349,7 +340,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 directory.mkdirs();
             }
             //get date to name the picture file
-            SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd", Locale.US);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd_HH_mm_ss", Locale.US);
             java.util.Date now = new java.util.Date();
             //save the picture under correct directory and date
             Bitmap bitmap_obtained = image.convertToBitmap();
