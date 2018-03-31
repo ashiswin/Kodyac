@@ -6,25 +6,46 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:clipToPadding="false"
+    android:layout_gravity="center"
     tools:context="com.ashiswin.kodyac.VerificationMethodsActivity">
-    <ListView
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="@drawable/kodyaclogo"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="VERIFY YOUR IDENTITY"
+        android:textColor="@color/colorIBMBlue"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:paddingBottom="10dp"
+        android:textStyle="bold"/>
+
+    <ListView
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/lstMethods"
         android:clipToPadding="false"
-        android:paddingBottom="8dp" />
+        android:paddingBottom="8dp"
+        android:layout_gravity="center_horizontal"
+        android:padding="6dp"
+        android:dividerHeight="6dp"
+        android:divider="@color/colorPrimary" />
 
     <Button
         android:id="@+id/btnComplete"
-        android:layout_width="match_parent"
+        android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="48dp"
-        android:background="@drawable/rounded_rect_button_success"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btncompleteselect"
         android:enabled="false"
         android:elevation="0dp"
-        android:text="Complete"
         android:foreground="?android:attr/selectableItemBackground" />
 </LinearLayout>

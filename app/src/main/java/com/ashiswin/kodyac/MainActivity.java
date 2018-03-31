@@ -1,6 +1,5 @@
 package com.ashiswin.kodyac;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         btnBegin.setEnabled(false);
 
         txtWelcome.setText(text);
-        imgLogo.setImageResource(R.drawable.ibm);
+        imgLogo.setImageResource(R.drawable.ibmkodyac);
         btnBegin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

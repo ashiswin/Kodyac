@@ -1,5 +1,6 @@
 package com.ashiswin.kodyac;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -34,6 +35,7 @@ public class VerificationMethodsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification_methods);
+        getSupportActionBar().hide();
 
         m = (MainApplication) getApplicationContext();
 
@@ -42,6 +44,7 @@ public class VerificationMethodsActivity extends AppCompatActivity {
 
         adapter = new VerificationAdapter();
         lstMethods.setAdapter(adapter);
+
         lstMethods.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -105,6 +108,7 @@ public class VerificationMethodsActivity extends AppCompatActivity {
             return position;
         }
 
+        @SuppressLint("LongLogTag")
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View itemView;
@@ -121,15 +125,19 @@ public class VerificationMethodsActivity extends AppCompatActivity {
             switch (m.methodNames[position]) {
                 case "sms":
                     name = "SMS Verification";
+                    ((ImageView) itemView.findViewById(R.id.textIcon)).setImageDrawable(getDrawable(R.drawable.smsverifyicon));
                     break;
                 case "myinfo":
                     name = "Basic Information Verification";
+                    ((ImageView) itemView.findViewById(R.id.textIcon)).setImageDrawable(getDrawable(R.drawable.icverifyicon));
                     break;
                 case "nric":
                     name = "Photo Verification";
+                    ((ImageView) itemView.findViewById(R.id.textIcon)).setImageDrawable(getDrawable(R.drawable.faceverifyicon));
                     break;
                 case "video":
                     name = "Video Verification";
+                    ((ImageView) itemView.findViewById(R.id.textIcon)).setImageDrawable(getDrawable(R.drawable.biometricverifyicon));
                     break;
                 default:
                     name = "Unknown Verification Method";

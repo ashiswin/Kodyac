@@ -6,5 +6,7 @@
     <color name="colorDisabled">#99333333</color>
     <color name="colorSuccess">#FF5cb85c</color>
     <color name="colorSuccessDisabled">#A65cb85c</color>
-    <color name="colorBackground">#ECEFF1</color>
+    <color name="colorTextLight">#ECEFF1</color>
+    <color name="colorBackground">#333333</color>
+    <color name="colorIBMBlue">#1FC6C7</color>
 </resources>
