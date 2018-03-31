@@ -8,12 +8,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -25,13 +32,26 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.google.android.gms.vision.face.LargestFaceFocusingProcessor;
+import com.google.zxing.common.BitArray;
 
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.ashiswin.kodyac.OpenCVActivity.REQUEST_CODE;
 
 public class VideoVerificationVideoActivity extends AppCompatActivity {
 
@@ -70,6 +90,11 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             mIsFrontFacing = savedInstanceState.getBoolean("IsFrontFacing");
+        }
+
+        //alow bitmap to write into external storage
+        if(PackageManager.PERMISSION_GRANTED== ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)){} else {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
         }
 
         // Check for the camera permission before accessing the camera.  If the
@@ -231,7 +256,7 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
      * warning if it was not possible to download the face library.
      */
     @NonNull
-    private FaceDetector createFaceDetector(Context context) {
+    private MyFaceDetector createFaceDetector(Context context) {
         // For both front facing and rear facing modes, the detector is initialized to do landmark
         // detection (to find the eyes), classification (to determine if the eyes are open), and
         // tracking.
@@ -251,7 +276,7 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
         // tracking faster (at the expense of missing smaller faces).  But this optimization is less
         // important for the front facing case, because when "prominent face only" is enabled, the
         // detector stops scanning for faces after it has found the first (large) face.
-        FaceDetector detector = new FaceDetector.Builder(context)
+        FaceDetector faceDetector = new FaceDetector.Builder(context)
                 .setLandmarkType(FaceDetector.ALL_LANDMARKS)
                 .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
                 .setTrackingEnabled(true)
@@ -259,7 +284,7 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
                 .setProminentFaceOnly(mIsFrontFacing)
                 .setMinFaceSize(mIsFrontFacing ? 0.35f : 0.15f)
                 .build();
-
+        MyFaceDetector detector = new MyFaceDetector(faceDetector);
         Detector.Processor<Face> processor;
         if (mIsFrontFacing) {
             // For front facing mode, a single tracker instance is used with an associated focusing
@@ -327,7 +352,7 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
      */
     private void createCameraSource() {
         Context context = getApplicationContext();
-        FaceDetector detector = createFaceDetector(context);
+        MyFaceDetector detector = createFaceDetector(context);
 
         int facing = CameraSource.CAMERA_FACING_FRONT;
         if (!mIsFrontFacing) {
@@ -346,7 +371,7 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
         mCameraSource = new CameraSource.Builder(context, detector)
                 .setFacing(facing)
                 .setRequestedPreviewSize(320, 240)
-                .setRequestedFps(60.0f)
+                .setRequestedFps(100.0f)
                 .setAutoFocusEnabled(true)
                 .build();
     }
@@ -378,8 +403,50 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
     }
 
     public void verifyVideo() {
-        // TODO: Perform screenshot/photo capture and verify face with NRIC face
         setResult(RESULT_OK);
+
         finish();
+    }
+}
+
+class MyFaceDetector extends Detector<Face> {
+    private Detector<Face> mDelegate;
+
+    MyFaceDetector(Detector<Face> delegate) {
+        mDelegate = delegate;
+    }
+
+    public SparseArray<Face> detect(Frame frame) {
+        // *** add your custom frame processing code here
+        SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd", Locale.US);
+        Date now = new Date();
+        ByteBuffer byteBuffer = frame.getGrayscaleImageData();
+        YuvImage yuvImage = new YuvImage(frame.getGrayscaleImageData().array(), ImageFormat.NV21, frame.getMetadata().getWidth(), frame.getMetadata().getHeight(), null);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        yuvImage.compressToJpeg(new Rect(0, 0, frame.getMetadata().getWidth(), frame.getMetadata().getHeight()), 100, byteArrayOutputStream);
+        byte[] jpegArray = byteArrayOutputStream.toByteArray();
+        Bitmap bitmap_object = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.length);
+        //create directory to put file in
+        File directory = new File(Environment.getExternalStorageDirectory() + "/Kodyac/Video");
+        if (!directory.exists()){
+            directory.mkdirs();
+        }
+
+        File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+".png");
+            try {
+                bitmap_object.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        return mDelegate.detect(frame);
+    }
+
+    public boolean isOperational() {
+        return mDelegate.isOperational();
+    }
+
+    public boolean setFocus(int id) {
+        return mDelegate.setFocus(id);
     }
 }

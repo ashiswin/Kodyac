@@ -187,7 +187,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:enabled="false"
+        android:enabled="true"
         android:elevation="0dp"
         android:text="Perform Video Verification"
         android:foreground="?android:attr/selectableItemBackground" />

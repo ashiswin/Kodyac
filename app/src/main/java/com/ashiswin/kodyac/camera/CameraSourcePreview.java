@@ -47,6 +47,8 @@ public class CameraSourcePreview extends ViewGroup {
 
         mSurfaceView = new SurfaceView(context);
         mSurfaceView.getHolder().addCallback(new SurfaceCallback());
+        //allows screenshot of face
+        mSurfaceView.setDrawingCacheEnabled(true);
         addView(mSurfaceView);
     }
 
