@@ -66,6 +66,7 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
     private GraphicOverlay mGraphicOverlay;
 
     private boolean mIsFrontFacing = true;
+    private static String videoScreenShot;
 
     //==============================================================================================
     // Activity Methods
@@ -417,7 +418,7 @@ class MyFaceDetector extends Detector<Face> {
 
     public SparseArray<Face> detect(Frame frame) {
         // *** add your custom frame processing code here
-        SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd", Locale.US);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
         Date now = new Date();
         ByteBuffer byteBuffer = frame.getGrayscaleImageData();
         YuvImage yuvImage = new YuvImage(frame.getGrayscaleImageData().array(), ImageFormat.NV21, frame.getMetadata().getWidth(), frame.getMetadata().getHeight(), null);
@@ -432,11 +433,16 @@ class MyFaceDetector extends Detector<Face> {
         }
 
         File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+".png");
-            try {
-                bitmap_object.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap_object.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            VideoVerificationNRICActivity.m.photoTaken = file.getAbsolutePath();
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         return mDelegate.detect(frame);
     }

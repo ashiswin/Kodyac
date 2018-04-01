@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.os.Parcel;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,7 @@ import com.microblink.util.RecognizerCompatibilityStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -71,7 +73,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
     private Button btnConfirm;
     private static String headShotFileName;
 
-    MainApplication m;
+    static MainApplication m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +165,11 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 m.dob = dobText.getText().toString();
                 m.address = addressText.getText().toString();
                 m.nationality = countryText.getText().toString();
+                if (headShotFileName!=null){
+                    m.NRICpicture = headShotFileName;
+                }
+
+
 
                 /*final ProgressDialog dialog = new ProgressDialog(VideoVerificationNRICActivity.this);
 
@@ -210,6 +217,46 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 };
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                 queue.add(postRequest);*/
+
+                //sending pictures to the FaceAPI
+                //TODO: repeat for Photo verification
+                final String url = MainApplication.SERVER_URL + "VerifyFace.php";
+                StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject res = new JSONObject(response);
+                                    if (res.getBoolean("success")) {
+                                        JSONObject verification = res.getJSONObject("verification");
+                                        Toast.makeText(m, String.valueOf(verification.getBoolean("isIdentical"))+" at confience level of: "+
+                                                verification.getString("confidence"), Toast.LENGTH_SHORT).show();
+
+                                    }
+                                    else {
+                                        Toast.makeText(VideoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error.Response", error.getLocalizedMessage());
+                            }
+                        }) {
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
+
+                        params.put("face1", getStringImage(m.NRICpicture));
+                        params.put("face2", getStringImage(m.photoTaken));
+                        return params;
+                    }
+                };
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                queue.add(postRequest);
             }
         });
 
@@ -345,8 +392,6 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 fos.close();
                 headShotFileName = file.getAbsolutePath();
             } catch (Exception e) {
-                Log.e("NRICVideo","file error");
-                Log.e("NRICVideo",e.getMessage());
                 e.printStackTrace();
             }
 
@@ -377,6 +422,15 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 return new MyImageListener[size];
             }
         };
+    }
+
+    public String getStringImage(String absoluteFilePath) {
+        Bitmap bmp = BitmapFactory.decodeFile(absoluteFilePath);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
     }
 
 }

@@ -24,4 +24,6 @@ public class MainApplication extends Application {
     String dob;
     String sex;
     String race;
+    String NRICpicture;
+    String photoTaken;
 }
