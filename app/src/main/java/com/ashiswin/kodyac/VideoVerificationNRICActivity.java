@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcel;
@@ -70,10 +69,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
     private ImageView profilePic;
     private Button btnVideoVerification;
     private Button btnConfirm;
-    private String headShotFileName;
-
-    private boolean profilePictest;
-    private String UriString = "file:///storage/emulated/0/myImages20180314.jpg";
+    private static String headShotFileName;
 
     MainApplication m;
 
@@ -118,8 +114,6 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 // enable obtaining of dewarped(cropped) images
                 ims.setDewarpedImageEnabled(true);
 
-
-                profilePictest=settings.shouldEncodeFaceImage();
                 Intent intent = new Intent(VideoVerificationNRICActivity.this, VerificationFlowActivity.class);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_LICENSE_KEY, getString(R.string.microblink_license_key));
                 intent.putExtra(VerificationFlowActivity.EXTRAS_COMBINED_RECOGNIZER_SETTINGS, settings);
@@ -247,9 +241,6 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                     String address = result.getAddress();
                     byte[] face = result.getEncodedFaceImage();
 
-                    Uri imageURI = Uri.parse(UriString);
-                    profilePic.setImageURI(imageURI);
-
                     nameText.setText(name.trim());
                     cardText.setText(cardNumber.trim());
                     countryText.setText(country.trim());
@@ -258,12 +249,12 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                     dobText.setText(dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
                     addressText.setText(address.trim());
 
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
-                    java.util.Date now = new java.util.Date();
-                    File headshot = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Kodyac/NRIC/"+formatter.format(now)+".png");
-                    Bitmap headshotBitmap = BitmapFactory.decodeFile(headshot.getAbsolutePath());
-                    profilePic.setImageBitmap(headshotBitmap);
-
+                    if (headShotFileName != null) {
+                        Bitmap headshotBitmap = BitmapFactory.decodeFile(headShotFileName);
+                        profilePic.setImageBitmap(headshotBitmap);
+                    }else{
+                        Toast.makeText(m, "Profile picture cannot be retrieved please try again", Toast.LENGTH_SHORT).show();
+                    }
                     btnVideoVerification.setEnabled(true);
                 }
             } else {
@@ -337,12 +328,12 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
         @Override
         public void onImageAvailable(Image image) {
             //create directory to store the file
-            File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Kodyac/NRIC/");
+            File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Kodyac/NRIC");
             if(!directory.exists()) {
                 directory.mkdirs();
             }
             //get date to name the picture file
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US);
             java.util.Date now = new java.util.Date();
             //save the picture under correct directory and date
             Bitmap bitmap_obtained = image.convertToBitmap();
@@ -352,7 +343,10 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 bitmap_obtained.compress(Bitmap.CompressFormat.PNG, 100, fos);
                 fos.flush();
                 fos.close();
+                headShotFileName = file.getAbsolutePath();
             } catch (Exception e) {
+                Log.e("NRICVideo","file error");
+                Log.e("NRICVideo",e.getMessage());
                 e.printStackTrace();
             }
 
