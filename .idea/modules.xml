@@ -3,13 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Kodyac.iml" filepath="$PROJECT_DIR$/Kodyac.iml" />
-      <module fileurl="file://C:\Users\CHERIA\Downloads\Kodyac\Kodyac.iml" filepath="C:\Users\CHERIA\Downloads\Kodyac\Kodyac.iml" />
       <module fileurl="file://$PROJECT_DIR$/LibBlinkID/LibBlinkID.iml" filepath="$PROJECT_DIR$/LibBlinkID/LibBlinkID.iml" />
-      <module fileurl="file://C:\Users\CHERIA\Downloads\Kodyac\LibBlinkID\LibBlinkID.iml" filepath="C:\Users\CHERIA\Downloads\Kodyac\LibBlinkID\LibBlinkID.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\CHERIA\Downloads\Kodyac\app\app.iml" filepath="C:\Users\CHERIA\Downloads\Kodyac\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/openCVLibrary300/openCVLibrary300.iml" filepath="$PROJECT_DIR$/openCVLibrary300/openCVLibrary300.iml" />
-      <module fileurl="file://C:\Users\CHERIA\Downloads\Kodyac\openCVLibrary300\openCVLibrary300.iml" filepath="C:\Users\CHERIA\Downloads\Kodyac\openCVLibrary300\openCVLibrary300.iml" />
     </modules>
   </component>
 </project>
