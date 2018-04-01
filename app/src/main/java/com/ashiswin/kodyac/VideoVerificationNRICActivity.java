@@ -259,9 +259,11 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                     dobText.setText(dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
                     addressText.setText(address.trim());
 
-                    if(face!=null) {
-                    //set URI here
-                    }
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd", Locale.US);
+                    java.util.Date now = new java.util.Date();
+                    File headshot = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Kodyac/NRIC/"+formatter.format(now)+".png");
+                    Bitmap headshotBitmap = BitmapFactory.decodeFile(headshot.getAbsolutePath());
+                    profilePic.setImageBitmap(headshotBitmap);
 
                     btnVideoVerification.setEnabled(true);
                 }
@@ -341,7 +343,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 directory.mkdirs();
             }
             //get date to name the picture file
-            SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd_HH_mm_ss", Locale.US);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd", Locale.US);
             java.util.Date now = new java.util.Date();
             //save the picture under correct directory and date
             Bitmap bitmap_obtained = image.convertToBitmap();
@@ -351,6 +353,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            //TODO: clean up the code, flush out the output and fucking close it -jy
         }
 
         /**
