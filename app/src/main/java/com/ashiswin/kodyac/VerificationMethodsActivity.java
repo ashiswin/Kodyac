@@ -148,8 +148,8 @@ public class VerificationMethodsActivity extends AppCompatActivity {
             ((TextView) itemView.findViewById(R.id.text)).setText(name);
             if(m.methods.get(m.methodNames[position])) {
                 itemView.setBackgroundColor(Color.parseColor("#5cb85c"));
-                ((TextView) itemView.findViewById(R.id.text)).setTextColor(Color.parseColor("#FFFFFF"));
-                ((ImageView) itemView.findViewById(R.id.imgStatus)).setImageDrawable(getDrawable(R.drawable.ic_chevron_right_white_24dp));
+                ((TextView) itemView.findViewById(R.id.text)).setTextColor(Color.parseColor("#ECEFF1"));
+                ((ImageView) itemView.findViewById(R.id.imgStatus)).setImageDrawable(getDrawable(R.drawable.tickverifiedeach));
             }
 
             return itemView;

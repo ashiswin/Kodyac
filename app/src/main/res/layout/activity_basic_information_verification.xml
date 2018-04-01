@@ -9,24 +9,42 @@
 
     <Button
         android:id="@+id/scan_bttn"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Scan Barcode"
-        android:elevation="0dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorTextLight"
+        android:textColor="@color/colorPrimary"
+        android:text="Click to Scan Barcode"
+        android:elevation="10dp"
         tools:layout_editor_absoluteX="106dp"
         tools:layout_editor_absoluteY="66dp"
+        android:layout_gravity="center_horizontal"
         android:foreground="?android:attr/selectableItemBackground" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@color/colorIBMBlue"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:id="@+id/txtErrorMsg"
+        android:text=" "
+        android:paddingBottom="20dp"/>
 
     <TextView
         android:id="@+id/txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:textSize="30sp"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@color/colorTextLight"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
@@ -44,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorTextLight"
             android:layout_marginRight="4dp"
             android:text="NRIC:"/>
         <TextView
@@ -52,6 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/colorTextLight"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"/>
     </LinearLayout>
@@ -68,13 +87,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorTextLight"
             android:layout_marginRight="4dp"
             android:text="Race:"/>
         <TextView
             android:id="@+id/txtRace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorTextLight"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textAppearance="?android:textAppearanceMedium"/>
@@ -92,13 +112,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorTextLight"
             android:layout_marginRight="4dp"
             android:text="Sex:"/>
         <TextView
             android:id="@+id/txtSex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorTextLight"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textAppearance="?android:textAppearanceMedium"/>
@@ -115,7 +136,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorTextLight"
             android:layout_marginRight="4dp"
             android:text="Date of Birth:"/>
         <TextView
@@ -123,6 +144,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/colorTextLight"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp" />
     </LinearLayout>
@@ -138,13 +160,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorTextLight"
             android:layout_marginRight="4dp"
             android:text="Nationality:"/>
         <TextView
             android:id="@+id/txtCountryBirth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorTextLight"
             android:textAppearance="?android:textAppearanceMedium"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp" />
@@ -161,13 +184,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorTextLight"
             android:layout_marginRight="4dp"
             android:text="Address:"/>
         <TextView
             android:id="@+id/txtAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorTextLight"
             android:textAppearance="?android:textAppearanceMedium"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp" />
@@ -183,7 +207,7 @@
         android:layout_marginBottom="48dp"
         android:background="@drawable/rounded_rect_button_success"
         android:enabled="false"
-        android:elevation="0dp"
-        android:text="Confirm"
+        android:elevation="10dp"
+        android:text="Confirm Details"
         android:foreground="?android:attr/selectableItemBackground" />
 </LinearLayout>

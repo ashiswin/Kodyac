@@ -12,6 +12,7 @@
         android:layout_margin="16dp"
         android:textAppearance="?android:textAppearanceLarge"
         android:gravity="center_horizontal"
+        android:textColor="@color/colorIBMBlue"
         android:text="Please enter your phone number"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spnCountryCode"
-            android:textAppearance="?android:textAppearanceLarge"/>
+            android:textAppearance="?android:textAppearanceLarge" />
 
         <EditText
             android:id="@+id/edtPhoneNumber"

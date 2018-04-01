@@ -35,6 +35,7 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
     private Button startScan;
     private Button btnConfirm;
     private TextView barcodeNum;
+    private TextView errorText;
     private TextView nameText;
     private TextView raceText;
     private TextView sexText;
@@ -42,7 +43,7 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
     private TextView dobText;
     private TextView addressText;
     private final String endPoint = "GetMyInfo.php";
-    private final String ERROR_MSG = "Deatils could not be obtained. Please ensure you have a SingPass Account.";
+    private final String ERROR_MSG = "Details could not be obtained.\nPlease ensure you have a valid SingPass Account.";
     private JSONObject jsonObject;
 
     MainApplication m;
@@ -52,12 +53,13 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic_information_verification);
 
-        getSupportActionBar().setTitle("Scan NRIC Barcode");
+        getSupportActionBar().setTitle("Basic Information Verification");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
 
         startScan = (Button) findViewById(R.id.scan_bttn);
         barcodeNum = (TextView) findViewById(R.id.barcode_num);
+        errorText = (TextView) findViewById(R.id.txtErrorMsg);
         nameText  = (TextView) findViewById(R.id.txtName);
         raceText = (TextView) findViewById(R.id.txtRace);
         sexText = (TextView) findViewById(R.id.txtSex);
@@ -85,7 +87,7 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 IntentIntegrator scanIntegrator = new IntentIntegrator(BasicInformationVerificationActivity.this);
                 //initiate scan
-                scanIntegrator.setPrompt("Scan barcode at the back of your NRIC");
+                scanIntegrator.setPrompt("Please scan the barcode at the back of your NRIC");
                 scanIntegrator.setOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 scanIntegrator.initiateScan();
             }
@@ -196,7 +198,7 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
                 JSONObject details = jsonObject.getJSONObject("details");
                 /*"name":null,"sex":null,"race":null,"dob":null,"address":"  #-, S"*/
                 if (details.isNull("name")||details.isNull("sex")||details.isNull("race")||details.isNull("dob")){
-                    nameText.setText(ERROR_MSG);
+                    errorText.setText(ERROR_MSG);
                 }
                 else{
                     m.name = details.getString("name").trim();
@@ -218,7 +220,7 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
             }
             else{
                 //cannot log into MyInfo API
-                nameText.setText(ERROR_MSG);
+                errorText.setText(ERROR_MSG);
             }
         } catch(Exception e){
             e.printStackTrace();

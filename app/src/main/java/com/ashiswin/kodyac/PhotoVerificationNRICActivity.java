@@ -78,7 +78,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo_verification_nric);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        getSupportActionBar().setTitle("Scan NRIC");
+        getSupportActionBar().setTitle("Photo Verification");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
 
