@@ -86,7 +86,8 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Scan NRIC");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setElevation(0);
+        
         nameText  = (TextView) findViewById(R.id.txtName);
         cardText = (TextView) findViewById(R.id.txtCardNumber);
         raceText = (TextView) findViewById(R.id.txtRace);

@@ -35,6 +35,7 @@ public class SMSVerificationNumberActivity extends AppCompatActivity {
         setContentView(R.layout.activity_smsverification_number);
         getSupportActionBar().setTitle("SMS Verification");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
 
         m = (MainApplication) getApplicationContext();
 
@@ -64,7 +65,8 @@ public class SMSVerificationNumberActivity extends AppCompatActivity {
 
                     Intent otpIntent = new Intent(SMSVerificationNumberActivity.this, SMSVerificationOTPActivity.class);
                     otpIntent.putExtra("linkId", getIntent().getIntExtra("linkId", m.linkId));
-                    otpIntent.putExtra("phone", phone);startActivityForResult(otpIntent, INTENT_OTP);
+                    otpIntent.putExtra("phone", phone);
+                    startActivityForResult(otpIntent, INTENT_OTP);
                 } else{
                     edtPhoneNumber.getText().clear();
                     Toast.makeText(SMSVerificationNumberActivity.this, "ERROR: "+result, Toast.LENGTH_SHORT).show();

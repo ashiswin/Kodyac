@@ -37,6 +37,7 @@ public class SMSVerificationOTPActivity extends AppCompatActivity {
         setContentView(R.layout.activity_smsverification_otp);
         getSupportActionBar().setTitle("Verify OTP");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
 
         edtOTP = (EditText) findViewById(R.id.edtOTP);
         btnVerify = (Button) findViewById(R.id.btnVerify);
@@ -72,6 +73,7 @@ public class SMSVerificationOTPActivity extends AppCompatActivity {
                                             if (res.getBoolean("success")) {
                                                 Toast.makeText(SMSVerificationOTPActivity.this, "Verified", Toast.LENGTH_SHORT).show();
                                                 m.methods.put("sms", true);
+                                                m.contact = getIntent().getStringExtra("phone");
                                                 completeMethod();
                                             }
                                             else {
@@ -98,9 +100,6 @@ public class SMSVerificationOTPActivity extends AppCompatActivity {
                         queue.add(postRequest);
                     }
                 }).start();
-
-
-
             }
         });
 

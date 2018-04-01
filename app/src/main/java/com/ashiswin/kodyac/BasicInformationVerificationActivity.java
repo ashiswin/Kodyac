@@ -54,6 +54,7 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Scan NRIC Barcode");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
 
         startScan = (Button) findViewById(R.id.scan_bttn);
         barcodeNum = (TextView) findViewById(R.id.barcode_num);
@@ -125,7 +126,7 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
                             }
                         }) {
                     protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<String, String>();
+                        Map<String, String> params = new HashMap<>();
                         params.put("name", m.name);
                         params.put("nric", m.nric);
                         params.put("address", m.address);
