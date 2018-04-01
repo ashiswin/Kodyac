@@ -70,6 +70,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
     private ImageView profilePic;
     private Button btnVideoVerification;
     private Button btnConfirm;
+    private String headShotFileName;
 
     private boolean profilePictest;
     private String UriString = "file:///storage/emulated/0/myImages20180314.jpg";
@@ -218,7 +219,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
             }
         });
 
-        //alow bitmap to write into external storage
+        //allow bitmap to write into external storage
         if(PackageManager.PERMISSION_GRANTED== ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)){} else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
         }
@@ -257,7 +258,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                     dobText.setText(dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
                     addressText.setText(address.trim());
 
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd", Locale.US);
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
                     java.util.Date now = new java.util.Date();
                     File headshot = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Kodyac/NRIC/"+formatter.format(now)+".png");
                     Bitmap headshotBitmap = BitmapFactory.decodeFile(headshot.getAbsolutePath());
@@ -341,17 +342,20 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 directory.mkdirs();
             }
             //get date to name the picture file
-            SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd", Locale.US);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
             java.util.Date now = new java.util.Date();
             //save the picture under correct directory and date
             Bitmap bitmap_obtained = image.convertToBitmap();
             File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+".png");
             try {
-                bitmap_obtained.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
+                FileOutputStream fos = new FileOutputStream(file);
+                bitmap_obtained.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.flush();
+                fos.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //TODO: clean up the code, flush out the output and fucking close it -jy
+
         }
 
         /**
