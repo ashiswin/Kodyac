@@ -13,7 +13,7 @@
     <string name="ok">OK</string>
     <string name="photopayOK">OK</string>
     <string name="errorDesc">There has been an error starting the scanner.</string>
-
+    <integer name="REQUEST_CODE">1024</integer>
     <string-array name="country_codes">
         <item>+65</item>
     </string-array>

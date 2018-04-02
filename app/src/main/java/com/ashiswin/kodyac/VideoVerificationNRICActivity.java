@@ -61,8 +61,6 @@ import cz.msebera.android.httpclient.entity.InputStreamEntity;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static com.ashiswin.kodyac.OpenCVActivity.REQUEST_CODE;
-
 
 //Tutorial: https://github.com/BlinkID/blinkid-android#quickDemo
 //reference: https://github.com/BlinkID/blinkid-android/blob/master/BlinkIDSample/BlinkIDSampleCustomUI/src/main/java/com/microblink/blinkid/demo/customui/MyScanActivity.java
@@ -70,6 +68,7 @@ import static com.ashiswin.kodyac.OpenCVActivity.REQUEST_CODE;
 public class VideoVerificationNRICActivity extends AppCompatActivity {
     private static final int MY_REQUEST_CODE = 0x101;
     private static final int VIDEO_INTENT = 1;
+
 
     private Button startBtn;
     private TextView nameText;
@@ -272,7 +271,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
 
         //allow bitmap to write into external storage
         if(PackageManager.PERMISSION_GRANTED== ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)){} else {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, getResources().getInteger(R.integer.REQUEST_CODE));
         }
     }
 
@@ -434,12 +433,12 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
         };
     }
 
-    public String getStringImage(String absoluteFilePath) {
+    //converst file into a Base64 encoded string
+    private String getStringImage(String absoluteFilePath) {
         Bitmap bmp = BitmapFactory.decodeFile(absoluteFilePath);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
-        //String encodedImage = new String(imageBytes);
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
