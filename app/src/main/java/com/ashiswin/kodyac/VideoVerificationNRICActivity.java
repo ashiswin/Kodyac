@@ -28,9 +28,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.microblink.activity.VerificationFlowActivity;
 import com.microblink.image.Image;
 import com.microblink.image.ImageListener;
@@ -46,19 +43,11 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.HttpResponse;
-import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.client.methods.HttpPost;
-import cz.msebera.android.httpclient.entity.InputStreamEntity;
-import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
