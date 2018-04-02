@@ -65,6 +65,8 @@ dependencies {
 
     /* for HTTP request (SMS OTP) */
     compile 'com.android.volley:volley:1.0.0'
+    /*ASync Http to upload file */
+    compile 'com.loopj.android:android-async-http:1.4.9'
 
     /*local test*/
     testCompile 'junit:junit:4.12'

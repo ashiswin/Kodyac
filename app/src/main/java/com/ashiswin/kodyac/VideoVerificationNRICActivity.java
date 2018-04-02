@@ -28,6 +28,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.microblink.activity.VerificationFlowActivity;
 import com.microblink.image.Image;
 import com.microblink.image.ImageListener;
@@ -43,11 +46,19 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.InputStreamEntity;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.ashiswin.kodyac.OpenCVActivity.REQUEST_CODE;
@@ -220,18 +231,18 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
 
                 //sending pictures to the FaceAPI
                 //TODO: repeat for Photo verification
-                final String url = MainApplication.SERVER_URL + "VerifyFace.php";
-                StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                final String faceUrl = MainApplication.SERVER_URL + "VerifyFace.php";
+                StringRequest postRequest = new StringRequest(Request.Method.POST, faceUrl,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
                                 try {
                                     JSONObject res = new JSONObject(response);
+                                    Toast.makeText(VideoVerificationNRICActivity.this, response, Toast.LENGTH_SHORT).show();
                                     if (res.getBoolean("success")) {
-                                        JSONObject verification = res.getJSONObject("verification");
-                                        Toast.makeText(m, String.valueOf(verification.getBoolean("isIdentical"))+" at confience level of: "+
-                                                verification.getString("confidence"), Toast.LENGTH_SHORT).show();
-
+                                        JSONObject ver = res.getJSONObject("verification");
+                                        Log.d("FAce Api results", ver.toString());
+                                        Toast.makeText(VideoVerificationNRICActivity.this, "match is "+ver.getBoolean("isIdentical")+" with confidence "+ver.getString("confidence"), Toast.LENGTH_SHORT).show();
                                     }
                                     else {
                                         Toast.makeText(VideoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
@@ -244,14 +255,13 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.d("Error.Response", error.getLocalizedMessage());
+                                error.printStackTrace();
                             }
                         }) {
                     protected Map<String, String> getParams() {
                         Map<String, String> params = new HashMap<String, String>();
-
-                        params.put("face1", getStringImage(m.NRICpicture));
-                        params.put("face2", getStringImage(m.photoTaken));
+                        params.put("face1", getStringImage(m.photoTaken));
+                        params.put("face2", getStringImage(m.NRICpicture));
                         return params;
                     }
                 };
@@ -429,6 +439,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
+        //String encodedImage = new String(imageBytes);
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.os.Environment;
@@ -54,7 +55,7 @@ import static com.ashiswin.kodyac.OpenCVActivity.REQUEST_CODE;
 
 public class VideoVerificationVideoActivity extends AppCompatActivity {
 
-    private static final String TAG = "GooglyEyes";
+    private static final String TAG = "Video Verification";
 
     private static final int RC_HANDLE_GMS = 9001;
 
@@ -425,7 +426,11 @@ class MyFaceDetector extends Detector<Face> {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         yuvImage.compressToJpeg(new Rect(0, 0, frame.getMetadata().getWidth(), frame.getMetadata().getHeight()), 100, byteArrayOutputStream);
         byte[] jpegArray = byteArrayOutputStream.toByteArray();
-        Bitmap bitmap_object = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.length);
+        Bitmap bmp = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.length);
+        //rotate image
+        Matrix matrix = new Matrix();
+        matrix.postRotate(270);
+        Bitmap bitmap_object =  Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
         //create directory to put file in
         File directory = new File(Environment.getExternalStorageDirectory() + "/Kodyac/Video");
         if (!directory.exists()){
