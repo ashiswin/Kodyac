@@ -5,14 +5,10 @@
     <string name="microblink_license_key">UPGOJ3UY-KOV7STQT-2MYL6GXU-RMANXESD-5XF3PKUW-MQDZXK7O-6EA7Q53S-M3XIN4IF</string>
     <string name="emas_scan_first_side">Please scan the front of your NRIC</string>
     <string name="emas_scan_second_side">Please scan the back of your NRIC</string>
-    <string name="Face_plusplues_API_key">d93aMc_aVelb_hB-q71NQM8EfKABhpK0</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
     <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>
-    <string name="error">Error</string>
     <string name="ok">OK</string>
-    <string name="photopayOK">OK</string>
-    <string name="errorDesc">There has been an error starting the scanner.</string>
     <integer name="REQUEST_CODE">1024</integer>
     <string-array name="country_codes">
         <item>+65</item>
