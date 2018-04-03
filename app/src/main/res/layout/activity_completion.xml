@@ -6,33 +6,48 @@
     android:layout_height="match_parent"
     tools:context="com.ashiswin.kodyac.CompletionActivity">
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true">
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/tickcomplete"
+            android:layout_gravity="center_horizontal"
             android:layout_marginLeft="64dp"
-            android:layout_marginRight="64dp"/>
+            android:layout_marginRight="64dp"
+            android:layout_marginBottom="10dp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceLarge"
             android:gravity="center"
             android:text="@string/thankyou_string"
+            android:textAllCaps="true"
+            android:textColor="@color/colorTextLight"
             android:layout_margin="16dp" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:background="@drawable/kodyaclogo"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="80dp"
+            android:layout_marginTop="1dp"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:id="@+id/txtCountdownTitle"
+            android:textColor="@color/colorTextLight"
             android:text="Closing in"
             android:gravity="center"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:id="@+id/txtCountdown"
+            android:textColor="@color/colorTextLight"
             android:gravity="center"/>
     </LinearLayout>
 </RelativeLayout>
