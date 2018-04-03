@@ -24,12 +24,14 @@
             android:textAppearance="?android:textAppearanceLarge"
             android:gravity="center_horizontal"
             android:id="@+id/txtWelcome"
-            android:layout_margin="16dp" />
+            android:textAllCaps="true"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="16dp"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:id="@+id/btnBegin"
-            android:text="Begin"
+            android:text="BEGIN"
             android:elevation="0dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:layout_margin="16dp"/>
