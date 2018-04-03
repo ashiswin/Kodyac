@@ -50,6 +50,8 @@ public class PhotoVerificationSelfieActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Photo Verification");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        m = (MainApplication) getApplicationContext();
+
         txtCode = (TextView) findViewById(R.id.txtCode);
         btnTakePhoto = (Button) findViewById(R.id.btnTakePhoto);
 

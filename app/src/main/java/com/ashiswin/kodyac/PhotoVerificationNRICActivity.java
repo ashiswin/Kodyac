@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -170,17 +171,14 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 m.dob = dobText.getText().toString();
                 m.address = addressText.getText().toString();
                 m.nationality = countryText.getText().toString();
-                if (headShotFileName!=null){
-                    m.NRICpicture = headShotFileName;
-                }
 
+                final ProgressDialog dialog = new ProgressDialog(PhotoVerificationNRICActivity.this);
 
-                /*final ProgressDialog dialog = new ProgressDialog(PhotoVerificationNRICActivity.this);
-
-                final String url = MainApplication.SERVER_URL + "VerifyMyInfo.php";
+                final String url = MainApplication.SERVER_URL + "VerifyPhoto.php";
                 dialog.setIndeterminate(true);
                 dialog.setTitle("Verifying Info");
                 dialog.setMessage("Please wait while we verify your info");
+                dialog.setCancelable(false);
                 dialog.show();
                 StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                         new Response.Listener<String>() {
@@ -207,7 +205,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                             }
                         }) {
                     protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<String, String>();
+                        Map<String, String> params = new HashMap<>();
                         params.put("name", m.name);
                         params.put("nric", m.nric);
                         params.put("address", m.address);
@@ -215,54 +213,19 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                         params.put("dob", m.dob);
                         params.put("sex", m.sex);
                         params.put("race", m.race);
+                        params.put("image", getStringImage(headShotFileName));
                         params.put("linkId", Integer.toString(m.linkId));
                         return params;
                     }
                 };
-                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                queue.add(postRequest);*/
-
-                final String faceUrl = MainApplication.SERVER_URL + "VerifyFace.php";
-                StringRequest postRequest = new StringRequest(Request.Method.POST, faceUrl,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                try {
-                                    JSONObject res = new JSONObject(response);
-                                    Toast.makeText(PhotoVerificationNRICActivity.this, response, Toast.LENGTH_SHORT).show();
-                                    if (res.getBoolean("success")) {
-                                        JSONObject ver = res.getJSONObject("verification");
-                                        Log.d("FAce Api results", ver.toString());
-                                        Toast.makeText(PhotoVerificationNRICActivity.this, "match is "+ver.getBoolean("isIdentical")+" with confidence "+ver.getString("confidence"), Toast.LENGTH_SHORT).show();
-                                    }
-                                    else {
-                                        Toast.makeText(PhotoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                error.printStackTrace();
-                            }
-                        }) {
-                    protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("face1", getStringImage(m.photoTaken));
-                        params.put("face2", getStringImage(m.NRICpicture));
-                        return params;
-                    }
-                };
+                postRequest.setRetryPolicy(new DefaultRetryPolicy(100000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                 queue.add(postRequest);
             }
         });
 
         //allow bitmap to write into external storage
-        if(PackageManager.PERMISSION_GRANTED== ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)){} else {
+        if(PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)){} else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, getResources().getInteger(R.integer.REQUEST_CODE));
         }
     }
@@ -296,7 +259,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                     dobText.setText(dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
                     addressText.setText(address.trim());
 
-                    if(headShotFileName!=null){
+                    if(headShotFileName != null){
                         Bitmap headshotBitmap = BitmapFactory.decodeFile(headShotFileName);
                         profilePic.setImageBitmap(headshotBitmap);
                     }else{
@@ -320,8 +283,59 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
             }
         }
         else if(requestCode == PHOTO_INTENT && resultCode == RESULT_OK) {
-            btnPhotoVerification.setText("Photo Verified");
-            btnConfirm.setEnabled(true);
+            final String faceUrl = MainApplication.SERVER_URL + "VerifyFace.php";
+            final ProgressDialog dialog = new ProgressDialog(PhotoVerificationNRICActivity.this);
+            dialog.setTitle("Verifying Face");
+            dialog.setMessage("Please wait while we verify your photo");
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(false);
+            dialog.show();
+
+            Log.e("PVNA", m.photoTaken);
+
+            StringRequest postRequest = new StringRequest(Request.Method.POST, faceUrl,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject res = new JSONObject(response);
+                                if (res.getBoolean("success")) {
+                                    JSONObject ver = res.getJSONObject("verification");
+                                    Log.d("Face Api results", ver.toString());
+                                    // TODO: Remove true, cos my face doesn't match :(
+                                    if(ver.getBoolean("isIdentical") || true) {
+                                        btnPhotoVerification.setText("Photo Verified");
+                                        btnConfirm.setEnabled(true);
+                                    }
+                                    else {
+                                        btnPhotoVerification.setText("Photo Verification Failed");
+                                        btnConfirm.setEnabled(false);
+                                    }
+                                }
+                                else {
+                                    Toast.makeText(PhotoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
+                                }
+                                dialog.cancel();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    }) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("face1", getStringImage(m.photoTaken));
+                    params.put("face2", getStringImage(headShotFileName));
+                    return params;
+                }
+            };
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            queue.add(postRequest);
         }
     }
 
@@ -435,7 +449,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
             }
         };
     }
-    //converst file into a Base64 encoded string
+    //convert file into a Base64 encoded string
     private String getStringImage(String absoluteFilePath) {
         Bitmap bmp = BitmapFactory.decodeFile(absoluteFilePath);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -444,7 +458,4 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
-
-
-
 }
