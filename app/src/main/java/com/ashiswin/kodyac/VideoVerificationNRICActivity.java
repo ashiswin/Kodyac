@@ -2,6 +2,7 @@ package com.ashiswin.kodyac;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -284,7 +285,6 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                     String sex = result.getSex();
                     Date dob = result.getDateOfBirth();
                     String address = result.getAddress();
-                    byte[] face = result.getEncodedFaceImage();
 
                     nameText.setText(name.trim());
                     cardText.setText(cardNumber.trim());
@@ -295,11 +295,13 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                     addressText.setText(address.trim());
 
                     if (headShotFileName != null) {
+                        //set the headshot
                         Bitmap headshotBitmap = BitmapFactory.decodeFile(headShotFileName);
                         profilePic.setImageBitmap(headshotBitmap);
                     }else{
-                        Toast.makeText(m, "Profile picture cannot be retrieved please try again", Toast.LENGTH_SHORT).show();
-                    }
+                        AlertDialog.Builder builder = new AlertDialog.Builder(VideoVerificationNRICActivity.this);
+                        builder.setMessage("Profile picture not detected. Please scan NRIC again").setTitle("Error");
+                        AlertDialog dialog = builder.create();                    }
                     btnVideoVerification.setEnabled(true);
                 }
             } else {
