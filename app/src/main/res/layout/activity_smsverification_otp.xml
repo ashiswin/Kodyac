@@ -2,34 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="300dp"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
     tools:context="com.ashiswin.kodyac.SMSVerificationNumberActivity">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:textAppearance="?android:textAppearanceLarge"
+        android:textAppearance="?android:textAppearanceMedium"
         android:gravity="center_horizontal"
         android:textColor="@color/colorIBMBlue"
-        android:text="Please enter the OTP you received"/>
+        android:text="Please enter the OTP sent to your mobile"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edtOTP"
         android:gravity="center_horizontal"
+        android:textColor="@color/colorTextLight"
         android:textAppearance="?android:textAppearanceLarge"
-        android:layout_margin="16dp"/>
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/colorTextLight"
+        android:textCursorDrawable="@color/colorTextLight"/>
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
         android:id="@+id/btnVerify"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:foreground="?android:attr/selectableItemBackground"
+        android:padding="6dp"
         android:text="Verify"
         android:elevation="0dp"
+        android:background="@drawable/btn_border"
         android:layout_gravity="center_horizontal"/>
     <TextView
         android:layout_width="match_parent"
