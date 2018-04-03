@@ -56,7 +56,6 @@
         <activity
             android:name=".BasicInformationVerificationActivity"
             android:screenOrientation="sensorPortrait" />
-        <activity android:name=".OpenCVActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

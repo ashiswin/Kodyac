@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.os.Environment;
@@ -50,11 +51,10 @@ import java.util.Date;
 import java.util.Locale;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static com.ashiswin.kodyac.OpenCVActivity.REQUEST_CODE;
 
 public class VideoVerificationVideoActivity extends AppCompatActivity {
 
-    private static final String TAG = "GooglyEyes";
+    private static final String TAG = "Video Verification";
 
     private static final int RC_HANDLE_GMS = 9001;
 
@@ -66,6 +66,7 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
     private GraphicOverlay mGraphicOverlay;
 
     private boolean mIsFrontFacing = true;
+    private static String videoScreenShot;
 
     //==============================================================================================
     // Activity Methods
@@ -93,7 +94,7 @@ public class VideoVerificationVideoActivity extends AppCompatActivity {
 
         //alow bitmap to write into external storage
         if(PackageManager.PERMISSION_GRANTED== ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)){} else {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, getResources().getInteger(R.integer.REQUEST_CODE));
         }
 
         // Check for the camera permission before accessing the camera.  If the
@@ -416,15 +417,19 @@ class MyFaceDetector extends Detector<Face> {
     }
 
     public SparseArray<Face> detect(Frame frame) {
-        // *** add your custom frame processing code here
-        SimpleDateFormat formatter = new SimpleDateFormat("yyy_MM_dd", Locale.US);
+        //converts last detected fram (the smile) into a bitmap
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
         Date now = new Date();
         ByteBuffer byteBuffer = frame.getGrayscaleImageData();
         YuvImage yuvImage = new YuvImage(frame.getGrayscaleImageData().array(), ImageFormat.NV21, frame.getMetadata().getWidth(), frame.getMetadata().getHeight(), null);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         yuvImage.compressToJpeg(new Rect(0, 0, frame.getMetadata().getWidth(), frame.getMetadata().getHeight()), 100, byteArrayOutputStream);
         byte[] jpegArray = byteArrayOutputStream.toByteArray();
-        Bitmap bitmap_object = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.length);
+        Bitmap bmp = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.length);
+        //rotate image by 270 degrees so it is in the upright position
+        Matrix matrix = new Matrix();
+        matrix.postRotate(270);
+        Bitmap bitmap_object =  Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
         //create directory to put file in
         File directory = new File(Environment.getExternalStorageDirectory() + "/Kodyac/Video");
         if (!directory.exists()){
@@ -432,11 +437,16 @@ class MyFaceDetector extends Detector<Face> {
         }
 
         File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+".png");
-            try {
-                bitmap_object.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap_object.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            VideoVerificationNRICActivity.m.photoTaken = file.getAbsolutePath();
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         return mDelegate.detect(frame);
     }

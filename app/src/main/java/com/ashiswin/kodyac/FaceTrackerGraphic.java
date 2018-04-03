@@ -2,41 +2,30 @@ package com.ashiswin.kodyac;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Environment;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.View;
 
 import com.ashiswin.kodyac.camera.GraphicOverlay;
 import com.google.android.gms.vision.face.Face;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Date;
-
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 /**
  * Created by Jing Yun on 8/3/2018.
  */
 
 public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
-    private static final float FACE_POSITION_RADIUS = 10.0f;
     private static final float EYE_RADIUS_PROPORTION = 0.45f;
     private static final float IRIS_RADIUS_PROPORTION = EYE_RADIUS_PROPORTION / 2.0f;
     private static final float ID_TEXT_SIZE = 40.0f;
     private static final float INS_TEXT_SIZE = 100.0f;
-    private static final float ID_Y_OFFSET = 100.0f;
-    private static final float ID_X_OFFSET = 100.0f;
     private static final float BOX_STROKE_WIDTH = 5.0f;
 
     //Boolean is update in real time! static int is to correct that
