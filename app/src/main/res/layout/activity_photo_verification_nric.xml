@@ -21,7 +21,7 @@
         android:text="Start Scan" />
 
     <ImageView
-        android:id="@+id/NRICpic"
+        android:id="@+id/photo_NRIC_headShot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

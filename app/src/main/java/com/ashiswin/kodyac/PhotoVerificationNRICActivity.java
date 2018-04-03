@@ -2,16 +2,22 @@ package com.ashiswin.kodyac;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Parcel;
+import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,13 +45,17 @@ import com.microblink.util.RecognizerCompatibilityStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
 //Tutorial: https://github.com/BlinkID/blinkid-android#quickDemo
@@ -66,9 +76,10 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
     private ImageView profilePic;
     private Button btnConfirm;
     private Button btnPhotoVerification;
+    private static String headShotFileName;
+
 
     private boolean profilePictest;
-    private String UriString = "file:///storage/emulated/0/myImages20180314.jpg";
 
     MainApplication m;
 
@@ -91,6 +102,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         addressText = (TextView) findViewById(R.id.txtAddress);
         btnPhotoVerification = (Button) findViewById(R.id.btnPhotoVerification);
         btnConfirm = (Button) findViewById(R.id.btnConfirm);
+        profilePic = (ImageView) findViewById(R.id.photo_NRIC_headShot);
 
         m = (MainApplication) getApplicationContext();
 
@@ -105,26 +117,18 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SingaporeIDCombinedRecognizerSettings settings = new SingaporeIDCombinedRecognizerSettings();
+                MetadataSettings.ImageMetadataSettings ims = new MetadataSettings.ImageMetadataSettings();
                 //so i can extract the face image
                 settings.setEncodeFaceImage(true);
-
-                MetadataSettings.ImageMetadataSettings ims = new MetadataSettings.ImageMetadataSettings();
                 // enable obtaining of dewarped(cropped) images
                 ims.setDewarpedImageEnabled(true);
-                // obtain successful frames (full last frame on which scan has succeeded)
-                // if you want to obtain only dewarped(cropped) images do not enable successful scan frames
-                ims.setSuccessfulScanFrameEnabled(true);
 
-                profilePictest=settings.shouldEncodeFaceImage();
                 Intent intent = new Intent(PhotoVerificationNRICActivity.this, VerificationFlowActivity.class);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_LICENSE_KEY, getString(R.string.microblink_license_key));
                 intent.putExtra(VerificationFlowActivity.EXTRAS_COMBINED_RECOGNIZER_SETTINGS, settings);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_BEEP_RESOURCE, R.raw.beep);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_IMAGE_LISTENER, new MyImageListener());
                 intent.putExtra(VerificationFlowActivity.EXTRAS_IMAGE_METADATA_SETTINGS,ims);
-                //TODO: sort out the hints so the UI is better
-                intent.putExtra(VerificationFlowActivity.EXTRAS_INSTRUCTIONS_DOCUMENT_FIRST_SIDE, R.string.emas_scan_first_side);
-                intent.putExtra(VerificationFlowActivity.EXTRAS_INSTRUCTIONS_DOCUMENT_SECOND_SIDE, R.string.emas_scan_second_side);
 
                 //TODO: include a res ID if possible so users know which side front and back are
 
@@ -166,6 +170,10 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 m.dob = dobText.getText().toString();
                 m.address = addressText.getText().toString();
                 m.nationality = countryText.getText().toString();
+                if (headShotFileName!=null){
+                    m.NRICpicture = headShotFileName;
+                }
+
 
                 /*final ProgressDialog dialog = new ProgressDialog(PhotoVerificationNRICActivity.this);
 
@@ -213,8 +221,50 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 };
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                 queue.add(postRequest);*/
+
+                final String faceUrl = MainApplication.SERVER_URL + "VerifyFace.php";
+                StringRequest postRequest = new StringRequest(Request.Method.POST, faceUrl,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject res = new JSONObject(response);
+                                    Toast.makeText(PhotoVerificationNRICActivity.this, response, Toast.LENGTH_SHORT).show();
+                                    if (res.getBoolean("success")) {
+                                        JSONObject ver = res.getJSONObject("verification");
+                                        Log.d("FAce Api results", ver.toString());
+                                        Toast.makeText(PhotoVerificationNRICActivity.this, "match is "+ver.getBoolean("isIdentical")+" with confidence "+ver.getString("confidence"), Toast.LENGTH_SHORT).show();
+                                    }
+                                    else {
+                                        Toast.makeText(PhotoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                error.printStackTrace();
+                            }
+                        }) {
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("face1", getStringImage(m.photoTaken));
+                        params.put("face2", getStringImage(m.NRICpicture));
+                        return params;
+                    }
+                };
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                queue.add(postRequest);
             }
         });
+
+        //allow bitmap to write into external storage
+        if(PackageManager.PERMISSION_GRANTED== ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)){} else {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, getResources().getInteger(R.integer.REQUEST_CODE));
+        }
     }
 
     @Override
@@ -237,10 +287,6 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                     String sex = result.getSex();
                     Date dob = result.getDateOfBirth();
                     String address = result.getAddress();
-                    byte[] face = result.getEncodedFaceImage();
-
-                    Uri imageURI = Uri.parse(UriString);
-                    //profilePic.setImageURI(imageURI);
 
                     nameText.setText(name.trim());
                     cardText.setText(cardNumber.trim());
@@ -250,13 +296,21 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                     dobText.setText(dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
                     addressText.setText(address.trim());
 
-                    if(face!=null){
-                        Bitmap bmp = BitmapFactory.decodeByteArray(face,0,face.length);
-                        profilePic.setImageBitmap(bmp);
-                        //TODO: check performance if not use picasso
-
+                    if(headShotFileName!=null){
+                        Bitmap headshotBitmap = BitmapFactory.decodeFile(headShotFileName);
+                        profilePic.setImageBitmap(headshotBitmap);
                     }else{
-                        Toast.makeText(this, "profile pic not detected. Encoding profile pic enabled:"+profilePictest, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(m, "u done fked up", Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(PhotoVerificationNRICActivity.this);
+                        builder.setMessage("Profile picture not detected. Please scan NRIC again").setTitle("Error");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
                     }
 
                     btnPhotoVerification.setEnabled(true);
@@ -331,73 +385,28 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
          */
         @Override
         public void onImageAvailable(Image image) {
-            // we will save images to 'myImages' folder on external storage
-            // image filenames will be 'imageType - currentTimestamp.jpg'
-            String output = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImages";
-            File f = new File(output);
-            if(!f.exists()) {
-                f.mkdirs();
+            //create directory to store the file
+            File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Kodyac/NRIC");
+            if(!directory.exists()) {
+                directory.mkdirs();
+                Log.e("Photo Verification NRIC", "here, making directory");
             }
-            String dateString = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
-            String filename = null;
-            switch(image.getImageFormat()) {
-                case ALPHA_8: {
-                    filename = output + "/alpha_8 - " + image.getImageName() + " - " + dateString + ".jpg";
-                    break;
-                }
-                case BGRA_8888: {
-                    filename = output + "/bgra - " + image.getImageName() + " - " + dateString + ".jpg";
-                    break;
-                }
-                case YUV_NV21: {
-                    filename = output + "/yuv - " + image.getImageName() + " - " + dateString + ".jpg";
-                    break;
-                }
-            }
-
-            Bitmap b = image.convertToBitmap();
-            //Uri faceUri = Uri.fromFile(f);
-            //Log.e("Image Listener", faceUri.toString());
-            FileOutputStream fos = null;
+            //get date to name the picture file
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US);
+            java.util.Date now = new java.util.Date();
+            //save the picture under correct directory and date
+            Bitmap bitmap_obtained = image.convertToBitmap();
+            File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+".png");
             try {
-                fos = new FileOutputStream(filename);
-                boolean success = b.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                if(!success) {
-                    Log.e("EMAS ImageListener", "Failed to compress bitmap!");
-                    if(fos != null) {
-                        try {
-                            fos.close();
-                        } catch (IOException ignored) {
-                        } finally {
-                            fos = null;
-                        }
-                        new File(filename).delete();
-                    }
-                }
-            } catch (FileNotFoundException e) {
+                FileOutputStream fos = new FileOutputStream(file);
+                bitmap_obtained.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.flush();
+                fos.close();
+                headShotFileName = file.getAbsolutePath();
+            } catch (Exception e) {
                 e.printStackTrace();
-                Log.e("EMAS ImageListener", "Failed to save image ");
-            } finally {
-                if(fos != null) {
-                    try {
-                        fos.close();
-                    } catch (IOException ignored) {
-                    }
-                }
             }
-            // after this line, image gets disposed. If you want to save it
-            // for later, you need to clone it with image.clone()
-            Image myimage = image.clone();
 
-            String timeStamp = new SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
-            String imageFileName = timeStamp + ".jpg";
-            String storageDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImages";
-            File imgF = new File(storageDir+imageFileName);
-            if(!imgF.exists()) {
-                imgF.mkdirs();
-            }
-            Uri IMgFile = Uri.fromFile(imgF);
-            Log.e("ImageListener",IMgFile.toString());
         }
 
         /**
@@ -414,17 +423,28 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         public void writeToParcel(Parcel dest, int flags) {
         }
 
-        public static final Creator<MyImageListener> CREATOR = new Creator<MyImageListener>() {
+        public static final Creator<PhotoVerificationNRICActivity.MyImageListener> CREATOR = new Creator<PhotoVerificationNRICActivity.MyImageListener>() {
             @Override
-            public MyImageListener createFromParcel(Parcel source) {
-                return new MyImageListener();
+            public PhotoVerificationNRICActivity.MyImageListener createFromParcel(Parcel source) {
+                return new PhotoVerificationNRICActivity.MyImageListener();
             }
 
             @Override
-            public MyImageListener[] newArray(int size) {
-                return new MyImageListener[size];
+            public PhotoVerificationNRICActivity.MyImageListener[] newArray(int size) {
+                return new PhotoVerificationNRICActivity.MyImageListener[size];
             }
         };
     }
+    //converst file into a Base64 encoded string
+    private String getStringImage(String absoluteFilePath) {
+        Bitmap bmp = BitmapFactory.decodeFile(absoluteFilePath);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
+
+
 
 }

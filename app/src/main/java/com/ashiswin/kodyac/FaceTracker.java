@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class FaceTracker extends Tracker<Face> {
 
-    //do a sreen grab once you do a pose.
+    //TODO: use a less hackermanz method -jy
 
     private static final float EYE_CLOSED_THRESHOLD = 0.4f;
     private static final float SMILE_THRESHOLD = 0.6f;
