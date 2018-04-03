@@ -4,6 +4,7 @@ package com.ashiswin.kodyac;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -299,9 +300,17 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                         Bitmap headshotBitmap = BitmapFactory.decodeFile(headShotFileName);
                         profilePic.setImageBitmap(headshotBitmap);
                     }else{
+                        Toast.makeText(m, "u done fked up", Toast.LENGTH_SHORT).show();
                         AlertDialog.Builder builder = new AlertDialog.Builder(VideoVerificationNRICActivity.this);
                         builder.setMessage("Profile picture not detected. Please scan NRIC again").setTitle("Error");
-                        AlertDialog dialog = builder.create();                    }
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();                    }
                     btnVideoVerification.setEnabled(true);
                 }
             } else {

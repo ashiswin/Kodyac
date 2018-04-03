@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Parcel;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -101,7 +102,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         addressText = (TextView) findViewById(R.id.txtAddress);
         btnPhotoVerification = (Button) findViewById(R.id.btnPhotoVerification);
         btnConfirm = (Button) findViewById(R.id.btnConfirm);
-        profilePic = (ImageView) findViewById(R.id.NRICpic);
+        profilePic = (ImageView) findViewById(R.id.photo_NRIC_headShot);
 
         m = (MainApplication) getApplicationContext();
 
@@ -116,14 +117,12 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SingaporeIDCombinedRecognizerSettings settings = new SingaporeIDCombinedRecognizerSettings();
+                MetadataSettings.ImageMetadataSettings ims = new MetadataSettings.ImageMetadataSettings();
                 //so i can extract the face image
                 settings.setEncodeFaceImage(true);
-
-                MetadataSettings.ImageMetadataSettings ims = new MetadataSettings.ImageMetadataSettings();
                 // enable obtaining of dewarped(cropped) images
                 ims.setDewarpedImageEnabled(true);
 
-                profilePictest=settings.shouldEncodeFaceImage();
                 Intent intent = new Intent(PhotoVerificationNRICActivity.this, VerificationFlowActivity.class);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_LICENSE_KEY, getString(R.string.microblink_license_key));
                 intent.putExtra(VerificationFlowActivity.EXTRAS_COMBINED_RECOGNIZER_SETTINGS, settings);
@@ -304,9 +303,17 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                         Bitmap headshotBitmap = BitmapFactory.decodeFile(headShotFileName);
                         profilePic.setImageBitmap(headshotBitmap);
                     }else{
+                        Toast.makeText(m, "u done fked up", Toast.LENGTH_SHORT).show();
                         AlertDialog.Builder builder = new AlertDialog.Builder(PhotoVerificationNRICActivity.this);
                         builder.setMessage("Profile picture not detected. Please scan NRIC again").setTitle("Error");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
                         AlertDialog dialog = builder.create();
+                        dialog.show();
                     }
 
                     btnPhotoVerification.setEnabled(true);
@@ -385,13 +392,14 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
             File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Kodyac/NRIC");
             if(!directory.exists()) {
                 directory.mkdirs();
+                Log.e("Photo Verification NRIC", "here, making directory");
             }
             //get date to name the picture file
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
             java.util.Date now = new java.util.Date();
             //save the picture under correct directory and date
             Bitmap bitmap_obtained = image.convertToBitmap();
-            File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+".png");
+            File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+"test.png");
             try {
                 FileOutputStream fos = new FileOutputStream(file);
                 bitmap_obtained.compress(Bitmap.CompressFormat.PNG, 100, fos);
@@ -399,6 +407,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 fos.close();
                 headShotFileName = file.getAbsolutePath();
             } catch (Exception e) {
+                Log.e("PHoto NRIC","File storage exception");
                 e.printStackTrace();
             }
 
@@ -418,15 +427,15 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         public void writeToParcel(Parcel dest, int flags) {
         }
 
-        public static final Creator<VideoVerificationNRICActivity.MyImageListener> CREATOR = new Creator<VideoVerificationNRICActivity.MyImageListener>() {
+        public static final Creator<PhotoVerificationNRICActivity.MyImageListener> CREATOR = new Creator<PhotoVerificationNRICActivity.MyImageListener>() {
             @Override
-            public VideoVerificationNRICActivity.MyImageListener createFromParcel(Parcel source) {
-                return new VideoVerificationNRICActivity.MyImageListener();
+            public PhotoVerificationNRICActivity.MyImageListener createFromParcel(Parcel source) {
+                return new PhotoVerificationNRICActivity.MyImageListener();
             }
 
             @Override
-            public VideoVerificationNRICActivity.MyImageListener[] newArray(int size) {
-                return new VideoVerificationNRICActivity.MyImageListener[size];
+            public PhotoVerificationNRICActivity.MyImageListener[] newArray(int size) {
+                return new PhotoVerificationNRICActivity.MyImageListener[size];
             }
         };
     }

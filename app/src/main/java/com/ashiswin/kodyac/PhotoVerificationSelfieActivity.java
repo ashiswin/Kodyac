@@ -32,6 +32,7 @@ public class PhotoVerificationSelfieActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                takePictureIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(takePictureIntent, INTENT_CAMERA);
                 }
