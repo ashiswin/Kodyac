@@ -74,7 +74,7 @@ public class SMSVerificationNumberActivity extends AppCompatActivity {
             }
         });
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.country_codes));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, getResources().getStringArray(R.array.country_codes));
         spnCountryCodes.setAdapter(adapter);
     }
 
