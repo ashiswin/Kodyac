@@ -161,14 +161,6 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                m.nric = cardText.getText().toString();
-                m.name = nameText.getText().toString();
-                m.sex = sexText.getText().toString();
-                m.race = raceText.getText().toString();
-                m.dob = dobText.getText().toString();
-                m.address = addressText.getText().toString();
-                m.nationality = countryText.getText().toString();
-
                 final ProgressDialog dialog = new ProgressDialog(PhotoVerificationNRICActivity.this);
 
                 final String url = MainApplication.SERVER_URL + "VerifyPhoto.php";
@@ -240,21 +232,21 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                     Toast.makeText(this, "Front and back side are not from the same ID card", Toast.LENGTH_SHORT).show();
                     // front and back sides are not from the same ID card
                 } else {
-                    String name = result.getName();
-                    String cardNumber = result.getCardNumber();
-                    String country = result.getCountryOfBirth();
-                    String race = result.getRace();
-                    String sex = result.getSex();
-                    Date dob = result.getDateOfBirth();
-                    String address = result.getAddress();
+                    m.name = result.getName().trim();
+                    m.nric = result.getCardNumber().trim();
+                    m.nationality = result.getCountryOfBirth().trim();
+                    m.race = result.getRace().trim();
+                    m.sex = result.getSex().trim();
+                    m.dob = result.getDateOfBirth().getYear()+"-"+result.getDateOfBirth().getMonth()+"-"+result.getDateOfBirth().getDay();
+                    m.address = result.getAddress().trim();
 
-                    nameText.setText(name.trim());
-                    cardText.setText(cardNumber.trim());
-                    countryText.setText(country.trim());
-                    raceText.setText(race.trim());
-                    sexText.setText(sex.trim());
-                    dobText.setText(Util.prettyDate(dob.getYear()+"-"+dob.getMonth()+"-"+dob.getDay()));
-                    addressText.setText(address.trim());
+                    nameText.setText(m.name);
+                    cardText.setText(m.nric);
+                    countryText.setText(m.nationality);
+                    raceText.setText(m.race);
+                    sexText.setText(m.sex);
+                    dobText.setText(Util.prettyDate(m.dob));
+                    addressText.setText(m.address);
 
                     if(headShotFileName != null){
                         Bitmap headshotBitmap = BitmapFactory.decodeFile(headShotFileName);
