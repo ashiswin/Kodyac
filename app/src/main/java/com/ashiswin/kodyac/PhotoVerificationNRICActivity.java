@@ -10,13 +10,11 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcel;
-import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
@@ -32,12 +30,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.microblink.activity.VerificationFlowActivity;
 import com.microblink.image.Image;
 import com.microblink.image.ImageListener;
 import com.microblink.metadata.MetadataSettings;
 import com.microblink.recognizers.blinkid.singapore.combined.SingaporeIDCombinedRecognitionResult;
 import com.microblink.recognizers.blinkid.singapore.combined.SingaporeIDCombinedRecognizerSettings;
-import com.microblink.activity.VerificationFlowActivity;
 import com.microblink.results.date.Date;
 import com.microblink.util.RecognizerCompatibility;
 import com.microblink.util.RecognizerCompatibilityStatus;
@@ -47,9 +45,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -141,7 +137,8 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         if(m.methods.get("nric")) {
             startBtn.setEnabled(false);
             btnPhotoVerification.setEnabled(false);
-            btnPhotoVerification.setText("Photo Verified");
+            //btnPhotoVerification.setText("Photo Verified");
+            btnPhotoVerification.setBackground(getDrawable(R.drawable.tickverifiedeach));
             btnConfirm.setVisibility(View.GONE);
 
             cardText.setText(m.nric);
@@ -320,7 +317,8 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
             }
         }
         else if(requestCode == PHOTO_INTENT && resultCode == RESULT_OK) {
-            btnPhotoVerification.setText("Photo Verified");
+            //btnPhotoVerification.setText("Photo Verified");
+            btnPhotoVerification.setBackground(getDrawable(R.drawable.tickverifiedeach));
             btnConfirm.setEnabled(true);
         }
     }

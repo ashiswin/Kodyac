@@ -11,21 +11,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:textAppearance="?android:textAppearanceLarge"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@color/colorIBMBlue"
         android:gravity="center"
-        android:text="We need you to take a photo of yourself holding the following code"/>
+        android:text="Please take a photo of yourself \nholding the following code:"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:textSize="64sp"
         android:id="@+id/txtCode"
-        android:text="KXQZ"/>
+        android:text="KXQZ"
+        android:textStyle="bold"
+        android:textColor="@color/colorTextLight"/>
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:id="@+id/btnTakePhoto"
-        android:text="Take Photo"
+        android:background="@drawable/cameraicon"
+        android:layout_gravity="center_horizontal"
         android:foreground="?android:attr/selectableItemBackground"
-        android:layout_margin="16dp"/>
+        android:layout_marginTop="80dp"/>
 </LinearLayout>

@@ -135,7 +135,8 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
         if(m.methods.get("video")) {
             startBtn.setEnabled(false);
             btnVideoVerification.setEnabled(false);
-            btnVideoVerification.setText("Video Verified");
+            //btnVideoVerification.setText("Video Verified");
+            btnVideoVerification.setBackground(getDrawable(R.drawable.tickverifiedeach));
             btnConfirm.setVisibility(View.GONE);
 
             cardText.setText(m.nric);

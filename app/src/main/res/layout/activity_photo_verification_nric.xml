@@ -2,212 +2,251 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="330dp"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
     tools:context="com.ashiswin.kodyac.PhotoVerificationNRICActivity">
 
-    <Button
-        android:id="@+id/startBtn"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:elevation="0dp"
-        android:text="Start Scan" />
-
-    <ImageView
-        android:id="@+id/photo_NRIC_headShot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:srcCompat="@android:drawable/btn_star" />
-
     <TextView
-        android:id="@+id/txtName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="@color/colorTextLight"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="Name" />
+        android:text="Please click to add photo ID and \nperform photo verification"
+        android:textColor="@color/colorIBMBlue"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:textAppearance="?android:textAppearanceMedium"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp">
+        android:layout_gravity="left"
+        android:gravity="center_horizontal">
 
-        <TextView
+        <LinearLayout
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/id_border">
+
+            <ImageView
+                android:id="@+id/photo_NRIC_headShot"
+                android:layout_width="65dp"
+                android:layout_height="70dp"
+                android:layout_gravity="left"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/profilepicicon" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/txtName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@color/colorTextLight"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="(Name)" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:background="@drawable/nricicon"
+                        android:layout_gravity="center"/>
+                    <TextView
+                        android:id="@+id/txtCardNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextLight"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="(IC Number)"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/raceicon"/>
+                    <TextView
+                        android:id="@+id/txtRace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextLight"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:text="(Race)"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp">
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/sexicon"/>
+                    <TextView
+                        android:id="@+id/txtSex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextLight"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:text="(Gender)"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp">
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/dobicon"/>
+                    <TextView
+                        android:id="@+id/txtDOB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextLight"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="(Date of Birth)"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp">
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/nationalityicon"/>
+                    <TextView
+                        android:id="@+id/txtCountryBirth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextLight"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="(Nationality)"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp">
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/addressicon"/>
+                    <TextView
+                        android:id="@+id/txtAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextLight"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="(Address)"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="NRIC:"/>
-        <TextView
-            android:id="@+id/txtCardNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorTextLight"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/startBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:elevation="0dp"
+                android:background="@drawable/addicon"/>
+
+            <Button
+                android:id="@+id/btnPhotoVerification"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:enabled="true"
+                android:elevation="0dp"
+                android:background="@drawable/cameraicon"
+                android:foreground="?android:attr/selectableItemBackground" />
+
+        </LinearLayout>
+
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="Race:"/>
-        <TextView
-            android:id="@+id/txtRace"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:textAppearance="?android:textAppearanceMedium"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="Sex:"/>
-        <TextView
-            android:id="@+id/txtSex"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:textAppearance="?android:textAppearanceMedium"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="Date of Birth:"/>
-        <TextView
-            android:id="@+id/txtDOB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorTextLight"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="Nationality:"/>
-        <TextView
-            android:id="@+id/txtCountryBirth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorTextLight"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="Address:"/>
-        <TextView
-            android:id="@+id/txtAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorTextLight"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnPhotoVerification"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:enabled="false"
-        android:elevation="0dp"
-        android:text="Photo Verification"
-        android:foreground="?android:attr/selectableItemBackground" />
 
     <Button
         android:id="@+id/btnConfirm"
-        android:layout_width="match_parent"
+        android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="48dp"
-        android:background="@drawable/rounded_rect_button_success"
+        android:background="@drawable/btncompleteselect"
+        android:layout_gravity="center_horizontal"
         android:enabled="false"
         android:elevation="0dp"
-        android:text="Confirm"
         android:foreground="?android:attr/selectableItemBackground" />
 </LinearLayout>
