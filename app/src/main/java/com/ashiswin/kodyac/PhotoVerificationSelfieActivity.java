@@ -104,7 +104,8 @@ public class PhotoVerificationSelfieActivity extends AppCompatActivity {
                 public void run() {
                     try {
                         // TODO: Perform photo comparison
-                       
+                        
+                        Thread.sleep(1000);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
