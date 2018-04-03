@@ -2,31 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="300dp"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
     tools:context="com.ashiswin.kodyac.BasicInformationVerificationActivity">
 
-    <Button
-        android:id="@+id/scan_bttn"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="30dp"
-        android:background="@color/colorTextLight"
-        android:textColor="@color/colorPrimary"
-        android:text="Click to Scan Barcode"
-        android:elevation="10dp"
-        tools:layout_editor_absoluteX="106dp"
-        tools:layout_editor_absoluteY="66dp"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@color/colorError"
         android:layout_gravity="center_horizontal"
-        android:foreground="?android:attr/selectableItemBackground" />
+        android:gravity="center_horizontal"
+        android:id="@+id/txtErrorMsg"
+        android:text=" "
+        android:paddingBottom="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,20 +26,39 @@
         android:textColor="@color/colorIBMBlue"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:id="@+id/txtErrorMsg"
-        android:text=" "
-        android:paddingBottom="20dp"/>
+        android:text="Please click to scan NRIC barcode to generate the following information" />
+
+    <Button
+        android:id="@+id/scan_bttn"
+        android:layout_width="130dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/addbarcode"
+        android:textColor="@color/colorPrimary"
+        android:gravity="top"
+        android:elevation="10dp"
+        tools:layout_editor_absoluteX="106dp"
+        tools:layout_editor_absoluteY="66dp"
+        android:layout_gravity="center_horizontal"
+        android:foreground="?android:attr/selectableItemBackground" />
 
     <TextView
         android:id="@+id/txtName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@color/colorTextLight"
-        android:layout_marginLeft="16dp"
+        android:textAlignment="textStart"
+        android:textAllCaps="true"
+        android:layout_marginLeft="30dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="Name" />
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:text="(Name)" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,21 +68,22 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="NRIC:"/>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:background="@drawable/nricicon"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center"/>
         <TextView
             android:id="@+id/barcode_num"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/colorTextLight"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="16dp"
+            android:text="(IC Number)"/>
     </LinearLayout>
 
     <LinearLayout
@@ -83,20 +94,21 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="Race:"/>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:background="@drawable/raceicon"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center"/>
         <TextView
             android:id="@+id/txtRace"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorTextLight"
+            android:textAlignment="textEnd"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:text="(Race)"
             android:textAppearance="?android:textAppearanceMedium"/>
     </LinearLayout>
 
@@ -108,20 +120,21 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="Sex:"/>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:background="@drawable/sexicon"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center"/>
         <TextView
             android:id="@+id/txtSex"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
             android:textColor="@color/colorTextLight"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:text="(Gender)"
             android:textAppearance="?android:textAppearanceMedium"/>
     </LinearLayout>
 
@@ -132,21 +145,22 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="Date of Birth:"/>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:background="@drawable/dobicon"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center"/>
         <TextView
             android:id="@+id/txtDOB"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/colorTextLight"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"
+            android:text="(Date of Birth)"/>
     </LinearLayout>
 
     <LinearLayout
@@ -156,17 +170,18 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="Nationality:"/>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:background="@drawable/nationalityicon"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center"/>
         <TextView
             android:id="@+id/txtCountryBirth"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            android:text="(Nationality)"
             android:textColor="@color/colorTextLight"
             android:textAppearance="?android:textAppearanceMedium"
             android:layout_marginLeft="16dp"
@@ -180,17 +195,18 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginRight="4dp"
-            android:text="Address:"/>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:background="@drawable/addressicon"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center"/>
         <TextView
             android:id="@+id/txtAddress"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            android:text="(Address)"
             android:textColor="@color/colorTextLight"
             android:textAppearance="?android:textAppearanceMedium"
             android:layout_marginLeft="16dp"
@@ -199,15 +215,15 @@
 
     <Button
         android:id="@+id/btnConfirm"
-        android:layout_width="match_parent"
+        android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="48dp"
-        android:background="@drawable/rounded_rect_button_success"
+        android:background="@drawable/btncompleteselect"
         android:enabled="false"
+        android:layout_gravity="center_horizontal"
         android:elevation="10dp"
-        android:text="Confirm Details"
         android:foreground="?android:attr/selectableItemBackground" />
 </LinearLayout>

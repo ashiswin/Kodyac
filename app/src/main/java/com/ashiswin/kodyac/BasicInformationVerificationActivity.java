@@ -43,7 +43,7 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
     private TextView dobText;
     private TextView addressText;
     private final String endPoint = "GetMyInfo.php";
-    private final String ERROR_MSG = "Details could not be obtained.\nPlease ensure you have a valid SingPass Account.";
+    private final String ERROR_MSG = "Error: Details could not be obtained.\nPlease ensure that you have a valid SingPass Account.";
     private JSONObject jsonObject;
 
     MainApplication m;

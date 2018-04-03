@@ -10,4 +10,6 @@
     <color name="colorBackground">#333333</color>
     <color name="colorIBMBlue">#1FC6C7</color>
     <color name="colorVerifiedGreen">#5CB85C</color>
+    <color name="colorError">#CC0000</color>
+    <color name="colorGreyOut">#A8A5A5</color>
 </resources>
