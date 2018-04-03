@@ -79,7 +79,7 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
             raceText.setText(m.race);
             sexText.setText(m.sex);
             countryText.setText(m.nationality);
-            dobText.setText(prettyDate(m.dob));
+            dobText.setText(Util.prettyDate(m.dob));
             addressText.setText(m.address);
         }
         startScan.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +211,7 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
                     nameText.setText(m.name);
                     sexText.setText(m.sex);
                     raceText.setText(m.race);
-                    dobText.setText(prettyDate(m.dob));
+                    dobText.setText(Util.prettyDate(m.dob));
                     addressText.setText(m.address);
                     countryText.setText(m.nationality);
 
@@ -279,18 +279,5 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public String prettyDate(String date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-        java.util.Date newDate = null;
-        try {
-            newDate = format.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        format = new SimpleDateFormat("MMM dd, yyyy");
-        return format.format(newDate);
     }
 }

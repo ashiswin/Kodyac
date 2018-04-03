@@ -147,7 +147,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
             raceText.setText(m.race);
             sexText.setText(m.sex);
             countryText.setText(m.nationality);
-            dobText.setText(m.dob);
+            dobText.setText(Util.prettyDate(m.dob));
             addressText.setText(m.address);
         }
 
@@ -253,7 +253,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                     countryText.setText(country.trim());
                     raceText.setText(race.trim());
                     sexText.setText(sex.trim());
-                    dobText.setText(dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
+                    dobText.setText(Util.prettyDate(dob.getYear()+"-"+dob.getMonth()+"-"+dob.getDay()));
                     addressText.setText(address.trim());
 
                     if(headShotFileName != null){
@@ -301,11 +301,10 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                                     Log.d("Face Api results", ver.toString());
                                     // TODO: Remove true, cos my face doesn't match :(
                                     if(ver.getBoolean("isIdentical") || true) {
-                                        btnPhotoVerification.setText("Photo Verified");
                                         btnConfirm.setEnabled(true);
                                     }
                                     else {
-                                        btnPhotoVerification.setText("Photo Verification Failed");
+                                        Toast.makeText(PhotoVerificationNRICActivity.this, "Photo Verification Failed", Toast.LENGTH_SHORT).show();
                                         btnConfirm.setEnabled(false);
                                     }
                                 }
@@ -331,9 +330,10 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                     return params;
                 }
             };
+            postRequest.setRetryPolicy(new DefaultRetryPolicy(100000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
             queue.add(postRequest);
-            //btnPhotoVerification.setText("Photo Verified");
+
             btnPhotoVerification.setBackground(getDrawable(R.drawable.tickverifiedeach));
             btnConfirm.setEnabled(false);
         }

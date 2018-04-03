@@ -49,6 +49,7 @@ public class PhotoVerificationSelfieActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Photo Verification");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
 
         m = (MainApplication) getApplicationContext();
 

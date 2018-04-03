@@ -145,7 +145,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
             raceText.setText(m.race);
             sexText.setText(m.sex);
             countryText.setText(m.nationality);
-            dobText.setText(m.dob);
+            dobText.setText(Util.prettyDate(m.dob));
             addressText.setText(m.address);
         }
 
@@ -250,7 +250,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                     countryText.setText(country.trim());
                     raceText.setText(race.trim());
                     sexText.setText(sex.trim());
-                    dobText.setText(dob.getDay()+"-"+dob.getMonth()+"-"+dob.getYear());
+                    dobText.setText(Util.prettyDate(dob.getYear()+"-"+dob.getMonth()+"-"+dob.getDay()));
                     addressText.setText(address.trim());
 
                     if (headShotFileName != null) {

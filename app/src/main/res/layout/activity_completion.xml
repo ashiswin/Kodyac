@@ -25,8 +25,9 @@
             android:gravity="center"
             android:text="@string/thankyou_string"
             android:textAllCaps="true"
-            android:textColor="@color/colorTextLight"
-            android:layout_margin="16dp" />
+            android:textColor="@color/colorIBMBlue"
+            android:layout_margin="16dp"
+            android:textStyle="bold" />
 
         <ImageView
             android:layout_width="60dp"
