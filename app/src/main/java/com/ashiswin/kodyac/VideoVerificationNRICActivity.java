@@ -307,7 +307,8 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
             }
         }
         else if(requestCode == VIDEO_INTENT && resultCode == RESULT_OK) {
-            btnVideoVerification.setText("Video Verified");
+            //btnVideoVerification.setText("Video Verified");
+            btnVideoVerification.setBackground(getDrawable(R.drawable.tickverifiedeach));
             btnConfirm.setEnabled(true);
         }
     }

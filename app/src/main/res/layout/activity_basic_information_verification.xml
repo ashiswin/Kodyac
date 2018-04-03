@@ -68,22 +68,23 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
 
+
+        <TextView
+            android:id="@+id/barcode_num"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/colorTextLight"
+            android:layout_marginLeft="16dp"
+            android:text="(IC Number)"/>
         <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@drawable/nricicon"
+            android:layout_marginRight="16dp"
             android:layout_marginLeft="16dp"
             android:layout_gravity="center"/>
-        <TextView
-            android:id="@+id/barcode_num"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="textEnd"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:text="(IC Number)"/>
     </LinearLayout>
 
     <LinearLayout
@@ -94,22 +95,23 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
 
+
+        <TextView
+            android:id="@+id/txtRace"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextLight"
+            android:textAlignment="textStart"
+            android:layout_marginLeft="16dp"
+            android:text="(Race)"
+            android:textAppearance="?android:textAppearanceMedium"/>
         <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@drawable/raceicon"
             android:layout_marginLeft="16dp"
-            android:layout_gravity="center"/>
-        <TextView
-            android:id="@+id/txtRace"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorTextLight"
-            android:textAlignment="textEnd"
-            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:text="(Race)"
-            android:textAppearance="?android:textAppearanceMedium"/>
+            android:layout_gravity="center"/>
     </LinearLayout>
 
 
@@ -120,22 +122,23 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/txtSex"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorTextLight"
+            android:layout_marginLeft="16dp"
+            android:text="(Gender)"
+            android:textAppearance="?android:textAppearanceMedium"/>
         <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@drawable/sexicon"
             android:layout_marginLeft="16dp"
-            android:layout_gravity="center"/>
-        <TextView
-            android:id="@+id/txtSex"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="textEnd"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:text="(Gender)"
-            android:textAppearance="?android:textAppearanceMedium"/>
+            android:layout_gravity="center"/>
     </LinearLayout>
 
     <LinearLayout
@@ -145,22 +148,23 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/txtDOB"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/colorTextLight"
+            android:layout_marginLeft="16dp"
+            android:text="(Date of Birth)"/>
         <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@drawable/dobicon"
             android:layout_marginLeft="16dp"
-            android:layout_gravity="center"/>
-        <TextView
-            android:id="@+id/txtDOB"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="textEnd"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextLight"
-            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:text="(Date of Birth)"/>
+            android:layout_gravity="center"/>
     </LinearLayout>
 
     <LinearLayout
@@ -170,22 +174,23 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/txtCountryBirth"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:text="(Nationality)"
+            android:textColor="@color/colorTextLight"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:layout_marginLeft="16dp"/>
         <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@drawable/nationalityicon"
             android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_gravity="center"/>
-        <TextView
-            android:id="@+id/txtCountryBirth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="textEnd"
-            android:text="(Nationality)"
-            android:textColor="@color/colorTextLight"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -195,29 +200,30 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/txtAddress"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:text="(Address)"
+            android:textColor="@color/colorTextLight"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:layout_marginLeft="16dp"/>
         <ImageView
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@drawable/addressicon"
             android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_gravity="center"/>
-        <TextView
-            android:id="@+id/txtAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="textEnd"
-            android:text="(Address)"
-            android:textColor="@color/colorTextLight"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
     </LinearLayout>
 
     <Button
         android:id="@+id/btnConfirm"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="48dp"
