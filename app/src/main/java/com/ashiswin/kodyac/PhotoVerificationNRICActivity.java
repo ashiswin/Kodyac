@@ -395,11 +395,11 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 Log.e("Photo Verification NRIC", "here, making directory");
             }
             //get date to name the picture file
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US);
             java.util.Date now = new java.util.Date();
             //save the picture under correct directory and date
             Bitmap bitmap_obtained = image.convertToBitmap();
-            File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+"test.png");
+            File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+".png");
             try {
                 FileOutputStream fos = new FileOutputStream(file);
                 bitmap_obtained.compress(Bitmap.CompressFormat.PNG, 100, fos);
