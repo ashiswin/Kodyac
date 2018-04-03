@@ -123,10 +123,8 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 intent.putExtra(VerificationFlowActivity.EXTRAS_BEEP_RESOURCE, R.raw.beep);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_IMAGE_LISTENER, new MyImageListener());
                 intent.putExtra(VerificationFlowActivity.EXTRAS_IMAGE_METADATA_SETTINGS,ims);
-                //TODO: sort out the hints so the UI is better
-                intent.putExtra(VerificationFlowActivity.EXTRAS_INSTRUCTIONS_DOCUMENT_FIRST_SIDE, R.string.emas_scan_first_side);
-                intent.putExtra(VerificationFlowActivity.EXTRAS_INSTRUCTIONS_DOCUMENT_SECOND_SIDE, R.string.emas_scan_second_side);
-                //TODO: include a res ID if possible so users know which side front and back are
+
+                //TODO: include a res ID if possible so users know which side front and back are?
 
 
                 intent.putExtra(VerificationFlowActivity.EXTRAS_SHOW_TIME_LIMITED_LICENSE_KEY_WARNING, false);
@@ -220,7 +218,6 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 queue.add(postRequest);*/
 
                 //sending pictures to the FaceAPI
-                //TODO: repeat for Photo verification
                 final String faceUrl = MainApplication.SERVER_URL + "VerifyFace.php";
                 StringRequest postRequest = new StringRequest(Request.Method.POST, faceUrl,
                         new Response.Listener<String>() {
@@ -303,6 +300,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                         Toast.makeText(m, "u done fked up", Toast.LENGTH_SHORT).show();
                         AlertDialog.Builder builder = new AlertDialog.Builder(VideoVerificationNRICActivity.this);
                         builder.setMessage("Profile picture not detected. Please scan NRIC again").setTitle("Error");
+                        //TODO: Aler dialog is not showing the text -jy:(
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

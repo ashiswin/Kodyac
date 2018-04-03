@@ -129,9 +129,6 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 intent.putExtra(VerificationFlowActivity.EXTRAS_BEEP_RESOURCE, R.raw.beep);
                 intent.putExtra(VerificationFlowActivity.EXTRAS_IMAGE_LISTENER, new MyImageListener());
                 intent.putExtra(VerificationFlowActivity.EXTRAS_IMAGE_METADATA_SETTINGS,ims);
-                //TODO: sort out the hints so the UI is better
-                intent.putExtra(VerificationFlowActivity.EXTRAS_INSTRUCTIONS_DOCUMENT_FIRST_SIDE, R.string.emas_scan_first_side);
-                intent.putExtra(VerificationFlowActivity.EXTRAS_INSTRUCTIONS_DOCUMENT_SECOND_SIDE, R.string.emas_scan_second_side);
 
                 //TODO: include a res ID if possible so users know which side front and back are
 
@@ -407,7 +404,6 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 fos.close();
                 headShotFileName = file.getAbsolutePath();
             } catch (Exception e) {
-                Log.e("PHoto NRIC","File storage exception");
                 e.printStackTrace();
             }
 
@@ -439,7 +435,6 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
             }
         };
     }
-
     //converst file into a Base64 encoded string
     private String getStringImage(String absoluteFilePath) {
         Bitmap bmp = BitmapFactory.decodeFile(absoluteFilePath);
@@ -449,5 +444,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
+
+
 
 }
