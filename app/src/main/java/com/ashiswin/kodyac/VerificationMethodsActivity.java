@@ -1,6 +1,7 @@
 package com.ashiswin.kodyac;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,12 +17,24 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class VerificationMethodsActivity extends AppCompatActivity {
-    private static final String TAG = "VerificationMethodsActivity";
+    private static final String TAG = "VMActivity";
     private static final int INTENT_VERIFICATION = 0;
 
     MainApplication m;
@@ -68,6 +81,54 @@ public class VerificationMethodsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        reloadList();
+
+        btnComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ProgressDialog dialog = new ProgressDialog(VerificationMethodsActivity.this);
+                dialog.setTitle("Completing KYC");
+                dialog.setMessage("Please wait while we complete your KYC session");
+                dialog.setIndeterminate(true);
+                dialog.show();
+
+                StringRequest postRequest = new StringRequest(Request.Method.POST, MainApplication.SERVER_URL + "CompleteKYC.php",
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject res = new JSONObject(response);
+                                    dialog.dismiss();
+                                    if (res.getBoolean("success")) {
+                                        Intent verificationIntent = new Intent(VerificationMethodsActivity.this, CompletionActivity.class);
+                                        startActivity(verificationIntent);
+                                        finish();
+                                    }
+                                    else {
+                                        Toast.makeText(VerificationMethodsActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error.Response", error.getLocalizedMessage());
+                            }
+                        }) {
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("id", Integer.toString(m.linkId));
+                        return params;
+                    }
+                };
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                queue.add(postRequest);
+            }
+        });
     }
 
     @Override
@@ -75,23 +136,26 @@ public class VerificationMethodsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == INTENT_VERIFICATION && resultCode == RESULT_OK) {
-            adapter.notifyDataSetChanged();
-
-            Iterator<Map.Entry<String, Boolean>> it = m.methods.entrySet().iterator();
-            boolean complete = false;
-
-            while(it.hasNext()) {
-                Map.Entry<String, Boolean> e = it.next();
-                if(!e.getValue()) {
-                    complete = false;
-                    break;
-                }
-            }
-
-            btnComplete.setEnabled(complete);
+            reloadList();
         }
     }
 
+    public void reloadList() {
+        adapter.notifyDataSetChanged();
+
+        Iterator<Map.Entry<String, Boolean>> it = m.methods.entrySet().iterator();
+        boolean complete = true;
+
+        while(it.hasNext()) {
+            Map.Entry<String, Boolean> e = it.next();
+            if(!e.getValue()) {
+                complete = false;
+                break;
+            }
+        }
+
+        btnComplete.setEnabled(complete);
+    }
     class VerificationAdapter extends BaseAdapter {
         @Override
         public int getCount() {

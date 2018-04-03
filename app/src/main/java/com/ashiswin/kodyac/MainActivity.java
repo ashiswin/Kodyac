@@ -71,45 +71,40 @@ public class MainActivity extends AppCompatActivity {
                 dialog.setIndeterminate(true);
                 dialog.show();
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        StringRequest postRequest = new StringRequest(Request.Method.POST, MainApplication.SERVER_URL + "BeginKYC.php",
-                                new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        try {
-                                            JSONObject res = new JSONObject(response);
-                                            dialog.dismiss();
-                                            if (res.getBoolean("success")) {
-                                                Intent verificationIntent = new Intent(MainActivity.this, VerificationMethodsActivity.class);
-                                                startActivity(verificationIntent);
-                                                finish();
-                                            }
-                                            else {
-                                                Toast.makeText(MainActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
+                StringRequest postRequest = new StringRequest(Request.Method.POST, MainApplication.SERVER_URL + "BeginKYC.php",
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject res = new JSONObject(response);
+                                    dialog.dismiss();
+                                    if (res.getBoolean("success")) {
+                                        Intent verificationIntent = new Intent(MainActivity.this, VerificationMethodsActivity.class);
+                                        startActivity(verificationIntent);
+                                        finish();
                                     }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.d("Error.Response", error.getLocalizedMessage());
+                                    else {
+                                        Toast.makeText(MainActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
                                     }
-                                }) {
-                            protected Map<String, String> getParams() {
-                                Map<String, String> params = new HashMap<String, String>();
-                                params.put("id", Integer.toString(m.linkId));
-                                return params;
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        };
-                        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                        queue.add(postRequest);
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error.Response", error.getLocalizedMessage());
+                            }
+                        }) {
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("id", Integer.toString(m.linkId));
+                        return params;
                     }
-                }).start();
+                };
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                queue.add(postRequest);
             }
         });
         handleAppIntent();

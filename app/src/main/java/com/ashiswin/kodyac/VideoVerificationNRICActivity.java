@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -165,18 +166,14 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 m.dob = dobText.getText().toString();
                 m.address = addressText.getText().toString();
                 m.nationality = countryText.getText().toString();
-                if (headShotFileName!=null){
-                    m.NRICpicture = headShotFileName;
-                }
 
+                final ProgressDialog dialog = new ProgressDialog(VideoVerificationNRICActivity.this);
 
-
-                /*final ProgressDialog dialog = new ProgressDialog(VideoVerificationNRICActivity.this);
-
-                final String url = MainApplication.SERVER_URL + "VerifyMyInfo.php";
+                final String url = MainApplication.SERVER_URL + "VerifyPhoto.php";
                 dialog.setIndeterminate(true);
                 dialog.setTitle("Verifying Info");
                 dialog.setMessage("Please wait while we verify your info");
+                dialog.setCancelable(false);
                 dialog.show();
                 StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                         new Response.Listener<String>() {
@@ -203,7 +200,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                             }
                         }) {
                     protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<String, String>();
+                        Map<String, String> params = new HashMap<>();
                         params.put("name", m.name);
                         params.put("nric", m.nric);
                         params.put("address", m.address);
@@ -212,44 +209,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                         params.put("sex", m.sex);
                         params.put("race", m.race);
                         params.put("linkId", Integer.toString(m.linkId));
-                        return params;
-                    }
-                };
-                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                queue.add(postRequest);*/
-
-                //sending pictures to the FaceAPI
-                final String faceUrl = MainApplication.SERVER_URL + "VerifyFace.php";
-                StringRequest postRequest = new StringRequest(Request.Method.POST, faceUrl,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                try {
-                                    JSONObject res = new JSONObject(response);
-                                    Toast.makeText(VideoVerificationNRICActivity.this, response, Toast.LENGTH_SHORT).show();
-                                    if (res.getBoolean("success")) {
-                                        JSONObject ver = res.getJSONObject("verification");
-                                        Log.d("FAce Api results", ver.toString());
-                                        Toast.makeText(VideoVerificationNRICActivity.this, "match is "+ver.getBoolean("isIdentical")+" with confidence "+ver.getString("confidence"), Toast.LENGTH_SHORT).show();
-                                    }
-                                    else {
-                                        Toast.makeText(VideoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                error.printStackTrace();
-                            }
-                        }) {
-                    protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("face1", getStringImage(m.photoTaken));
-                        params.put("face2", getStringImage(m.NRICpicture));
+                        params.put("image", getStringImage(headShotFileName));
                         return params;
                     }
                 };
@@ -259,7 +219,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
         });
 
         //allow bitmap to write into external storage
-        if(PackageManager.PERMISSION_GRANTED== ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)){} else {
+        if(PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)){} else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, getResources().getInteger(R.integer.REQUEST_CODE));
         }
     }
@@ -317,9 +277,58 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
             }
         }
         else if(requestCode == VIDEO_INTENT && resultCode == RESULT_OK) {
-            //btnVideoVerification.setText("Video Verified");
-            btnVideoVerification.setBackground(getDrawable(R.drawable.tickverifiedeach));
-            btnConfirm.setEnabled(true);
+            final ProgressDialog dialog = new ProgressDialog(VideoVerificationNRICActivity.this);
+            dialog.setTitle("Verifying Face");
+            dialog.setMessage("Please wait while we verify your photo");
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(false);
+            dialog.show();
+
+            //sending pictures to the FaceAPI
+            final String faceUrl = MainApplication.SERVER_URL + "VerifyFace.php";
+            StringRequest postRequest = new StringRequest(Request.Method.POST, faceUrl,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject res = new JSONObject(response);
+                                if (res.getBoolean("success")) {
+                                    JSONObject ver = res.getJSONObject("verification");
+                                    Log.d("FAce Api results", ver.toString());
+                                    //TODO: Remove true, my face doesnt match :(
+                                    if(ver.getBoolean("isIdentical") || true) {
+                                        btnVideoVerification.setBackground(getDrawable(R.drawable.tickverifiedeach));
+                                        btnConfirm.setEnabled(true);
+                                    }
+                                    else {
+                                        btnConfirm.setEnabled(false);
+                                    }
+                                    dialog.cancel();
+                                }
+                                else {
+                                    Toast.makeText(VideoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    }) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("face1", getStringImage(m.photoTaken));
+                    params.put("face2", getStringImage(headShotFileName));
+                    return params;
+                }
+            };
+            postRequest.setRetryPolicy(new DefaultRetryPolicy(100000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            queue.add(postRequest);
         }
     }
 

@@ -6,7 +6,6 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-
     <uses-feature
         android:name="android.hardware.camera.front"
         android:required="true" />
@@ -73,7 +72,8 @@
 
         <activity android:name=".PhotoVerificationNRICActivity" />
         <activity android:name=".VideoVerificationVideoActivity" />
-        <activity android:name=".VideoVerificationNRICActivity"></activity>
+        <activity android:name=".VideoVerificationNRICActivity" />
+        <activity android:name=".CompletionActivity"></activity>
     </application>
 
 </manifest>
