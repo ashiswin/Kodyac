@@ -33,7 +33,7 @@ public class TestDeepLinks {
         protected Intent getActivityIntent() {
             Intent intent = super.getActivityIntent();
             intent.setAction(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("https://www.kodyac.tech/links/kyc.php?id=18"));
+            intent.setData(Uri.parse("https://www.kodyac.tech/links/kyc.php?id=52"));
             return intent;
         }
     };
@@ -106,6 +106,9 @@ public class TestDeepLinks {
                 .check(matches(isDisplayed()))
                 .check(matches(withText("")));
 
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(not(isEnabled())));
     }
     @Test
     public void checkBasicInfoKYC(){
@@ -139,7 +142,7 @@ public class TestDeepLinks {
         //checks if button is working
         onView(withId(R.id.scan_bttn))
                 .check(matches(isDisplayed()))
-                .check(matches(isClickable()));
+                .check(matches(isEnabled()));
 
         //checks that information is default
         onView(withId(R.id.txtName))
@@ -173,7 +176,7 @@ public class TestDeepLinks {
         onView(withId(R.id.scan_bttn))
                 .check(matches(isDisplayed()))
                 .check(matches(isEnabled()))
-                .check(matches( isClickable()));
+                .check(matches( isEnabled()));
 
         onView(withId(R.id.btnConfirm))
                 .check(matches(isDisplayed()))
