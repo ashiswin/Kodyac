@@ -253,7 +253,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                         profilePic.setImageBitmap(headshotBitmap);
                     }else{
                         Toast.makeText(m, "u done fked up", Toast.LENGTH_SHORT).show();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(PhotoVerificationNRICActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(PhotoVerificationNRICActivity.this,R.style.MyDialogTheme);
                         builder.setMessage("Profile picture not detected. Please scan NRIC again").setTitle("Error");
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override

@@ -24,15 +24,18 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -51,7 +54,7 @@ public class SMSVerificationNumberActivityTest {
 
 
     @Test
-    public void sMSVerificationNumberTest() {
+    public void InsufficientNumbers() {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -72,6 +75,128 @@ public class SMSVerificationNumberActivityTest {
                 .inAdapterView(withId(R.id.lstMethods))
                 .perform(click());
 
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(not(isEnabled())));
 
+        onView(withId(R.id.edtPhoneNumber))
+                .perform(click())
+                .perform(typeText("1234"));
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(not(isEnabled())));
+
+
+    }
+
+    @Test
+    public void ButtonEnablesAfterSufficientNumbers() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //checks that there is a being button
+        //and that yuo can clikc it
+        onView(withId(R.id.btnBegin))
+                .perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //check that all items in the methods are present
+        onData(hasToString("sms"))
+                .inAdapterView(withId(R.id.lstMethods))
+                .perform(click());
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(not(isEnabled())));
+
+        onView(withId(R.id.edtPhoneNumber))
+                .perform(click())
+                .perform(typeText("12345678"));
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()));
+    }
+
+    @Test
+    public void InputLimitedToEightNumbers() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //checks that there is a being button
+        //and that yuo can clikc it
+        onView(withId(R.id.btnBegin))
+                .perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //check that all items in the methods are present
+        onData(hasToString("sms"))
+                .inAdapterView(withId(R.id.lstMethods))
+                .perform(click());
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(not(isEnabled())));
+
+        onView(withId(R.id.edtPhoneNumber))
+                .perform(click())
+                .perform(typeText("12345678910456"));
+        closeSoftKeyboard();
+
+        onView(withId(R.id.edtPhoneNumber))
+                .check(matches(withText("12345678")));
+    }
+
+    @Test
+    public void TextClearsAfterSubmission() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //checks that there is a being button
+        //and that yuo can clikc it
+        onView(withId(R.id.btnBegin))
+                .perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //check that all items in the methods are present
+        onData(hasToString("sms"))
+                .inAdapterView(withId(R.id.lstMethods))
+                .perform(click());
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(not(isEnabled())));
+
+        onView(withId(R.id.edtPhoneNumber))
+                .perform(click())
+                .perform(typeText("12345678"));
+        closeSoftKeyboard();
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .perform(click());
+
+        onView(withId(R.id.edtPhoneNumber))
+                .perform(click())
+                .check(matches(withText("")));
     }
 }

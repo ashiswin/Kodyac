@@ -1,6 +1,8 @@
 package com.ashiswin.kodyac;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -62,6 +64,8 @@ public class SMSVerificationNumberActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length()>7){
                     btnSendSMS.setEnabled(true);
+                }else{
+                    btnSendSMS.setEnabled(false);
                 }
             }
 
@@ -89,8 +93,18 @@ public class SMSVerificationNumberActivity extends AppCompatActivity {
                     otpIntent.putExtra("phone", phone);
                     startActivityForResult(otpIntent, INTENT_OTP);
                 } else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SMSVerificationNumberActivity.this,R.style.MyDialogTheme);
+
+                    builder.setTitle("Erroneous Input")
+                            .setMessage(result)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).show();
+
                     edtPhoneNumber.getText().clear();
-                    Toast.makeText(SMSVerificationNumberActivity.this, "ERROR: "+result, Toast.LENGTH_SHORT).show();
                 }
             }
         });

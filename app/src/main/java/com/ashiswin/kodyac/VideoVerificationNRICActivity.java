@@ -251,7 +251,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                         profilePic.setImageBitmap(headshotBitmap);
                     }else{
                         Toast.makeText(m, "u done fked up", Toast.LENGTH_SHORT).show();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(VideoVerificationNRICActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(VideoVerificationNRICActivity.this,R.style.MyDialogTheme);
                         builder.setMessage("Profile picture not detected. Please scan NRIC again").setTitle("Error");
                         //TODO: Aler dialog is not showing the text -jy:(
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
