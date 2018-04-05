@@ -327,8 +327,5 @@ public class TestDeepLinks {
                 .check(matches(isClickable()))
                 .check(matches(not(isEnabled())));
 
-
-
-
     }
 }

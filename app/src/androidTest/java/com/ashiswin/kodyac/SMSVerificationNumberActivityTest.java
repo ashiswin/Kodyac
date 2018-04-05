@@ -15,12 +15,14 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
@@ -52,9 +54,8 @@ public class SMSVerificationNumberActivityTest {
         }
     };
 
-
-    @Test
-    public void InsufficientNumbers() {
+    @Before
+    public void EnterSMSActivity(){
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -74,6 +75,11 @@ public class SMSVerificationNumberActivityTest {
         onData(hasToString("sms"))
                 .inAdapterView(withId(R.id.lstMethods))
                 .perform(click());
+    }
+
+
+    @Test
+    public void InsufficientNumbers() {
 
         onView(withId(R.id.btnSendSMS))
                 .check(matches(isDisplayed()))
@@ -92,25 +98,6 @@ public class SMSVerificationNumberActivityTest {
 
     @Test
     public void ButtonEnablesAfterSufficientNumbers() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //checks that there is a being button
-        //and that yuo can clikc it
-        onView(withId(R.id.btnBegin))
-                .perform(click());
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        //check that all items in the methods are present
-        onData(hasToString("sms"))
-                .inAdapterView(withId(R.id.lstMethods))
-                .perform(click());
 
         onView(withId(R.id.btnSendSMS))
                 .check(matches(isDisplayed()))
@@ -127,25 +114,6 @@ public class SMSVerificationNumberActivityTest {
 
     @Test
     public void InputLimitedToEightNumbers() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //checks that there is a being button
-        //and that yuo can clikc it
-        onView(withId(R.id.btnBegin))
-                .perform(click());
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        //check that all items in the methods are present
-        onData(hasToString("sms"))
-                .inAdapterView(withId(R.id.lstMethods))
-                .perform(click());
 
         onView(withId(R.id.btnSendSMS))
                 .check(matches(isDisplayed()))
@@ -162,25 +130,6 @@ public class SMSVerificationNumberActivityTest {
 
     @Test
     public void TextClearsAfterSubmission() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //checks that there is a being button
-        //and that yuo can clikc it
-        onView(withId(R.id.btnBegin))
-                .perform(click());
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        //check that all items in the methods are present
-        onData(hasToString("sms"))
-                .inAdapterView(withId(R.id.lstMethods))
-                .perform(click());
 
         onView(withId(R.id.btnSendSMS))
                 .check(matches(isDisplayed()))
@@ -189,14 +138,19 @@ public class SMSVerificationNumberActivityTest {
         onView(withId(R.id.edtPhoneNumber))
                 .perform(click())
                 .perform(typeText("12345678"));
-        closeSoftKeyboard();
+
         onView(withId(R.id.btnSendSMS))
                 .check(matches(isDisplayed()))
                 .check(matches(isEnabled()))
                 .perform(click());
 
+        //dismiss alertDialog
+        onView(withText("OK"))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .perform(click());
+
         onView(withId(R.id.edtPhoneNumber))
-                .perform(click())
                 .check(matches(withText("")));
     }
 }
