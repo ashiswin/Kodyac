@@ -240,6 +240,8 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                     m.race = result.getRace().trim();
                     m.sex = result.getSex().trim();
                     m.dob = result.getDateOfBirth().getYear()+"-"+result.getDateOfBirth().getMonth()+"-"+result.getDateOfBirth().getDay();
+                    Log.e("NRIC Photo",String.valueOf(result.getDateOfBirth().getYear()));
+
                     m.address = result.getAddress().trim();
 
                     nameText.setText(m.name);
@@ -289,6 +291,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                         public void onResponse(String response) {
                             try {
                                 JSONObject res = new JSONObject(response);
+                                Log.d("Face Api response", res.toString());
                                 if (res.getBoolean("success")) {
                                     JSONObject ver = res.getJSONObject("verification");
                                     Log.d("Face Api results", ver.toString());

@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 
 public class Util {
     public static String prettyDate(String date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date newDate = null;
         try {
             newDate = format.parse(date);

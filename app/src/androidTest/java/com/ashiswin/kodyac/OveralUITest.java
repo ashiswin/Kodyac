@@ -24,6 +24,9 @@ import static org.hamcrest.Matchers.not;
  * Created by Jing Yun on 5/4/2018.
  */
 
+//overall UI Test is combines the test of all individual methods
+//It clicks all methods in the Verification Methods activity
+//then it checks if the textView and EditText are displaying the correct things
 public class OveralUITest {
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
