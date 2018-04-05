@@ -13,7 +13,7 @@ public class Util {
         java.util.Date newDate = null;
         try {
             newDate = format.parse(date);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
