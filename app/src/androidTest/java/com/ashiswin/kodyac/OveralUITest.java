@@ -2,16 +2,14 @@ package com.ashiswin.kodyac;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
-import android.view.View;
 
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
@@ -26,7 +24,7 @@ import static org.hamcrest.Matchers.not;
  * Created by Jing Yun on 5/4/2018.
  */
 
-public class TestDeepLinks {
+public class OveralUITest {
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
         @Override
@@ -39,7 +37,7 @@ public class TestDeepLinks {
     };
 
     @Test
-    public void checkMainActivity() {
+    public void TestAllUI() {
         //let the app load
         try {
             Thread.sleep(3000);
@@ -57,6 +55,8 @@ public class TestDeepLinks {
             e.printStackTrace();
         }
 
+
+        /********************************CHECK VERIFICATION METHODS PAGE*************************/
         //check that all items in the methods are present
         onData(hasToString("sms"))
                 .inAdapterView(withId(R.id.lstMethods))
@@ -73,30 +73,18 @@ public class TestDeepLinks {
         onData(hasToString("video"))
                 .inAdapterView(withId(R.id.lstMethods))
                 .check(matches(isDisplayed()));
-    }
 
-    //check the SMS activity
-    @Test
-    public void checkSMSKYC(){
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //checks that there is a being button
-        //and that yuo can clikc it
-        onView(withId(R.id.btnBegin))
+        /**********************ENTER SMS ACTIVITY AND CHECK IT*******************************/
+        //check that all items in the methods are present
+        onData(hasToString("sms"))
+                .inAdapterView(withId(R.id.lstMethods))
                 .perform(click());
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        //check that all items in the methods are present
-        onData(hasToString("sms"))
-                .inAdapterView(withId(R.id.lstMethods))
-                .perform(click());
 
         onView(withId(R.id.sms_instruction))
                 .check(matches(isDisplayed()))
@@ -109,28 +97,25 @@ public class TestDeepLinks {
         onView(withId(R.id.btnSendSMS))
                 .check(matches(isDisplayed()))
                 .check(matches(not(isEnabled())));
-    }
-    @Test
-    public void checkBasicInfoKYC(){
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //checks that there is a being button
-        //and that yuo can clikc it
-        onView(withId(R.id.btnBegin))
-                .perform(click());
+
+        pressBack();
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        //check that all items in the methods are present
+        /*********************88**CHECKS BASIC INFO VERIFICATION***************************888******/
         onData(hasToString("myinfo"))
                 .inAdapterView(withId(R.id.lstMethods))
                 .perform(click());
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //checks that instruction is correct and error message is absent
         onView(withId(R.id.txtErrorMsg))
                 .check(matches(isDisplayed()))
@@ -182,100 +167,89 @@ public class TestDeepLinks {
                 .check(matches(isDisplayed()))
                 .check(matches( not(isEnabled())));
 
-    }
-    @Test
-    public void checkNRICPHoto(){
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //checks that there is a being button
-        //and that yuo can clikc it
-        onView(withId(R.id.btnBegin))
-                .perform(click());
+        pressBack();
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //check that all items in the methods are present
+
+        /***************CHECKS PHOTO NRIC VERIFICATION********************/
+
         onData(hasToString("nric"))
                 .inAdapterView(withId(R.id.lstMethods))
                 .perform(click());
 
-        //checks that information is default
-        onView(withId(R.id.nric_photo_instructions))
-                .check(matches(isDisplayed()))
-                .check(matches(withText("Please click to add photo ID and \nperform photo verification")));
-
-        //checks that information is default
-        onView(withId(R.id.txtName))
-                .check(matches(isDisplayed()))
-                .check(matches(withText("(Name)")));
-
-        //checks that information is default
-        onView(withId(R.id.txtCardNumber))
-                .check(matches(isDisplayed()))
-                .check(matches(withText("(IC Number)")));
-
-        onView(withId(R.id.txtRace))
-                .check(matches(isDisplayed()))
-                .check(matches(withText("(Race)")));
-
-        onView(withId(R.id.txtSex))
-                .check(matches(isDisplayed()))
-                .check(matches(withText("(Gender)")));
-
-        onView(withId(R.id.txtDOB))
-                .check(matches(isDisplayed()))
-                .check(matches(withText("(Date of Birth)")));
-
-        onView(withId(R.id.txtCountryBirth))
-                .check(matches(isDisplayed()))
-                .check(matches(withText("(Nationality)")));
-
-        onView(withId(R.id.txtAddress))
-                .check(matches(isDisplayed()))
-                .check(matches(withText("(Address)")));
-
-        onView(withId(R.id.startBtn))
-                .check(matches(isDisplayed()))
-                .check(matches(isEnabled()))
-                .check(matches(isClickable()));
-
-        onView(withId(R.id.btnPhotoVerification))
-                .check(matches(isDisplayed()))
-                .check(matches(isEnabled()))
-                .check(matches(isClickable()));
-
-
-        onView(withId(R.id.btnConfirm))
-                .check(matches(isDisplayed()))
-                .check(matches(not(isEnabled())));
-
-    }
-
-    @Test
-    public void checkNRICVideo() {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //checks that there is a being button
-        //and that yuo can clikc it
-        onView(withId(R.id.btnBegin))
+
+         onView(withId(R.id.nric_photo_instructions))
+         .check(matches(isDisplayed()))
+         .check(matches(withText("Please click to add photo ID and \nperform photo verification")));
+
+         //checks that information is default
+         onView(withId(R.id.txtName))
+         .check(matches(isDisplayed()))
+         .check(matches(withText("(Name)")));
+
+         //checks that information is default
+         onView(withId(R.id.txtCardNumber))
+         .check(matches(isDisplayed()))
+         .check(matches(withText("(IC Number)")));
+
+         onView(withId(R.id.txtRace))
+         .check(matches(isDisplayed()))
+         .check(matches(withText("(Race)")));
+
+         onView(withId(R.id.txtSex))
+         .check(matches(isDisplayed()))
+         .check(matches(withText("(Gender)")));
+
+         onView(withId(R.id.txtDOB))
+         .check(matches(isDisplayed()))
+         .check(matches(withText("(Date of Birth)")));
+
+         onView(withId(R.id.txtCountryBirth))
+         .check(matches(isDisplayed()))
+         .check(matches(withText("(Nationality)")));
+
+         onView(withId(R.id.txtAddress))
+         .check(matches(isDisplayed()))
+         .check(matches(withText("(Address)")));
+
+         onView(withId(R.id.startBtn))
+         .check(matches(isDisplayed()))
+         .check(matches(isEnabled()))
+         .check(matches(isClickable()));
+
+         onView(withId(R.id.btnPhotoVerification))
+         .check(matches(isDisplayed()))
+         .check(matches(isEnabled()))
+         .check(matches(isClickable()));
+
+         onView(withId(R.id.btnConfirm))
+         .check(matches(isDisplayed()))
+         .check(matches(not(isEnabled())));
+
+        pressBack();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        /***********************8**CHECKS VIDEO NRIC VERIFICATION********************88******************/
+        onData(hasToString("video"))
+                .inAdapterView(withId(R.id.lstMethods))
                 .perform(click());
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //check that all items in the methods are present
-        onData(hasToString("video"))
-                .inAdapterView(withId(R.id.lstMethods))
-                .perform(click());
 
         //checks that information is default
         onView(withId(R.id.nric_video_instructions))

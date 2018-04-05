@@ -116,17 +116,19 @@ public class SMSVerificationNumberActivityTest {
     @Test
     public void InputLimitedToEightNumbers() {
 
+        String testNumber = "12345678910456";
+
         onView(withId(R.id.btnSendSMS))
                 .check(matches(isDisplayed()))
                 .check(matches(not(isEnabled())));
 
         onView(withId(R.id.edtPhoneNumber))
                 .perform(click())
-                .perform(typeText("12345678910456"));
+                .perform(typeText(testNumber));
         closeSoftKeyboard();
 
         onView(withId(R.id.edtPhoneNumber))
-                .check(matches(withText("12345678")));
+                .check(matches(withText(testNumber.substring(0,8))));
     }
 
     @Test
@@ -158,13 +160,15 @@ public class SMSVerificationNumberActivityTest {
     @Test
     public void IncorrectNumberErrorAlert() {
 
+        String incorrectNumber = "23456789";
+
         onView(withId(R.id.btnSendSMS))
                 .check(matches(isDisplayed()))
                 .check(matches(not(isEnabled())));
 
         onView(withId(R.id.edtPhoneNumber))
                 .perform(click())
-                .perform(typeText("23456789"));
+                .perform(typeText(incorrectNumber));
 
         onView(withId(R.id.btnSendSMS))
                 .check(matches(isDisplayed()))
