@@ -3,6 +3,7 @@ package com.ashiswin.kodyac;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,8 +25,6 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,11 +84,11 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
         startScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentIntegrator scanIntegrator = new IntentIntegrator(BasicInformationVerificationActivity.this);
-                //initiate scan
+                final IntentIntegrator scanIntegrator = new IntentIntegrator(BasicInformationVerificationActivity.this);
                 scanIntegrator.setPrompt("Please scan the barcode at the back of your NRIC");
                 scanIntegrator.setOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 scanIntegrator.initiateScan();
+
             }
         });
 
@@ -201,6 +200,9 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
                     errorText.setText(ERROR_MSG);
                 }
                 else{
+                    //cancel error text if you fail on first try but are successful on second try
+                    errorText.setText(" ");
+
                     m.name = details.getString("name").trim();
                     m.sex = details.getString("sex").trim();
                     m.race = details.getString("race").trim();
@@ -280,4 +282,5 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

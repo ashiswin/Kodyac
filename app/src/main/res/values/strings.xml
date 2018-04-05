@@ -3,7 +3,7 @@
 
     <string name="welcome_string">Welcome to %1$s\'s  KYC process!</string>
     <string name="thankyou_string">Thank you for verifying your identity!</string>
-    <string name="microblink_license_key">UPGOJ3UY-KOV7STQT-2MYL6GXU-RMANXESD-5XF3PKUW-MQDZXK7O-6EA7Q53S-M3XIN4IF</string>
+    <string name="microblink_license_key">NL4PGOHO-4OZM2ETL-CCRNEV72-B3QHWVKH-KAANXESD-5XF3PKUW-MQDZWC7I-LI662D3C</string>
     <string name="emas_scan_first_side">Please scan the front of your NRIC</string>
     <string name="emas_scan_second_side">Please scan the back of your NRIC</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>

@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.not;
  * Created by Jing Yun on 5/4/2018.
  */
 
-public class TestDeepLink {
+public class IndivMethodUITest {
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
         @Override

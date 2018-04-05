@@ -4,6 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -76,6 +80,7 @@ public class PhotoVerificationSelfieActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             //store the selfie taken so you can bring it up to Face API
             Bitmap imageBitmap = (Bitmap) extras.get("data");
+           // Bitmap imageBitmap = changeBitmapContrastBrightness(picture, 1,3);
             File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Kodyac/Selfie");
             if(!directory.exists()) {
                 directory.mkdirs();
@@ -84,7 +89,7 @@ public class PhotoVerificationSelfieActivity extends AppCompatActivity {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US);
             java.util.Date now = new java.util.Date();
             //save the picture under correct directory and date
-            File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+".png");
+            File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+"c1b3"+".png");
             try {
                 FileOutputStream fos = new FileOutputStream(file);
                 imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
@@ -144,6 +149,28 @@ public class PhotoVerificationSelfieActivity extends AppCompatActivity {
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
+    }
+
+    /*for testing purposes*/
+    private static Bitmap changeBitmapContrastBrightness(Bitmap bmp, float contrast, float brightness)
+    {
+        ColorMatrix cm = new ColorMatrix(new float[]
+                {
+                        contrast, 0, 0, 0, brightness,
+                        0, contrast, 0, 0, brightness,
+                        0, 0, contrast, 0, brightness,
+                        0, 0, 0, 1, 0
+                });
+
+        Bitmap ret = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
+
+        Canvas canvas = new Canvas(ret);
+
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(cm));
+        canvas.drawBitmap(bmp, 0, 0, paint);
+
+        return ret;
     }
 
 }

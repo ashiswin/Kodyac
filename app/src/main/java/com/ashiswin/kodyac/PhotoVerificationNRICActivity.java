@@ -10,6 +10,10 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcel;
@@ -128,8 +132,6 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 intent.putExtra(VerificationFlowActivity.EXTRAS_IMAGE_METADATA_SETTINGS,ims);
 
                 //TODO: include a res ID if possible so users know which side front and back are
-
-
                 intent.putExtra(VerificationFlowActivity.EXTRAS_SHOW_TIME_LIMITED_LICENSE_KEY_WARNING, false);
                 startActivityForResult(intent, MY_REQUEST_CODE);
             }
@@ -252,7 +254,6 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                         Bitmap headshotBitmap = BitmapFactory.decodeFile(headShotFileName);
                         profilePic.setImageBitmap(headshotBitmap);
                     }else{
-                        Toast.makeText(m, "u done fked up", Toast.LENGTH_SHORT).show();
                         AlertDialog.Builder builder = new AlertDialog.Builder(PhotoVerificationNRICActivity.this,R.style.MyDialogTheme);
                         builder.setMessage("Profile picture not detected. Please scan NRIC again").setTitle("Error");
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -292,7 +293,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                                     JSONObject ver = res.getJSONObject("verification");
                                     Log.d("Face Api results", ver.toString());
                                     // TODO: Remove true, cos my face doesn't match :(
-                                    if(ver.getBoolean("isIdentical") || true) {
+                                    if(ver.getBoolean("isIdentical")|| true) {
                                         btnConfirm.setEnabled(true);
                                     }
                                     else {
@@ -450,4 +451,6 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
+    //change the contrast of a Bitmap
+
 }
