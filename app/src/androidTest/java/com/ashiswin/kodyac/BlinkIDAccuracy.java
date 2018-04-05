@@ -1,7 +1,9 @@
 package com.ashiswin.kodyac;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.widget.EditText;
 
@@ -17,6 +19,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.hasToString;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Jing Yun on 6/4/2018.
@@ -24,6 +27,7 @@ import static org.hamcrest.Matchers.hasToString;
 
 public class BlinkIDAccuracy {
     /********Fill in your own details****/
+    /*
     private String NAME = "";
     private String NRIC = "";
     private String RACE = "";
@@ -67,7 +71,6 @@ public class BlinkIDAccuracy {
         onView(withId(R.id.startBtn))
                 .perform(click());
 
-        /**SCAN NRIC***/
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
@@ -116,5 +119,15 @@ public class BlinkIDAccuracy {
                 .check(matches(isDisplayed()))
                 .check(matches(withText(CountryOfBirth)));
     }
+    */
+
+    @Test
+    public void useAppContext() throws Exception {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        assertEquals("com.ashiswin.kodyac", appContext.getPackageName());
+    }
+
 
 }

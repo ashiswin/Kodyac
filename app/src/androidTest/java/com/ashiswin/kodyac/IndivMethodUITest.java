@@ -184,7 +184,7 @@ public class IndivMethodUITest {
 
     }
     @Test
-    public void checkNRICPHoto(){
+    public void checkNRICPhoto(){
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -244,15 +244,20 @@ public class IndivMethodUITest {
                 .check(matches(isEnabled()))
                 .check(matches(isClickable()));
 
-        onView(withId(R.id.btnPhotoVerification))
-                .check(matches(isDisplayed()))
-                .check(matches(isEnabled()))
-                .check(matches(isClickable()));
-
-
         onView(withId(R.id.btnConfirm))
                 .check(matches(isDisplayed()))
                 .check(matches(not(isEnabled())));
+
+        onView(withId(R.id.btnPhotoVerification))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .check(matches(isClickable()))
+                .perform(click());
+
+        onView(withId(R.id.btnTakePhoto))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .check(matches(isClickable()));
 
     }
 

@@ -4,8 +4,10 @@ package com.ashiswin.kodyac;
  * Created by Jing Yun on 6/4/2018.
  */
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
@@ -20,10 +22,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.hasToString;
+import static org.junit.Assert.assertEquals;
 
 /*******This is a test to test how accurate the barcode scanner is at determining your NRIC*******/
+
 public class BasicInfoTest {
-    /***********ENTER YOUR NRIC HERE********/
+    /***********ENTER YOUR NRIC HERE*******/
+    /*
     private String NRIC="";
 
     @Rule
@@ -71,12 +76,20 @@ public class BasicInfoTest {
 
     @Test
     public void TestBarcodeScan() {
-
         onView(withId(R.id.barcode_num))
                 .check(matches(isDisplayed()))
                 .check(matches(withText(NRIC)));
+    }
+    */
 
+    @Test
+    public void useAppContext() throws Exception {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getTargetContext();
 
+        assertEquals("com.ashiswin.kodyac", appContext.getPackageName());
     }
 
+
 }
+

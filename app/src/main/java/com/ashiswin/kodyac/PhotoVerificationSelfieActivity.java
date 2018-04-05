@@ -79,8 +79,8 @@ public class PhotoVerificationSelfieActivity extends AppCompatActivity {
         if(requestCode == INTENT_CAMERA && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
 
-            Bitmap picture = (Bitmap) extras.get("data");
-            Bitmap imageBitmap = changeBitmapContrastBrightness(picture, 2,75);
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //Bitmap imageBitmap = changeBitmapContrastBrightness(picture, 2,75);
             File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Kodyac/Selfie");
             if(!directory.exists()) {
                 directory.mkdirs();
@@ -89,7 +89,7 @@ public class PhotoVerificationSelfieActivity extends AppCompatActivity {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US);
             java.util.Date now = new java.util.Date();
             //save the picture under correct directory and date
-            File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+"c1b75"+".png");
+            File file = new File(directory.getAbsolutePath()+"/"+formatter.format(now)+".png");
             try {
                 FileOutputStream fos = new FileOutputStream(file);
                 imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
