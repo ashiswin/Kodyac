@@ -23,9 +23,10 @@ import static org.hamcrest.Matchers.hasToString;
  */
 
 public class BlinkIDAccuracy {
-
+    /********Fill in your own details****/
+    private String NAME = "";
     private String NRIC = "";
-    private String Race = "";
+    private String RACE = "";
     private String CountryOfBirth = "";
     private String DOB = "";
     private String SEX = "";
@@ -42,7 +43,7 @@ public class BlinkIDAccuracy {
     };
 
     @Before
-    public void EnterSMSActivity(){
+    public void EnterRelevantActivity(){
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -62,10 +63,7 @@ public class BlinkIDAccuracy {
         onData(hasToString("nric"))
                 .inAdapterView(withId(R.id.lstMethods))
                 .perform(click());
-    }
 
-    @Test
-    public void TestNRICMethod(){
         onView(withId(R.id.startBtn))
                 .perform(click());
 
@@ -75,13 +73,48 @@ public class BlinkIDAccuracy {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void TestSex() {
         onView(withId(R.id.txtSex))
                 .check(matches(isDisplayed()))
-                .check(matches(withText("(Gender)")));
-       // String test = ((EditText) )
-       // System.out.println(R.id.txtSex.)
-
-
+                .check(matches(withText(SEX)));
     }
+
+    @Test
+    public void TestName() {
+        onView(withId(R.id.txtName))
+                .check(matches(isDisplayed()))
+                .check(matches(withText(NAME)));
+    }
+
+    @Test
+    public void TestNRIC() {
+        onView(withId(R.id.txtCardNumber))
+                .check(matches(isDisplayed()))
+                .check(matches(withText(NRIC)));
+    }
+
+    @Test
+    public void TestRace() {
+        onView(withId(R.id.txtRace))
+                .check(matches(isDisplayed()))
+                .check(matches(withText(RACE)));
+    }
+
+    @Test
+    public void TestDOB() {
+        onView(withId(R.id.txtDOB))
+                .check(matches(isDisplayed()))
+                .check(matches(withText(DOB)));
+    }
+
+    @Test
+    public void TestCountry() {
+        onView(withId(R.id.txtCountryBirth))
+                .check(matches(isDisplayed()))
+                .check(matches(withText(CountryOfBirth)));
+    }
+
 }
