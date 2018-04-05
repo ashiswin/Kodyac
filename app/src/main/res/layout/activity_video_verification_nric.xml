@@ -11,6 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/nric_video_instructions"
         android:text="Please click to add photo ID and \nperform video verification"
         android:textColor="@color/colorIBMBlue"
         android:layout_gravity="center_horizontal"

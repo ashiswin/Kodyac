@@ -16,6 +16,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.hasToString;
@@ -159,7 +160,7 @@ public class TestDeepLinks {
 
         onView(withId(R.id.txtDOB))
                 .check(matches(isDisplayed()))
-                .check(matches(withText("(Date of Birth)(Date of Birth)")));
+                .check(matches(withText("(Date of Birth)")));
 
         onView(withId(R.id.txtCountryBirth))
                 .check(matches(isDisplayed()))
@@ -171,7 +172,12 @@ public class TestDeepLinks {
 
         onView(withId(R.id.scan_bttn))
                 .check(matches(isDisplayed()))
-                .check(matches( not(isClickable())));
+                .check(matches(isEnabled()))
+                .check(matches( isClickable()));
+
+        onView(withId(R.id.btnConfirm))
+                .check(matches(isDisplayed()))
+                .check(matches( not(isEnabled())));
 
     }
     @Test
@@ -190,8 +196,136 @@ public class TestDeepLinks {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        //check that all items in the methods are present
+        onData(hasToString("nric"))
+                .inAdapterView(withId(R.id.lstMethods))
+                .perform(click());
 
+        //checks that information is default
+        onView(withId(R.id.nric_photo_instructions))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("Please click to add photo ID and \nperform photo verification")));
+
+        //checks that information is default
+        onView(withId(R.id.txtName))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Name)")));
+
+        //checks that information is default
+        onView(withId(R.id.txtCardNumber))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(IC Number)")));
+
+        onView(withId(R.id.txtRace))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Race)")));
+
+        onView(withId(R.id.txtSex))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Gender)")));
+
+        onView(withId(R.id.txtDOB))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Date of Birth)")));
+
+        onView(withId(R.id.txtCountryBirth))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Nationality)")));
+
+        onView(withId(R.id.txtAddress))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Address)")));
+
+        onView(withId(R.id.startBtn))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .check(matches(isClickable()));
+
+        onView(withId(R.id.btnPhotoVerification))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .check(matches(isClickable()));
+
+
+        onView(withId(R.id.btnConfirm))
+                .check(matches(isDisplayed()))
+                .check(matches(not(isEnabled())));
 
     }
 
+    @Test
+    public void checkNRICVideo() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //checks that there is a being button
+        //and that yuo can clikc it
+        onView(withId(R.id.btnBegin))
+                .perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //check that all items in the methods are present
+        onData(hasToString("video"))
+                .inAdapterView(withId(R.id.lstMethods))
+                .perform(click());
+
+        //checks that information is default
+        onView(withId(R.id.nric_video_instructions))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("Please click to add photo ID and \nperform video verification")));
+
+        //checks that information is default
+        onView(withId(R.id.txtName))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Name)")));
+
+        //checks that information is default
+        onView(withId(R.id.txtCardNumber))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(IC Number)")));
+
+        onView(withId(R.id.txtRace))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Race)")));
+
+        onView(withId(R.id.txtSex))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Gender)")));
+
+        onView(withId(R.id.txtDOB))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Date of Birth)")));
+
+        onView(withId(R.id.txtCountryBirth))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Nationality)")));
+
+        onView(withId(R.id.txtAddress))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("(Address)")));
+
+        onView(withId(R.id.startBtn))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .check(matches(isClickable()));
+
+        onView(withId(R.id.btnVideoVerification))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .check(matches(isClickable()));
+
+        onView(withId(R.id.btnConfirm))
+                .check(matches(isDisplayed()))
+                .check(matches(isClickable()))
+                .check(matches(not(isEnabled())));
+
+
+
+
+    }
 }
