@@ -27,6 +27,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -152,5 +153,151 @@ public class SMSVerificationNumberActivityTest {
 
         onView(withId(R.id.edtPhoneNumber))
                 .check(matches(withText("")));
+    }
+
+    @Test
+    public void IncorrectNumberErrorAlert() {
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(not(isEnabled())));
+
+        onView(withId(R.id.edtPhoneNumber))
+                .perform(click())
+                .perform(typeText("23456789"));
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .perform(click());
+
+        //wait for alertDialog to appear
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withText("Erroneous Input"))
+                .check(matches(isDisplayed()));
+
+        onView(withText("Phone number is invalid"))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void IncorrectNumberErrorAlertDismiss() {
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(not(isEnabled())));
+
+        onView(withId(R.id.edtPhoneNumber))
+                .perform(click())
+                .perform(typeText("12364759"));
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .perform(click());
+
+        //wait for alertDialog to appear
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //dismiss alertDialog
+        //alertDialog button is not truly displayed
+        onView(withText("OK"))
+                .perform(click());
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //check that alert dialog has disappeared
+        onView(withText("Erroneous Input"))
+                .check(doesNotExist());
+
+
+        onView(withText("Phone number is invalid"))
+                .check(doesNotExist());
+
+    }
+
+    @Test
+    public void LandlineNumberEnteredAlert() {
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(not(isEnabled())));
+
+        onView(withId(R.id.edtPhoneNumber))
+                .perform(click())
+                .perform(typeText("61234567"));
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .perform(click());
+
+        //wait for alertDialog to appear
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withText("Erroneous Input"))
+                .check(matches(isDisplayed()));
+
+        onView(withText("Please enter a MOBILE number"))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void LandlineNumberEnteredAlertDismiss() {
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(not(isEnabled())));
+
+        onView(withId(R.id.edtPhoneNumber))
+                .perform(click())
+                .perform(typeText("62135476"));
+
+        onView(withId(R.id.btnSendSMS))
+                .check(matches(isDisplayed()))
+                .check(matches(isEnabled()))
+                .perform(click());
+
+        //wait for alertDialog to appear
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //dismiss alertDialog
+        onView(withText("OK"))
+                .perform(click());
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withText("Erroneous Input"))
+                .check(doesNotExist());
+
+        onView(withText("Please enter a MOBILE number"))
+                .check(doesNotExist());
+
+
     }
 }
