@@ -26,6 +26,7 @@
         android:textColor="@color/colorIBMBlue"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
+        android:id="@+id/myinfo_instruction"
         android:text="Please click to scan NRIC barcode to generate the following information" />
 
     <Button

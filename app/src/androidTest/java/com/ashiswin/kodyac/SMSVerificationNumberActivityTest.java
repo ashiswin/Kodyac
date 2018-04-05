@@ -1,6 +1,8 @@
 package com.ashiswin.kodyac;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -35,7 +37,15 @@ import static org.hamcrest.Matchers.is;
 public class SMSVerificationNumberActivityTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class){
+        @Override protected Intent getActivityIntent() {
+            Intent intent = super.getActivityIntent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("https://www.kodyac.tech/links/kyc.php?id=18"));
+            return intent;
+        }
+    };
+
 
     @Test
     public void sMSVerificationNumberTest() {

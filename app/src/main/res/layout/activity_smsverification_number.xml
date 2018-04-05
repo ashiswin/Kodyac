@@ -10,6 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/sms_instruction"
         android:layout_margin="16dp"
         android:layout_marginTop="30dp"
         android:textAppearance="?android:textAppearanceMedium"
