@@ -20,18 +20,18 @@ Missing SDK versions will be automatically downloaded by Android Studio upon bui
 ## Running the tests
 
 **System Test**
-android System testing was conducted using Espresso. System Testing for our android app consists of our app's UI (checking if buttons are enabled/ not enabled, if instructions and error messages shown are correct)
-Only BasicInfoTest and BlinkIDAccuracy requires user interaction and a physcial device for test to be successful.
-All Tests run the app by launching company 52's app link. This company contains all KYC methods our team has and none of the methods are completed. The test can run with another company app link by changing the Rules of the Tests. 
-
-1) Overall UI Test
-Within a single session, it checks the buttons and display of all the activities (that do not interact with the phone's hardware) in our app.
-2) Individual Method Test
-Tests the UI of 1 KYC method on each run of the test. Checks UI of each KYC method.
-3) SMSVerificationNumberActivityTest
-Tests the UI of SMSVerificationNumberActivity. It checks that: editText only accepts 8 characters/numbers, send button is only enabled after 8 characters/numbers have been entered, correct error messages appear on erronous input and alert dialog constructed can be dismissed.
-4) BasicInfo Test & 5) BlinkIDAccuracy
-These test the accuracy of ZXing Barcode scanner and BlinkID API in reading a barcode/NRIC. These test must be run on a physical phone. Enter the relevant/personal details at the top of the test. Run the test on your physcial phone. Once the Barcode scanner/ Blink ID scanner is initiated, scan your NRIC. The test checks if the details extracted from the NRIC corresppond to what you have entered. 
+android System testing was conducted using Espresso. System Testing for our android app consists of our app's UI (checking if buttons are enabled/ not enabled, if instructions and error messages shown are correct). <br />
+Only BasicInfoTest and BlinkIDAccuracy requires user interaction and a physcial device for test to be successful. <br />
+All Tests run the app by launching company 52's app link. This company contains all KYC methods our team has and none of the methods are completed. The test can run with another company app link by changing the Rules of the Tests.  <br />
+<br />
+1) Overall UI Test <br />
+Within a single session, it checks the buttons and display of all the activities (that do not interact with the phone's hardware) in our app. <br />
+2) Individual Method Test <br />
+Tests the UI of 1 KYC method on each run of the test. Checks UI of each KYC method.<br />
+3) SMSVerificationNumberActivityTest <br />
+Tests the UI of SMSVerificationNumberActivity. It checks that: editText only accepts 8 characters/numbers, send button is only enabled after 8 characters/numbers have been entered, correct error messages appear on erronous input and alert dialog constructed can be dismissed. <br />
+4) BasicInfo Test & 5) BlinkIDAccuracy <br />
+These test the accuracy of ZXing Barcode scanner and BlinkID API in reading a barcode/NRIC. These test must be run on a physical phone. Enter the relevant/personal details at the top of the test. Run the test on your physcial phone. Once the Barcode scanner/ Blink ID scanner is initiated, scan your NRIC. The test checks if the details extracted from the NRIC corresppond to what you have entered.  <br />
 
 **Unit Test**
 1) UtilTest
@@ -51,10 +51,10 @@ Simply connect your phone to your computer and launch it in Android Studio. Ensu
 
 ## Future Development
 
-Photo Verification includes OCR (client must take a selfie with unique code)
-Liviness detection in video verification so video cannot be spoofed with multiple photos.
-Video Verification requires client to rotate head in z-axis, and ultimately constructs a 3D model of client's head. This makes it harder for clients to spoof our KYC method.
-Enable BaiscInforVerification for anybody with a SingPass account
+Photo Verification includes OCR (client must take a selfie with unique code). <br />
+Liviness detection in video verification so video cannot be spoofed with multiple photos. <br />
+Video Verification requires client to rotate head in z-axis, and ult imately constructs a 3D model of client's head. This makes it harder for clients to spoof our KYC method. <br />
+Enable BaiscInforVerification for anybody with a SingPass account. <br />
 
 
 ## Authors
@@ -62,11 +62,11 @@ Enable BaiscInforVerification for anybody with a SingPass account
 * **Cheria Widayanto (1002246)** - [cwidz](https://github.com/cwidz)
 * **Isaac Ashwin (1002151)** - [ashiswin](https://github.com/ashiswin)
 * **Lim Jing Yun (1002261)** - [limJingYun](https://github.com/limJingYun)
-    BlinkID Api implementation
-    Google Mobile Vision implementation (Video Verification & taking screen shot from video)
-    Google phone library implementation - Check phone number and throw error
-    Android unit and system testing
-    User Testing
-    API (FaceAPI,GetMyInfo) endpoints implementation 
-    Coming up with content for project meeting reports
+    BlinkID Api implementation <br />
+    Google Mobile Vision implementation (Video Verification & taking screen shot from video)<br />
+    Google phone library implementation - Check phone number and throw error<br />
+    Android unit and system testing<br />
+    User Testing<br />
+    API (FaceAPI,GetMyInfo) endpoints implementation <br />
+    Coming up with content for project meeting reports<br />
 * **Shobhit (1002315)** - [OmegAshEnr01n](https://github.com/OmegAshEnr01n)
