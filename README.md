@@ -51,7 +51,11 @@ Simply connect your phone to your computer and launch it in Android Studio. Ensu
 
 ## Future Development
 
-GOTTA INSERT THIS GUYS, IF THERE'S ANYTHING MISSING
+Photo Verification includes OCR (client must take a selfie with unique code)
+Liviness detection in video verification so video cannot be spoofed with multiple photos.
+Video Verification requires client to rotate head in z-axis, and ultimately constructs a 3D model of client's head. This makes it harder for clients to spoof our KYC method.
+Enable BaiscInforVerification for anybody with a SingPass account
+
 
 ## Authors
 
