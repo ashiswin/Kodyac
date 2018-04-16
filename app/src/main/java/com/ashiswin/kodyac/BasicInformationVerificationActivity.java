@@ -88,7 +88,6 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
                 scanIntegrator.setPrompt("Please scan the barcode at the back of your NRIC");
                 scanIntegrator.setOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 scanIntegrator.initiateScan();
-
             }
         });
 
@@ -165,6 +164,12 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
         final RequestQueue queue = Volley.newRequestQueue(this);
         final String url = MainApplication.SERVER_URL + endPoint;
 
+        final ProgressDialog dialog = new ProgressDialog(BasicInformationVerificationActivity.this);
+        dialog.setIndeterminate(true);
+        dialog.setTitle("Retrieving Information");
+        dialog.setMessage("Please wait while we retrieve your information from MyInfo...");
+        dialog.setCancelable(false);
+        dialog.show();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url + "?nric=" + nricInput,
                 new Response.Listener<String>() {
                     @Override
@@ -178,6 +183,8 @@ public class BasicInformationVerificationActivity extends AppCompatActivity {
                             e.printStackTrace();
                             Log.e("JSON ERROR", e.toString());
                         }
+
+                        dialog.cancel();
                     }
                 }, new Response.ErrorListener() {
             @Override
