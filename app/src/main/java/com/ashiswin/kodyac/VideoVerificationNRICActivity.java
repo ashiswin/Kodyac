@@ -73,7 +73,6 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
     private ImageView profilePic;
     private Button btnVideoVerification;
     private Button btnConfirm;
-    private static String headShotFileName;
 
     static MainApplication m;
 
@@ -152,8 +151,22 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
         btnVideoVerification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent videoIntent = new Intent(VideoVerificationNRICActivity.this, VideoVerificationVideoActivity.class);
-                startActivityForResult(videoIntent, VIDEO_INTENT);
+                if (m.NRICpicture!=null){
+                    Intent videoIntent = new Intent(VideoVerificationNRICActivity.this, VideoVerificationVideoActivity.class);
+                    startActivityForResult(videoIntent, VIDEO_INTENT);
+                }else{
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(VideoVerificationNRICActivity.this,R.style.MyDialogTheme);
+
+                        builder.setTitle("Error")
+                                .setMessage("Please scan your NRIC first")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                }).show();
+                }
+
             }
         });
         btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -201,7 +214,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                         params.put("sex", m.sex);
                         params.put("race", m.race);
                         params.put("linkId", Integer.toString(m.linkId));
-                        params.put("image", getStringImage(headShotFileName));
+                        params.put("image", getStringImage(m.NRICpicture));
                         return params;
                     }
                 };
@@ -245,23 +258,22 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                     dobText.setText(Util.prettyDate(m.dob));
                     addressText.setText(m.address);
 
-                    if (headShotFileName != null) {
+                    if (m.NRICpicture != null) {
                         //set the headshot
-                        Bitmap headshotBitmap = BitmapFactory.decodeFile(headShotFileName);
+                        Bitmap headshotBitmap = BitmapFactory.decodeFile(m.NRICpicture);
                         profilePic.setImageBitmap(headshotBitmap);
                     }else{
-                        Toast.makeText(m, "u done fked up", Toast.LENGTH_SHORT).show();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(VideoVerificationNRICActivity.this,R.style.MyDialogTheme);
-                        builder.setMessage("Profile picture not detected. Please scan NRIC again").setTitle("Error");
-                        //TODO: Aler dialog is not showing the text -jy:(
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        });
-                        AlertDialog dialog = builder.create();
-                        dialog.show();                    }
+                        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(VideoVerificationNRICActivity.this,R.style.MyDialogTheme);
+
+                        builder.setTitle("Profile Picture not detected")
+                                .setMessage("Please scan your NRIC again")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                }).show();
+                    }
                     btnVideoVerification.setEnabled(true);
                 }
             } else {
@@ -314,7 +326,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("face1", getStringImage(m.photoTaken));
-                    params.put("face2", getStringImage(headShotFileName));
+                    params.put("face2", getStringImage(m.NRICpicture));
                     return params;
                 }
             };
@@ -400,7 +412,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
                 bitmap_obtained.compress(Bitmap.CompressFormat.PNG, 100, fos);
                 fos.flush();
                 fos.close();
-                headShotFileName = file.getAbsolutePath();
+                m.NRICpicture = file.getAbsolutePath();
             } catch (Exception e) {
                 e.printStackTrace();
             }

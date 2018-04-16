@@ -77,12 +77,11 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
     private ImageView profilePic;
     private Button btnConfirm;
     private Button btnPhotoVerification;
-    private static String headShotFileName;
 
 
     private boolean profilePictest;
 
-    MainApplication m;
+    static MainApplication m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,8 +155,21 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
         btnPhotoVerification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent photoIntent = new Intent(PhotoVerificationNRICActivity.this, PhotoVerificationSelfieActivity.class);
-                startActivityForResult(photoIntent, PHOTO_INTENT);
+                if (m.NRICpicture!=null) {
+                    Intent photoIntent = new Intent(PhotoVerificationNRICActivity.this, PhotoVerificationSelfieActivity.class);
+                    startActivityForResult(photoIntent, PHOTO_INTENT);
+                }else{
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(PhotoVerificationNRICActivity.this,R.style.MyDialogTheme);
+
+                    builder.setTitle("Error")
+                            .setMessage("Please scan your NRIC first")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).show();
+                }
             }
         });
         btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +190,8 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                                 try {
                                     JSONObject res = new JSONObject(response);
                                     dialog.dismiss();
+                                    Toast.makeText(PhotoVerificationNRICActivity.this, res.toString(), Toast.LENGTH_SHORT).show();
+                                    Log.e("NRIC FACE", res.toString());
                                     if (res.getBoolean("success")) {
                                         completeMethod();
                                     }
@@ -204,7 +218,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                         params.put("dob", m.dob);
                         params.put("sex", m.sex);
                         params.put("race", m.race);
-                        params.put("image", getStringImage(headShotFileName));
+                        params.put("image", getStringImage(m.NRICpicture));
                         params.put("linkId", Integer.toString(m.linkId));
                         return params;
                     }
@@ -252,8 +266,8 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                     dobText.setText(Util.prettyDate(m.dob));
                     addressText.setText(m.address);
 
-                    if(headShotFileName != null){
-                        Bitmap headshotBitmap = BitmapFactory.decodeFile(headShotFileName);
+                    if(m.NRICpicture != null){
+                        Bitmap headshotBitmap = BitmapFactory.decodeFile(m.NRICpicture);
                         profilePic.setImageBitmap(headshotBitmap);
                     }else{
                         AlertDialog.Builder builder = new AlertDialog.Builder(PhotoVerificationNRICActivity.this,R.style.MyDialogTheme);
@@ -322,7 +336,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("face1", getStringImage(m.photoTaken));
-                    params.put("face2", getStringImage(headShotFileName));
+                    params.put("face2", getStringImage(m.NRICpicture));
                     return params;
                 }
             };
@@ -412,7 +426,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                 bitmap_obtained.compress(Bitmap.CompressFormat.PNG, 100, fos);
                 fos.flush();
                 fos.close();
-                headShotFileName = file.getAbsolutePath();
+                m.NRICpicture = file.getAbsolutePath();
             } catch (Exception e) {
                 e.printStackTrace();
             }
