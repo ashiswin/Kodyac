@@ -2,6 +2,8 @@ package com.ashiswin.kodyac;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -114,13 +116,21 @@ public class FaceTrackerGraphic extends GraphicOverlay.Graphic {
         //get person to rotate head
         if(rotated == 0 && winkedLeft == 0 && smiled == 0){
             text = "Tilt your head right";
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.rotate_right);
+            canvas.drawBitmap(bitmap, canvas.getClipBounds().width()-bitmap.getWidth()-20, canvas.getClipBounds().height()-bitmap.getHeight(),mIdInstructions);
+
         }
         else if (rotated > 0 && winkedLeft == 0 && smiled == 0) {
             text = "Wink your left eye";
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.wink_left_eye);
+            canvas.drawBitmap(bitmap, canvas.getClipBounds().width()-bitmap.getWidth()-20, canvas.getClipBounds().height()-bitmap.getHeight(),mIdInstructions);
         }
         else if(rotated > 0 && winkedLeft > 0&& smiled == 0){
             //take a picture? (fucking low res tho)
             text = "Smile!";
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.smiling);
+            canvas.drawBitmap(bitmap, canvas.getClipBounds().width()-bitmap.getWidth()-20, canvas.getClipBounds().height()-bitmap.getHeight(),mIdInstructions);
+
         }
 
         TextPaint textPaint = new TextPaint();

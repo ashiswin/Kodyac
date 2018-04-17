@@ -19,6 +19,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -96,6 +98,7 @@ public class VideoVerificationNRICActivity extends AppCompatActivity {
         profilePic = (ImageView) findViewById(R.id.NRICpic);
         btnVideoVerification = (Button) findViewById(R.id.btnVideoVerification); 
         btnConfirm = (Button) findViewById(R.id.btnConfirm);
+        final Animation animation = new AlphaAnimation(1,0);
 
         m = (MainApplication) getApplicationContext();
 
