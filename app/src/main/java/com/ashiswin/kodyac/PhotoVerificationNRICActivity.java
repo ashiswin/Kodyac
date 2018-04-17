@@ -190,7 +190,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                                 try {
                                     JSONObject res = new JSONObject(response);
                                     dialog.dismiss();
-                                    Toast.makeText(PhotoVerificationNRICActivity.this, res.toString(), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(PhotoVerificationNRICActivity.this, res.toString(), Toast.LENGTH_SHORT).show();
                                     Log.e("NRIC FACE", res.toString());
                                     if (res.getBoolean("success")) {
                                         completeMethod();
@@ -310,7 +310,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                                     JSONObject ver = res.getJSONObject("verification");
                                     Log.d("Face Api results", ver.toString());
                                     // TODO: Remove true, cos my face doesn't match :(
-                                    if(ver.getBoolean("isIdentical")|| true) {
+                                    if(ver.getBoolean("isIdentical") || true) {
                                         btnConfirm.setEnabled(true);
                                     }
                                     else {
@@ -319,7 +319,7 @@ public class PhotoVerificationNRICActivity extends AppCompatActivity {
                                     }
                                 }
                                 else {
-                                    Toast.makeText(PhotoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(PhotoVerificationNRICActivity.this, res.getString("message"), Toast.LENGTH_SHORT).show();
                                 }
                                 dialog.cancel();
                             } catch (JSONException e) {

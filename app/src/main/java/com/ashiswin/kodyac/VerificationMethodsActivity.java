@@ -29,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -210,7 +211,13 @@ public class VerificationMethodsActivity extends AppCompatActivity {
             }
 
             ((TextView) itemView.findViewById(R.id.text)).setText(name);
+            Log.e("VMA PRINT", Arrays.asList(m.methods).toString());
+            Log.e("VMA PRINT 2", Arrays.toString(m.methodNames));
+            Log.e("VMA2", m.methodNames[position] + " " + position + " " + m.methods.get(m.methodNames[position]).toString());
+            ((ImageView) itemView.findViewById(R.id.imgStatus)).setImageDrawable(getDrawable(R.drawable.ic_chevron_right_white_24dp));
+            itemView.setBackground(getDrawable(R.drawable.listview_border));
             if(m.methods.get(m.methodNames[position])) {
+                Log.e("VMA", m.methodNames[position] + " " + m.methods.get(m.methodNames[position]) + " " + position);
                 itemView.setBackgroundColor(Color.parseColor("#5cb85c"));
                 ((TextView) itemView.findViewById(R.id.text)).setTextColor(Color.parseColor("#ECEFF1"));
                 ((ImageView) itemView.findViewById(R.id.imgStatus)).setImageDrawable(getDrawable(R.drawable.tickverifiedeach));

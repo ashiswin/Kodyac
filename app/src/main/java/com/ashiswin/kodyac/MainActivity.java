@@ -198,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
                                         String[] completedMethods = linkJson.getString("completedMethods").split("\\|");
                                         for(String s : completedMethods) {
+                                            if(s.equals("")) continue;
                                             m.methods.put(s, true);
                                         }
                                         //Log.e("Company ID", "company ID obtained is " + linkJson.getInt("companyId"));
@@ -252,6 +253,7 @@ public class MainActivity extends AppCompatActivity {
                                 String[] methods = companyJson.getString("methods").split("\\|");
                                 m.methodNames = methods;
                                 for(String s : methods) {
+                                    if(s.equals("")) continue;
                                     if(!m.methods.containsKey(s)) {
                                         m.methods.put(s, false);
                                     }
